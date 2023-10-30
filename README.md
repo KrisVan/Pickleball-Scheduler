@@ -1,24 +1,14 @@
 # Pickleball Scheduler
 
-### Documentation of your Web App and React Components
-
-*Here please describe your (at least) 5 different React components as well as the overall purpose of your web application. We provide an example below of what we expect this documentation to look like.*
-
 **General App Description:** This web application allows users to schedule a time and day with multiple users, and provides a calender that displays a how many people are available. Also shows weather info.
 
 ## Project Overview
 
 This repo contains a barebones React app with a single component. You will use this as the "base" version of your Interactive Front-end application for HW Assignment #4. You will simply create a copy of this repo through GitHub classroom and then work in that repo. 
 
-## Homework Assignment 3 Detailed Instructions
-
-You can find the deatiled instructions for HW Assignment #4 on the [course webpage](https://kpmoran.cs.gmu.edu/swe-432-f22/hw4-tutorial/). Please read these carefully before getting started.
-
 ## Running this Project Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and (optionally) the [Heroku CLI](https://cli.heroku.com/) installed. You only need the Heroku CLI installed if you plan to deploy the project from the CLI instead of the Heroku web interface. See the [HW Assignment #4 instructions](https://kpmoran.cs.gmu.edu/swe-432-f22/hw4-tutorial/) for more details.
-
-*Note the following commands assume a Unix-based enviornment. If you are on windows, you may need to use something such as Windows Subsystem for Linux (https://docs.microsoft.com/en-us/windows/wsl/about).*
+Make sure you have [Node.js](http://nodejs.org/).
 
 ```sh
 $ git clone <repo-name>
@@ -28,12 +18,6 @@ $ npm start
 ```
 
 After executing these commands, your React frontend should now be running on [localhost:3000](http://localhost:3000/). You can visit this page in your web browser to view your front-end user interface.
-
-## Deploying to Heroku
-
-Check out [our instructions](https://kpmoran.cs.gmu.edu/swe-432-f22/hw4-tutorial/) for deploying your application to Heroku. You can use the button below for quick access to your Heroku account.
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 ## Testing with Continuous Integration
 
