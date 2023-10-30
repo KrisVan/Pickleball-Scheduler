@@ -1,21 +1,10 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/odWaIq8H)
-# SWE-432 HW-4 Starter Application
-
-## Submission Information
-
-### Student Information
-
-*Please fill in this information before submission*
-
-* **Student Name:** 
-* **Student G-Number:** 
-* **Heroku Deployment URL:**
+# Pickleball Scheduler
 
 ### Documentation of your Web App and React Components
 
 *Here please describe your (at least) 5 different React components as well as the overall purpose of your web application. We provide an example below of what we expect this documentation to look like.*
 
-**General App Description:** This web application provides information about cities loaded from a centralized database at www.citiesinfo.org. This app can help people find reference information about various city attributes such as population, capitals, and other demographic information.
+**General App Description:** This web application allows users to schedule a time and day with multiple users, and provides a calender that displays a how many people are available. Also shows weather info.
 
 * **React Component 1:** Retrieve a city from our Washington DC Database
   * *Functionality:* Displays a list of cities and allows the user to sort the cities alphabetically
