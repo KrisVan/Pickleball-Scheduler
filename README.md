@@ -6,10 +6,6 @@
 
 **General App Description:** This web application allows users to schedule a time and day with multiple users, and provides a calender that displays a how many people are available. Also shows weather info.
 
-* **React Component 1:** Retrieve a city from our Washington DC Database
-  * *Functionality:* Displays a list of cities and allows the user to sort the cities alphabetically
-  * *Interactivity:* The user can click on an arrow at the top of the list to change the sorting.
-
 ## Project Overview
 
 This repo contains a barebones React app with a single component. You will use this as the "base" version of your Interactive Front-end application for HW Assignment #4. You will simply create a copy of this repo through GitHub classroom and then work in that repo. 
