@@ -13,17 +13,17 @@ jobs:
     steps:
       - checkout
       - node/install-packages
-        pkg-manager: npm
+          pkg-manager: npm
       - run:
-        command: npm run test
-        name: run tests
+          command: npm run test
+          name: run tests
       - run:
-        command: npm run build
-        name: Build app
+          command: npm run build
+          name: Build app
       - persist_to_workspace
-        root: ~/project
-        paths:
-          -.
+          root: ~/project
+          paths:
+            -.
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
