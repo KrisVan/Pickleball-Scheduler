@@ -12,7 +12,7 @@ jobs:
     executor: node/default
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
           pkg-manager: npm
       - run:
           command: npm run test
@@ -20,7 +20,7 @@ jobs:
       - run:
           command: npm run build
           name: Build app
-      - persist_to_workspace
+      - persist_to_workspace:
           root: ~/project
           paths:
             -.
