@@ -8,7 +8,7 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build_and_test: 
+  build_test: 
     executor: node/default
     steps:
       - checkout
@@ -30,7 +30,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          command: ssh-keyscan github.com >> ~/.ssh/known_hosts
+          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
           name: Add github.com to known hosts
       - run:
           command: npm run deploy
@@ -40,15 +40,15 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  build_and_test_workflow:
+  build_test_workflow:
     jobs:
-      - build_and_test
-  build_test_deploy_workflow:
-    jobs:
-      - build_and_test
-      - deploy:
-          requires:
-            - build_and_test # Only deploy if build and test succesful
-          # filters:
-          #   branches:
-          #     only: main # Only deploy when on main branch
+      - build_test
+  # build_test_deploy_workflow:
+  #   jobs:
+  #     - build_and_test
+  #     - deploy:
+  #         requires:
+  #           - build_and_test # Only deploy if build and test succesful
+  #         filters:
+  #           branches:
+  #             only: main # Only deploy when on main branch
