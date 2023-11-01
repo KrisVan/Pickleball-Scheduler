@@ -30,6 +30,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          command: ssh-keyscan github.com >> ~/.ssh/known_hosts
+          name: Add github.com to known hosts
+      - run:
           command: npm run deploy
           name: Deploy app
 
@@ -40,7 +43,7 @@ workflows:
   build_and_test_workflow:
     jobs:
       - build_and_test
-  build_test_deploy:
+  build_test_deploy_workflow:
     jobs:
       - build_and_test
       - deploy:
