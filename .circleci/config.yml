@@ -16,7 +16,7 @@ jobs:
           pkg-manager: npm
       - run:
           command: npm run test
-          name: run tests
+          name: Run tests
       - run:
           command: npm run build
           name: Build app
@@ -24,6 +24,12 @@ jobs:
           root: .
           paths:
             - .
+  deploy:
+    steps: 
+      - run:
+        command: npm run deploy
+        name: Deploy app
+
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
@@ -31,3 +37,12 @@ workflows:
   build_and_test_workflow:
     jobs:
       - build_and_test
+  build_test_deploy:
+    jobs:
+      - build_and_test
+      - deploy:
+        requires:
+          - build_and_test # Only deploy if build and test succesful
+        # filters:
+        #   branches:
+        #     only: main # Only deploy when on main branch
