@@ -26,6 +26,8 @@ jobs:
             - .
   deploy:
     steps: 
+      - attach_workspace:
+          at: .
       - run:
         command: npm run deploy
         name: Deploy app
