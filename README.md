@@ -1,6 +1,6 @@
 # Pickleball Scheduler
 
-## Deployement
+## Deployment
 
 To deploy this with your current local version, run
 
