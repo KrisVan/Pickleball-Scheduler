@@ -1,6 +1,16 @@
 # Pickleball Scheduler
 
-**General App Description:** This web application allows users to schedule a time and day with multiple users, and provides a calender that displays a how many people are available. Also shows weather info.
+## Deployment
+
+To deploy this with your current local version, run
+
+```sh
+npm run deploy
+```
+
+See deployement [here](https://krisvan.github.io/Pickleball-Scheduler/).
+
+**Introduction** This web application allows users to schedule a time and day with multiple users, and provides a calender that displays a how many people are available. Also shows weather info.
 
 ## Project Overview
 
@@ -11,10 +21,10 @@ This repo contains a barebones React app with a single component. You will use t
 Make sure you have [Node.js](http://nodejs.org/).
 
 ```sh
-$ git clone <repo-name>
-$ cd <repo-name>
-$ npm install
-$ npm start
+git clone <repo-name>
+cd <repo-name>
+npm install
+npm start
 ```
 
 After executing these commands, your React frontend should now be running on [localhost:3000](http://localhost:3000/). You can visit this page in your web browser to view your front-end user interface.
