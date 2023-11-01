@@ -25,6 +25,7 @@ jobs:
           paths:
             - .
   deploy:
+    executor: node/default
     steps: 
       - attach_workspace:
           at: .
