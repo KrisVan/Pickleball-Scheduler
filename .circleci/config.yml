@@ -43,8 +43,8 @@ workflows:
     jobs:
       - build_and_test
       - deploy:
-        requires:
-          - build_and_test # Only deploy if build and test succesful
-        # filters:
-        #   branches:
-        #     only: main # Only deploy when on main branch
+          requires:
+            - build_and_test # Only deploy if build and test succesful
+          # filters:
+          #   branches:
+          #     only: main # Only deploy when on main branch
