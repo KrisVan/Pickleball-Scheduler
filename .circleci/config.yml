@@ -30,8 +30,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-        command: npm run deploy
-        name: Deploy app
+          command: npm run deploy
+          name: Deploy app
 
 
 # Orchestrate jobs using workflows
