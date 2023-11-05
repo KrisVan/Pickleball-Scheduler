@@ -31,8 +31,8 @@ jobs:
       - store_test_results:
           path: results.xml
       - store_artifacts:
-        path: .
-        destination: results.html
+          path: .
+          destination: results.xml
       - persist_to_workspace:
           root: .
           paths:
