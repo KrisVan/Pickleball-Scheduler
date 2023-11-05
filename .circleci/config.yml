@@ -16,7 +16,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-      - run :
+      - run:
         - name: Download CI dependency
         - command: npm ci
       - run:
