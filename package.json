@@ -21,7 +21,8 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npx playwright test",
+    "report": "npx playwright show-report",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

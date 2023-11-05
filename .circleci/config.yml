@@ -10,16 +10,21 @@ orbs:
 jobs:
   build_test: 
     executor: node/default
+    docker :
+      - image: docker pull mcr.microsoft.com/playwright:v1.39.0-jammy
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
+      - run :
+        - name: Download CI dependency
+        - commad: npm ci
       - run:
-          command: npm run test
-          name: Run tests
-      - run:
-          command: npm run build
           name: Build app
+          command: npm run build
+      - run:
+          name: Run tests
+          command: npm run test
       - persist_to_workspace:
           root: .
           paths:
