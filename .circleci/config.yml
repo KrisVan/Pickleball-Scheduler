@@ -6,20 +6,28 @@ orbs:
   node: circleci/node@5.0.2
 
 # Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
   build_test: 
     executor: node/default
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.39.0-jammy
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run test
-          name: Run tests
+          name: Download CI dependency
+          command: npm ci
       - run:
-          command: npm run build
           name: Build app
+          command: npm run build
+      - run:
+          name: Start app
+          command: npm run start
+          background: true
+      - run:
+          name: Run tests
+          command: npm run test
       - persist_to_workspace:
           root: .
           paths:
@@ -30,11 +38,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
           name: Add github.com to known hosts
+          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
       - run:
-          command: npm run deploy
           name: Deploy app
+          command: npm run deploy
 
 
 # Orchestrate jobs using workflows

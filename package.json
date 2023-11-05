@@ -21,7 +21,8 @@
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npx playwright test",
+    "report": "npx playwright show-report",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -44,6 +45,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@playwright/test": "^1.39.0",
+    "@types/node": "^20.8.10",
     "gh-pages": "^6.0.0"
   }
 }
