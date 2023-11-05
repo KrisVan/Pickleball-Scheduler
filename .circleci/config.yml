@@ -24,6 +24,7 @@ jobs:
       - run:
           name: Start app
           command: npm run start
+          background: true
       - run:
           name: Run tests
           command: npm run test
