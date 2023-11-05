@@ -30,6 +30,9 @@ jobs:
           command: npm run test
       - store_test_results:
           path: results.xml
+      - store_artifacts:
+        path: .
+        destination: results.html
       - persist_to_workspace:
           root: .
           paths:
