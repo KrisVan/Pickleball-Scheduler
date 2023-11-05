@@ -18,7 +18,7 @@ jobs:
           pkg-manager: npm
       - run :
         - name: Download CI dependency
-        - commad: npm ci
+        - command: npm install ci
       - run:
           name: Build app
           command: npm run build
@@ -35,11 +35,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+        name: Add github.com to known hosts
           command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
-          name: Add github.com to known hosts
       - run:
-          command: npm run deploy
           name: Deploy app
+          command: npm run deploy
 
 
 # Orchestrate jobs using workflows
