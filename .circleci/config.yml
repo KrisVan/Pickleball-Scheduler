@@ -11,14 +11,14 @@ jobs:
   build_test: 
     executor: node/default
     docker :
-      - image: docker pull mcr.microsoft.com/playwright:v1.39.0-jammy
+      - image: mcr.microsoft.com/playwright:v1.39.0-jammy
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
       - run :
         - name: Download CI dependency
-        - command: npm install ci
+        - command: npm ci
       - run:
           name: Build app
           command: npm run build
