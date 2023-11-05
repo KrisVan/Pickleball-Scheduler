@@ -36,7 +36,7 @@ jobs:
           at: .
       - run:
         name: Add github.com to known hosts
-          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
+        command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
       - run:
           name: Deploy app
           command: npm run deploy
