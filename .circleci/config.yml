@@ -28,10 +28,8 @@ jobs:
       - run:
           name: Run tests
           command: npm run test
-      - store_test_results:
-          path: results.xml
       - store_artifacts:
-          path: results.html
+          path: playwright-report\index.html
       - persist_to_workspace:
           root: .
           paths:
