@@ -4,16 +4,6 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
 
-// Fastify
-const fastify = require('fastify')({
-  logger: true
-});
-
-// fastify.get('/', (req, reply) => {
-//   reply.send('Hello World!');
-// });
-
-
 // Calendar 
 const localizer = momentLocalizer(moment);
 

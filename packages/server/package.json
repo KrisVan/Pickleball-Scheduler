@@ -1,0 +1,13 @@
+{
+  "name": "@krisvan/pickleballscheduler-api",
+  "homepage": "https://krisvan.github.io/Pickleball-Scheduler/",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "fastify": "^4.24.3"
+  },
+  "scripts": {
+    "start": "node ./src/index.js"
+  }
+}
