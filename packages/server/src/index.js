@@ -1,5 +1,5 @@
 // copied from https://fastify.dev
-
+const port = 5000
 // Import the framework and instantiate it
 import Fastify from 'fastify'
 const fastify = Fastify({
@@ -13,7 +13,7 @@ fastify.get('/', async function handler (request, reply) {
 
 // Run the server!
 try {
-  await fastify.listen({ port: 3000 })
+  await fastify.listen({ port })
 } catch (err) {
   fastify.log.error(err)
   process.exit(1)
