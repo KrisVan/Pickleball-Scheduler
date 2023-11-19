@@ -1,13 +1,17 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Header } from './components/Header/Header';
 import { PickleballCalendar } from './components/PickleballCalendar/PickleballCalendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './App.css';
+
+const queryClient = new QueryClient();
 
 const App = () => (
   <div className="App">
-    <Header />
-    <PickleballCalendar />
+    <QueryClientProvider client={queryClient}>
+      <Header />
+      <PickleballCalendar />
+    </QueryClientProvider>
   </div>
 );
 
