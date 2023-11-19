@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "fastify": "^4.24.3"
+    "fastify": "^4.24.3",
+    "pino": "8.16.2"
   },
   "scripts": {
     "start": "node ./src/index.js"
