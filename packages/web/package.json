@@ -13,6 +13,7 @@
       "react-big-calendar": "^1.8.5",
       "react-calendar": "^4.6.1",
       "react-dom": "^18.0.2",
+      "react-query": "3.39.3",
       "react-scripts": "^5.0.1",
       "util": "^0.12.5",
       "web-vitals": "^3.5.0"
