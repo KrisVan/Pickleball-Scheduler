@@ -3,6 +3,7 @@
     "homepage": "https://krisvan.github.io/Pickleball-Scheduler/",
     "version": "0.1.0",
     "private": true,
+    "type": "module",
     "dependencies": {
       "@testing-library/jest-dom": "^5.14.1",
       "@testing-library/react": "^11.2.7",
@@ -13,6 +14,7 @@
       "react-big-calendar": "^1.8.5",
       "react-calendar": "^4.6.1",
       "react-dom": "^18.0.2",
+      "react-query": "3.39.3",
       "react-scripts": "^5.0.1",
       "util": "^0.12.5",
       "web-vitals": "^3.5.0"
@@ -46,6 +48,7 @@
     "devDependencies": {
       "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
       "gh-pages": "^6.0.0"
-    }
+    },
+    "proxy": "http://localhost:5000"
   }
   

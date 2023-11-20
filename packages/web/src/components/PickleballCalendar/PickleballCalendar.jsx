@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import './App.css';
+import './PickleballCalendar.css';
 
 // Calendar 
 const localizer = momentLocalizer(moment);
 
-const App = () => {
+export const PickleballCalendar = () => {
   const [selectedSlots, setSelectedSlots] = useState([]);
 
   const handleSlotSelect = (slotInfo) => {
@@ -27,26 +27,18 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <h1>Pickleball Scheduler</h1>
-      <body>For the boys at Van Dyke Park</body>
-      <div className="calendar-container">
+    <div className="calendar-container">
         <Calendar
-          localizer={localizer}
-          selectable
-          events={[]} // No events for this example, you can add events if needed
-          defaultView="week"
-          views={['week']}
-          step={30}
-          timeslots={2}
-          onSelectSlot={handleSlotSelect}
-          selected={selectedSlots}
+            localizer={localizer}
+            selectable
+            events={[]} // No events for this example, you can add events if needed
+            defaultView="week"
+            views={['week']}
+            step={30}
+            timeslots={2}
+            onSelectSlot={handleSlotSelect}
+            selected={selectedSlots}
         />
-      </div>
     </div>
   );
 };
-
-export default App;
-
-

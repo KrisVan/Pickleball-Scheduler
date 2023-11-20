@@ -1,20 +1,22 @@
 {
-  "name": "pickleballscheduler",
+  "name": "@krisvan/pickleballscheduler",
   "homepage": "https://krisvan.github.io/Pickleball-Scheduler/",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/server",
+    "packages/web"
+  ],
   "dependencies": {
     "babel-jest": "26.6.0"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
     "server": "nodemon --quiet ./packages/server/src/index.js",
     "client": "npm start --prefix packages/web",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": [
@@ -36,6 +38,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "7.23.3",
+    "babel-jest": "29.7.0",
     "concurrently": "^8.2.2",
     "gh-pages": "^6.0.0",
     "nodemon": "^3.0.1"
