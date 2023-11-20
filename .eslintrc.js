@@ -23,6 +23,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'max-len': ['error', { code: 120, ignoreComments: true }],
     'no-restricted-exports': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
