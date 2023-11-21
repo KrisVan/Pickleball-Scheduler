@@ -15,9 +15,6 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run predeploy
-          name: Build app
-      - run:
           command: npm run lint
           name: Enforce code styles
       - run:
@@ -27,17 +24,6 @@ jobs:
           root: .
           paths:
             - .
-  deploy:
-    executor: node/default
-    steps: 
-      - attach_workspace:
-          at: .
-      - run:
-          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
-          name: Add github.com to known hosts
-      - run:
-          command: npm run deploy
-          name: Deploy app
 
 
 # Orchestrate jobs using workflows
@@ -46,12 +32,3 @@ workflows:
   build_test_workflow:
     jobs:
       - build_test
-  # build_test_deploy_workflow:
-  #   jobs:
-  #     - build_and_test
-  #     - deploy:
-  #         requires:
-  #           - build_and_test # Only deploy if build and test succesful
-  #         filters:
-  #           branches:
-  #             only: main # Only deploy when on main branch
