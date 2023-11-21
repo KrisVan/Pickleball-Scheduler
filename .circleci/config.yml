@@ -15,7 +15,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run build
+          command: npm run predeploy
           name: Build app
       - run:
           command: npm run lint
