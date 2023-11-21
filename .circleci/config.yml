@@ -8,26 +8,27 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build_and_test: 
+  build_test: 
     executor: node/default
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run test
-          name: run tests
+          command: npm run lint
+          name: Enforce code styles
       - run:
-          command: npm run build
-          name: Build app
+          command: npm run test
+          name: Run tests
       - persist_to_workspace:
           root: .
           paths:
             - .
 
+
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  build_and_test_workflow:
+  build_test_workflow:
     jobs:
-      - build_and_test
+      - build_test
