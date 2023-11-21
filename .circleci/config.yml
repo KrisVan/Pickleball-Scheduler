@@ -20,7 +20,7 @@ jobs:
           command: npm ci
       - run:
           name: Build app
-          command: npm run build
+          command: npm run predeploy
       - run:
           command: npm run lint
           name: Enforce code styles
