@@ -1,6 +1,5 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
-const { getEnvironmentData } = require('worker_threads');
 
 /**
  * Read environment variables from file.
@@ -33,16 +32,16 @@ module.exports = defineConfig({
   },
 
   testMatch: [
-    '*.test.js'
+    '*.test.js',
   ],
   timeout: 1 * 60 * 1000, // 1 minute
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
-        headless: process.env.CI ? true : false,
+        headless: Boolean(process.env.CI),
       },
     },
 
@@ -84,4 +83,3 @@ module.exports = defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
-
