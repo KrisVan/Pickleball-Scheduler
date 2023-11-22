@@ -19,12 +19,12 @@ jobs:
           name: Download CI dependency
           command: npm ci
       - run:
-          name: Build app
-          command: npm run build
-      - run:
           name: Start app
           command: npm run start
           background: true
+      - run:
+          command: npm run lint
+          name: Enforce code styles
       - run:
           name: Run tests
           command: npm run test
@@ -32,17 +32,6 @@ jobs:
           root: .
           paths:
             - .
-  deploy:
-    executor: node/default
-    steps: 
-      - attach_workspace:
-          at: .
-      - run:
-          name: Add github.com to known hosts
-          command: ssh-keyscan github.com >> ~/.ssh/known_hosts # FIXME: /bin/bash: line 1: /home/circleci/.ssh/known_hosts: No such file or directory
-      - run:
-          name: Deploy app
-          command: npm run deploy
 
 
 # Orchestrate jobs using workflows
@@ -51,12 +40,3 @@ workflows:
   build_test_workflow:
     jobs:
       - build_test
-  # build_test_deploy_workflow:
-  #   jobs:
-  #     - build_and_test
-  #     - deploy:
-  #         requires:
-  #           - build_and_test # Only deploy if build and test succesful
-  #         filters:
-  #           branches:
-  #             only: main # Only deploy when on main branch
