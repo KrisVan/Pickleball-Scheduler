@@ -5,10 +5,14 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@prisma/client": "^5.7.1",
     "fastify": "^4.24.3",
     "pino": "8.16.2"
   },
   "scripts": {
     "start": "node ./src/index.js"
+  },
+  "devDependencies": {
+    "prisma": "^5.7.1"
   }
 }
