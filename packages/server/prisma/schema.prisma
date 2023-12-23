@@ -11,17 +11,17 @@ datasource db {
 }
 
 model Player {
-  id Int @id @default(autoincrement())
-  name String
-  sessions Session[]
+  PId     Int       @id @default(autoincrement())
+  PName   String
+  Session Session[]
 }
 
 model Session {
-  id Int @id @default(autoincrement())
-  creationDate DateTime @default(now())
-  startTime DateTime
-  endTime DateTime
-  playerId Int
+  SId          Int      @id @default(autoincrement())
+  CreationDate DateTime @default(now())
+  StartTime    DateTime
+  EndTime      DateTime
+  PlayerId     Int
   // Links playerId to session
-  player Player @relation(fields: [playerId], references: [id])
+  player       Player   @relation(fields: [PlayerId], references: [PId])
 }
