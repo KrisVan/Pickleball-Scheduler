@@ -24,6 +24,9 @@ Make sure you have [Node.js](http://nodejs.org/).
 git clone <repo-name>
 cd <repo-name>
 npm install
+cd packages/server
+npx prisma migrate dev --name init
+cd ../..
 npm start
 ```
 
