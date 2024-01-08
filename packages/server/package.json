@@ -9,7 +9,11 @@
     "fastify": "^4.24.3",
     "pino": "8.16.2"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
+    "seed": "npx prisma db seed",
     "start": "node ./src/index.js"
   },
   "devDependencies": {

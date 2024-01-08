@@ -14,7 +14,7 @@ model Player {
   id          Int       @id @default(autoincrement())
   username    String    @unique
   displayName String
-  session     Session[]
+  sessions     Session[]
 }
 
 model Session {
