@@ -24,6 +24,7 @@ module.exports = {
   },
   rules: {
     'max-len': ['error', { code: 120, ignoreComments: true }],
+    'no-console': 'off',
     'no-restricted-exports': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
