@@ -10,6 +10,7 @@ export default function Home() {
     return(
         <div>
             <QueryClientProvider client={queryClient}>
+                <h2>Home</h2>
                 <Header />
                 <PickleballCalendar />
             </QueryClientProvider>
