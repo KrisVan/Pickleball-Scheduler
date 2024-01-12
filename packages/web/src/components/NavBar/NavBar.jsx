@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import Home from "../../pages/Home.jsx"
+
 export default function NavBar() {
     return(
         <nav>

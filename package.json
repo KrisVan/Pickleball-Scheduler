@@ -13,7 +13,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .jsx,.js",
     "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
     "server": "nodemon --quiet ./packages/server/src/index.js",
     "client": "npm start --prefix packages/web",
