@@ -1,17 +1,30 @@
 import React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Header } from './components/Header/Header';
-import { PickleballCalendar } from './components/PickleballCalendar/PickleballCalendar';
-import './App.css';
+import { Routes, Route } from 'react-router-dom'
 
-const queryClient = new QueryClient();
+// Page imports
+import Home from './pages/Home';
+import About from './pages/About';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import NoPage from './pages/NoPage';
+import User from './pages/User';
+// Component imports
+import Navbar from './components/NavBar/NavBar';
+// Local imports
+import './App.css';
 
 const App = () => (
   <div className="App">
-    <QueryClientProvider client={queryClient}>
-      <Header />
-      <PickleballCalendar />
-    </QueryClientProvider>
+      <Navbar/>
+        <Routes>
+          <Route path="/" element = {<Home />} />
+          <Route path="/home" element = {<Home />} />
+          <Route path="/about" element = {<About />} />
+          <Route path="/login" element = {<Login />} />
+          <Route path="/register" element = {<Register />} />
+          <Route path="/user/:username" element = {<User />} />
+          <Route path="*" element = {<NoPage />} />
+        </Routes>
   </div>
 );
 

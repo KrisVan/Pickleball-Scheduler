@@ -4,20 +4,26 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'airbnb',
+  extends: ['airbnb', 'plugin:react/recommended'],
   overrides: [
     {
       env: {
         node: true,
       },
       files: [
-        '.eslintrc.{js,cjs}',
+        '*.jsx',
+        '.eslintrc.{cjs,js,jsx}',
       ],
+      parser: '@babel/eslint-parser',
       parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
         sourceType: 'script',
       },
     },
   ],
+  plugins: ['react'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
