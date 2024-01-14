@@ -2,15 +2,33 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { createTheme, ThemeProvider } from '@mui/material';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Customize app styling theme
+const theme = createTheme({/*
+  palette: {
+    primary: {
+      main: '#013e87'
+    },
+    secondary: {
+      main: '#013e87'
+    },
+  },
+  typography: {
+    h1: {}
+  },
+*/});
+
 const queryClient = new QueryClient();
 
+// Render App
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <React.StrictMode>
+    <ThemeProvider theme={theme} />
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <App />
