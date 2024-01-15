@@ -9,13 +9,11 @@ import Register from './pages/Register';
 import NoPage from './pages/NoPage';
 import User from './pages/User';
 // Component imports
-import Navbar from './components/NavBar/NavBar';
-// Local imports
-import './App.css';
+import AppBar from './components/AppBar/AppBar';
 
 const App = () => (
   <div className="App">
-      <Navbar/>
+      <AppBar />
       <Routes>
         <Route path="/" element = {<Home />} />
         <Route path="/home" element = {<Home />} />
