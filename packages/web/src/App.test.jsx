@@ -9,9 +9,9 @@ jest.mock('./components/PickleballCalendar/PickleballCalendar', () => ({
   PickleballCalendar: () => <div data-testid="pickleball-calendar" />
 }));
 
-test('Is Navbar Rendered', () => {
+test('Is App Bar Rendered', () => {
   render(<MemoryRouter><App /></MemoryRouter>);
-  const text = screen.getByText('Navbar');
+  const text = screen.getByText('PickLeTime');
   expect(text).toBeInTheDocument();
 });
 
