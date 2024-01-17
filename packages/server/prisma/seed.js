@@ -1,15 +1,15 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient({ errorFormat: 'minimal' });
+import prisma from '../src/utils/prisma.js'
 
 async function main() {
   console.log('Start seeding...');
-  await prisma.player.upsert({
-    where: { username: 'alice123' },
+  await prisma.user.upsert({
+    where: { email: 'alice123@gmail.com' },
     update: {},
     create: {
-      username: 'alice123',
+      email: 'alice123@gmail.com',
       displayName: 'alice',
+      password: 'password1',
+      role: 'BASIC',
       sessions: {
         create: {
           startTime: '2024-01-05T18:00:00.000-04:00',
@@ -18,12 +18,14 @@ async function main() {
       },
     },
   });
-  await prisma.player.upsert({
-    where: { username: 'cvan' },
+  await prisma.user.upsert({
+    where: { email: 'cvan4@gmail.com' },
     update: {},
     create: {
-      username: 'cvan',
-      displayName: 'Chris Van Der',
+      email: 'cvan4@gmail.com',
+      displayName: 'Chris Van',
+      password: 'password2',
+      role: 'BASIC',
       sessions: {
         create: {
           startTime: '2024-01-08T18:00:00.000-04:00',
@@ -32,12 +34,14 @@ async function main() {
       },
     },
   });
-  await prisma.player.upsert({
-    where: { username: 'bob' },
+  await prisma.user.upsert({
+    where: { email: 'bobby@gmail.com' },
     update: {},
     create: {
-      username: 'bob',
-      displayName: 'Bobby',
+      email: 'bobby@gmail.com',
+      displayName: 'Bob',
+      password: 'password3',
+      role: 'BASIC',
       sessions: {
         create: {
           startTime: '2024-01-08T17:00:00.000-04:00',

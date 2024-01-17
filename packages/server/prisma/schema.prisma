@@ -10,18 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Player {
-  id          Int       @id @default(autoincrement())
-  username    String    @unique
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
   displayName String
-  sessions     Session[]
+  password    String
+  role        String
+  sessions    Session[]
 }
 
 model Session {
-  id           Int      @id @default(autoincrement())
+  id           String      @id @default(uuid())
   creationDate DateTime @default(now())
   startTime    DateTime
   endTime      DateTime
-  playerId     Int
-  player       Player   @relation(fields: [playerId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
 }
