@@ -97,7 +97,13 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
+                  <Typography
+                    textAlign="center"
+                    component={Link}
+                    to={`/${page}`}
+                    key={page}
+                    sx={{color: 'black', display: 'block' }}
+                  >
                     {page}
                   </Typography>
                 </MenuItem>
@@ -121,7 +127,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            PickLeTime
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
