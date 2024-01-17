@@ -15,9 +15,9 @@ app.get('/test', (req, res) => {
 app.register(userRoutes, { prefix: 'api/users' });
 
 // Add schemas to Fastify
-for (const schema of [...userSchemas]) {
-  app.addSchema(schema);
-}
+Object.values(userSchemas).forEach((schema) => {
+  app.addSchema(schema); 
+});
 
 // Graceful shutdown
 const listeners = ['SIGINT', 'SIGTERM'];

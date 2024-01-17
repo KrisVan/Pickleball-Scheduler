@@ -1,4 +1,4 @@
-import prisma from '../src/utils/prisma.js'
+import prisma from '../src/utils/prisma.js';
 
 async function main() {
   console.log('Start seeding...');
@@ -48,6 +48,16 @@ async function main() {
           endTime: '2024-01-09T22:00:00.000-04:00',
         },
       },
+    },
+  });
+  await prisma.user.upsert({
+    where: { email: 'lazy@gmail.com' },
+    update: {},
+    create: {
+      email: 'lazy@gmail.com',
+      displayName: 'Lazy',
+      password: 'password4',
+      role: 'BASIC',
     },
   });
   console.log('Seeding finished.');
