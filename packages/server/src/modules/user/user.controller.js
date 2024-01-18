@@ -85,3 +85,9 @@ export async function login(req, reply) {
   // Return access token
   return { accessToken: token };
 }
+
+// Logout. Clears cookies from session
+export async function logout(req, reply) {
+  reply.clearCookie('access_token');
+  return reply.send({ message: 'Logout successful' });
+}

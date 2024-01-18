@@ -1,4 +1,6 @@
-import { createUser, getUsers, login } from './user.controller.js';
+import {
+  createUser, getUsers, login, logout,
+} from './user.controller.js';
 import { $ref } from './user.schema.js';
 
 export async function userRoutes(app) {
@@ -39,7 +41,7 @@ export async function userRoutes(app) {
   );
 
   // Logout
-  app.delete('/logout', () => {});
+  app.delete('/logout', { preHandler: [app.authenticate] }, logout);
 
   app.log.info('user routes registered');
 }
