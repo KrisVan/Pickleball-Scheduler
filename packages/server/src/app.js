@@ -50,21 +50,22 @@ app.register(fCookie, {
   hook: 'preHandler',
 });
 
-// Authenticate
+// Authenticate via logged in user coookie
 app.decorate(
   'authenticate',
   async (req, reply) => {
-    const token = req.cookies.access_token
+    const token = req.cookies.access_token;
     // If no token, user not authenticated
     if (!token) {
-      return reply.status(401).send({ message: 'Authentication required' })
+      return reply.status(401).send({ message: 'Authentication required' });
     }
     // Verify token with jwt
-    const decoded = req.jwt.verify(token)
+    const decoded = req.jwt.verify(token);
     // Attach current user payload to req
-    req.user = decoded
+    req.user = decoded;
+    return req.user;
   },
-)
+);
 
 // Graceful shutdown
 const listeners = ['SIGINT', 'SIGTERM'];

@@ -1,11 +1,15 @@
-import { createUser, login } from './user.controller.js';
+import { createUser, getUsers, login } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
 export async function userRoutes(app) {
-  app.get('/', (req, reply) => {
-    reply.send({ message: '/users route hit' });
-  });
-
+  // Get all userss at /api/users. Requires authentication of logged in user
+  app.get(
+    '/',
+    {
+      preHandler: [app.authenticate],
+    },
+    getUsers,
+  );
   // Register
   app.post(
     '/register',
