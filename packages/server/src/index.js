@@ -1,1 +1,1 @@
-export { start as default } from './start.js';
+export { start as default } from './app.js';
