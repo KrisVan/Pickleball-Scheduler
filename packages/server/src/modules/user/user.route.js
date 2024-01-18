@@ -1,4 +1,4 @@
-import { createUser } from './user.controller.js'
+import { createUser } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
 export async function userRoutes(app) {

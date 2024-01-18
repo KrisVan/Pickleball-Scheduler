@@ -1,8 +1,6 @@
-import dotenv from 'dotenv'
 import Fastify from 'fastify';
 import pino from 'pino';
 import fjwt from '@fastify/jwt';
-import FastifyJWT from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 
 import { userRoutes } from './modules/user/user.route.js';
@@ -14,12 +12,24 @@ const logger = pino();
 // Register routes
 app.register(userRoutes, { prefix: 'api/users' });
 
-// Register fjwt
-app.register(fjwt, { secret: process.env.supersecretcode })
-
 // Add schemas to Fastify
 Object.values(userSchemas).forEach((schema) => {
-  app.addSchema(schema); 
+  app.addSchema(schema);
+});
+
+// Register fjwt
+app.register(fjwt, { secret: process.env.supersecretcode });
+
+// Hook to pass token to req obj
+app.addHook('preHandler', (req, res, next) => {
+  req.jwt = app.jwt;
+  return next();
+});
+
+// Cookies
+app.register(fCookie, {
+  secret: 'some-secret-key',
+  hook: 'preHandler',
 });
 
 // Graceful shutdown
@@ -39,7 +49,8 @@ export const start = async (port = 5000, host = '0.0.0.0') => {
       port,
       host,
     },
-    (err, address) => {
+    // (err, address) => {
+    (err) => {
       if (err) {
         app.log.error(err);
         process.exit(1);
