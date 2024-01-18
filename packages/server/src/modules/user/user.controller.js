@@ -6,7 +6,9 @@ const SALT_ROUNDS = 10;
 // Creates a new user. Checks if username is unique, hashes passwrd,
 // and creates user in db.
 export async function createUser(req, reply) {
-  var { username, password } = req.body;
+  // var { username, password } = req.body;
+  var username = req.body.username;
+  const password = req.body.password;
   // Validate data
   username = username.toLowerCase();
   // Error message  if user already exists
@@ -25,7 +27,7 @@ export async function createUser(req, reply) {
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await prisma.user.create({
       data: {
-        username: username,
+        username,
         displayName: username,
         password: hash,
         role: 'BASIC',
@@ -40,7 +42,8 @@ export async function createUser(req, reply) {
 
 // Login user. Checks if user already exists, password matches
 export async function login(req, reply) {
-  var { username, password } = req.body;
+  var username = req.body.username;
+  const password = req.body.password;
   // Validate user data.
   username = username.toLowerCase();
   // Check if user already exists
