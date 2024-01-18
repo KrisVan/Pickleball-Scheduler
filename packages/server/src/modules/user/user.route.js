@@ -1,4 +1,5 @@
 import { createUser } from './user.controller.js';
+import { login } from './user.controller.js'
 import { $ref } from './user.schema.js';
 
 export async function userRoutes(app) {
@@ -31,7 +32,7 @@ export async function userRoutes(app) {
         },
       },
     },
-    () => {},
+    login,
   );
 
   // Logout
