@@ -3,6 +3,16 @@ import prisma from '../src/utils/prisma.js';
 async function main() {
   console.log('Start seeding...');
   await prisma.user.upsert({
+    where: { username: 'admin' },
+    update: {},
+    create: {
+      username: 'admin',
+      displayName: 'admin',
+      password: 'password',
+      role: 'ADMIN',
+    },
+  });
+  await prisma.user.upsert({
     where: { username: 'alice123' },
     update: {},
     create: {

@@ -6,9 +6,8 @@ const SALT_ROUNDS = 10;
 // Creates a new user. Checks if username is unique, hashes passwrd,
 // and creates user in db.
 export async function createUser(req, reply) {
-  // var { username, password } = req.body;
-  var username = req.body.username;
-  const password = req.body.password;
+  let { username } = req.body;
+  const { password } = req.body;
   // Validate data
   username = username.toLowerCase();
   // Error message  if user already exists
@@ -40,10 +39,24 @@ export async function createUser(req, reply) {
   }
 }
 
+// Get users that match username
+export async function getUsers(req, reply) {
+  const users = await prisma.user.findMany({
+    select: {
+      username: true,
+      id: true,
+      displayName: true,
+      role: true,
+      sessions: true,
+    },
+  });
+  return reply.code(200).send(users);
+}
+
 // Login user. Checks if user already exists, password matches
 export async function login(req, reply) {
-  var username = req.body.username;
-  const password = req.body.password;
+  let { username } = req.body;
+  const { password } = req.body;
   // Validate user data.
   username = username.toLowerCase();
   // Check if user already exists
