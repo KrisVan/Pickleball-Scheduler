@@ -3,19 +3,19 @@ import prisma from '../../utils/prisma.js';
 
 const SALT_ROUNDS = 10;
 
-// Creates a new user. Checks if email is unique, hashes passwrd,
+// Creates a new user. Checks if username is unique, hashes passwrd,
 // and creates user in db.
 export async function createUser(req, reply) {
-  const { email, displayName, password } = req.body;
+  const { username, displayName, password } = req.body;
   // Error message  if user already exists
   const foundUser = await prisma.user.findUnique({
     where: {
-      email,
+      username,
     },
   });
   if (foundUser) {
     return reply.code(401).send({
-      message: 'User already exists with this email',
+      message: 'User already exists with this username',
     });
   }
   // Hashes password and creates user in db
@@ -23,7 +23,7 @@ export async function createUser(req, reply) {
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await prisma.user.create({
       data: {
-        email,
+        username,
         displayName,
         password: hash,
         role: 'BASIC',

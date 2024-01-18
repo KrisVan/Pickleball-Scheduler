@@ -3,10 +3,10 @@ import prisma from '../src/utils/prisma.js';
 async function main() {
   console.log('Start seeding...');
   await prisma.user.upsert({
-    where: { email: 'alice123@gmail.com' },
+    where: { username: 'alice123' },
     update: {},
     create: {
-      email: 'alice123@gmail.com',
+      username: 'alice123',
       displayName: 'alice',
       password: 'password1',
       role: 'BASIC',
@@ -19,10 +19,10 @@ async function main() {
     },
   });
   await prisma.user.upsert({
-    where: { email: 'cvan4@gmail.com' },
+    where: { username: 'cvan4' },
     update: {},
     create: {
-      email: 'cvan4@gmail.com',
+      username: 'cvan4',
       displayName: 'Chris Van',
       password: 'password2',
       role: 'BASIC',
@@ -35,10 +35,10 @@ async function main() {
     },
   });
   await prisma.user.upsert({
-    where: { email: 'bobby@gmail.com' },
+    where: { username: 'bobby' },
     update: {},
     create: {
-      email: 'bobby@gmail.com',
+      username: 'bobby',
       displayName: 'Bob',
       password: 'password3',
       role: 'BASIC',
@@ -51,10 +51,10 @@ async function main() {
     },
   });
   await prisma.user.upsert({
-    where: { email: 'lazy@gmail.com' },
+    where: { username: 'lazy@gmail.com' },
     update: {},
     create: {
-      email: 'lazy@gmail.com',
+      username: 'lazy@gmail.com',
       displayName: 'Lazy',
       password: 'password4',
       role: 'BASIC',

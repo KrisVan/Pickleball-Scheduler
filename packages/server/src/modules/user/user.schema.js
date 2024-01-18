@@ -5,25 +5,24 @@ import { buildJsonSchemas } from 'fastify-zod';
 
 // Register: Register data, response schema
 const createUserSchema = z.object({
-  email: z.string().min(1),
+  username: z.string().min(1),
   displayName: z.string().min(1),
   password: z.string().min(6),
 });
 
 const createUserResponseSchema = z.object({
   id: z.string(),
-  email: z.string(),
+  username: z.string(),
   displayName: z.string(),
 });
 
 // Login: Login data, response schema
 const loginSchema = z.object({
-  email: z
+  username: z
     .string({
-      required_error: 'Email is required',
-      invalid_type_error: 'Email must be a string',
-    })
-    .email(),
+      required_error: 'Username is required',
+      invalid_type_error: 'Username must be a string',
+    }),
   password: z.string().min(6),
 });
 
