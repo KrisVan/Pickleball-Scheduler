@@ -7,11 +7,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // Customize app styling theme
-const theme = createTheme({/*
+const theme = createTheme({
   palette: {
-    mode: dark,
+    mode: 'dark',
   }
-*/
 });
 
 const queryClient = new QueryClient();
