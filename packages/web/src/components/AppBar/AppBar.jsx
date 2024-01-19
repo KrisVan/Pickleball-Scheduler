@@ -14,11 +14,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
 
-const pages = ['Scheduler', 'Dashboard', 'About'];
-const settings = ['Login', 'Register', 'User','Logout'];
-
-// const pages = [{'About': 'about'}];
-// const settings = [{'Login': 'login'}, {'Register':'register'}, {'Profile':'user'},{'Logout':'logout'}];
+const pages = [
+  {display:'Scheduler', path:'scheduler'},
+  {display:'Dashboard', path:'dashboard'},
+  {display:'About', path:'about'},
+];
+const settings = [
+  {display:'Login', path:'login'},
+  {display:'Register',path:'register'},
+  {display:'Profile',path:'user'},
+  {display:'Logout',path:'login'},
+];
 
 // Template: ResponsiveAppBar from MUI
 function ResponsiveAppBar() {
@@ -99,16 +105,16 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.display} onClick={handleCloseNavMenu}>
                   <Typography
                     variant="body1"
                     textAlign="center"
                     component={Link}
-                    to={`/${page}`}
-                    key={page}
+                    to={`/${page.path}`}
+                    key={page.path}
                     sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                   >
-                    {page}
+                    {page.display}
                   </Typography>
                 </MenuItem>
               ))}
@@ -119,7 +125,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component={Link}
-            to={'/'}
+            to={'/scheduler'}
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -137,12 +143,12 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 component={Link}
-                to={`/${page}`}
-                key={page}
+                to={`/${page.path}`}
+                key={page.path}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.display}
               </Button>
             ))}
           </Box>
@@ -170,17 +176,17 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting.display} onClick={handleCloseUserMenu}>
                   <Typography
                     textAlign="center"
                     variant="body1"
                     component={Link}
-                    to={`/${setting}`}
-                    key={setting}
+                    to={`/${setting.path}`}
+                    key={setting.path}
                     sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                     
                   >
-                    {setting}
+                    {setting.display}
                   </Typography>
                   
                 </MenuItem>
