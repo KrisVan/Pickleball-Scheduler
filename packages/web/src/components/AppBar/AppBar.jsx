@@ -14,8 +14,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
 
-const pages = ['About', 'Login', 'Register'];
-const settings = ['Login', 'Register', 'User'];
+const pages = ['Scheduler', 'Dashboard', 'About'];
+const settings = ['Login', 'Register', 'User','Logout'];
+
+// const pages = [{'About': 'about'}];
+// const settings = [{'Login': 'login'}, {'Register':'register'}, {'Profile':'user'},{'Logout':'logout'}];
 
 // Template: ResponsiveAppBar from MUI
 function ResponsiveAppBar() {
@@ -98,11 +101,12 @@ function ResponsiveAppBar() {
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography
+                    variant="body1"
                     textAlign="center"
                     component={Link}
                     to={`/${page}`}
                     key={page}
-                    sx={{color: 'black', display: 'block' }}
+                    sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                   >
                     {page}
                   </Typography>
@@ -169,10 +173,11 @@ function ResponsiveAppBar() {
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography
                     textAlign="center"
+                    variant="body1"
                     component={Link}
                     to={`/${setting}`}
                     key={setting}
-                    sx={{color: 'black', display: 'block' }}
+                    sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                     
                   >
                     {setting}
