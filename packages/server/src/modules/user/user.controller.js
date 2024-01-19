@@ -56,7 +56,7 @@ export async function getUsers(req, reply) {
 // Login user. Checks if user already exists, password matches
 export async function login(req, reply) {
   let { username } = req.body;
-  const { password } = req.body;
+  const { displayName, role, password } = req.body;
   // Validate user data.
   username = username.toLowerCase();
   // Check if user already exists
@@ -82,8 +82,13 @@ export async function login(req, reply) {
     httpOnly: true,
     secure: true,
   });
-  // Return access token
-  return { accessToken: token };
+  // Return access token, username, displayName, and role
+  return {
+    accessToken: token,
+    username: user.username,
+    displayName: user.displayName,
+    role: user.password,
+  };
 }
 
 // Logout. Clears cookies from session
