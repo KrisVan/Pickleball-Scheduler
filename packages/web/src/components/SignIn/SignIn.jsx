@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom'
-//https://stackoverflow.com/questions/63216730/can-you-use-material-ui-link-with-react-router-dom-link
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,7 +17,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" component={RouterLink} to="/about">
         PickLeTime
       </Link>{' '}
       {new Date().getFullYear()}
