@@ -17,6 +17,6 @@ test('Is App Bar Rendered', () => {
 
 test('Is Home Rendered', () => {
   render(<MemoryRouter><App /></MemoryRouter>);
-  const text = screen.getByText('Pickleball Scheduler');
+  const text = screen.getByText('Home');
   expect(text).toBeInTheDocument();
 });
