@@ -4,7 +4,7 @@ import {
 import { $ref } from './user.schema.js';
 
 export async function userRoutes(app) {
-  // Get all userss at /api/users. Requires authentication of logged in user
+  // Get all users at /api/users. Requires authentication of logged in user
   app.get(
     '/',
     {
@@ -40,7 +40,7 @@ export async function userRoutes(app) {
     login,
   );
 
-  // Logout
+  // Logout. Login required.
   app.delete('/logout', { preHandler: [app.authenticate] }, logout);
 
   app.log.info('user routes registered');
