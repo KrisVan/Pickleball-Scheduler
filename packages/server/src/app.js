@@ -65,19 +65,6 @@ app.decorate(
     return req.user;
   },
 );
-// Authenticate admin via role
-app.decorate(
-  'isAdmin',
-  async (req, reply) => {
-    const role = req.role;
-    // If role is not ADMIN, user not permitted
-    if (req.role !== "ADMIN") {
-      return reply.status(401).send({ message: 'Not permitted' });
-    }
-    return true;
-  },
-);
-
 
 // Graceful shutdown
 const listeners = ['SIGINT', 'SIGTERM'];
