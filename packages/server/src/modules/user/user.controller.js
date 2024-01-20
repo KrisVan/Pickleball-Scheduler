@@ -59,7 +59,7 @@ export async function login(req, reply) {
   const { password } = req.body;
   // Validate user data.
   username = username.toLowerCase();
-  // Check if user already exists
+  // Get if user already exists
   const user = await prisma.user.findUnique({ where: { username } });
   // Check if password matches user
   const isMatch = user && (await bcrypt.compare(password, user.password));
@@ -82,8 +82,13 @@ export async function login(req, reply) {
     httpOnly: true,
     secure: true,
   });
-  // Return access token
-  return { accessToken: token };
+  // Return access token, username, displayName, and role
+  return {
+    accessToken: token,
+    username: user.username,
+    displayName: user.displayName,
+    role: user.role,
+  };
 }
 
 // Logout. Clears cookies from session

@@ -36,8 +36,7 @@ Object.values(userSchemas).forEach((schema) => {
 });
 
 // Register fjwt
-app.register(fjwt, { secret: process.env.supersecretcode });
-
+app.register(fjwt, { secret: process.env.JWT_SECRET_CODE });
 // Hook to pass token to req obj as prehandler before route calls
 app.addHook('preHandler', (req, res, next) => {
   req.jwt = app.jwt;
@@ -46,7 +45,7 @@ app.addHook('preHandler', (req, res, next) => {
 
 // Register cookie to fastify
 app.register(fCookie, {
-  secret: 'some-secret-key',
+  secret: process.env.COOKIE_SECRET_KEY,
   hook: 'preHandler',
 });
 
