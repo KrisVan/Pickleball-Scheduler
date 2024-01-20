@@ -56,10 +56,10 @@ export async function getUsers(req, reply) {
 // Login user. Checks if user already exists, password matches
 export async function login(req, reply) {
   let { username } = req.body;
-  const { displayName, role, password } = req.body;
+  const { password } = req.body;
   // Validate user data.
   username = username.toLowerCase();
-  // Check if user already exists
+  // Get if user already exists
   const user = await prisma.user.findUnique({ where: { username } });
   // Check if password matches user
   const isMatch = user && (await bcrypt.compare(password, user.password));
@@ -87,7 +87,7 @@ export async function login(req, reply) {
     accessToken: token,
     username: user.username,
     displayName: user.displayName,
-    role: user.password,
+    role: user.role,
   };
 }
 
