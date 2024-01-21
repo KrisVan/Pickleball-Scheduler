@@ -74,6 +74,7 @@ export async function login(req, reply) {
     id: user.id,
     username: user.username,
     displayName: user.displayName,
+    role: user.role,
   };
   const token = req.jwt.sign(payload);
   // Set cookie so that client can request token
