@@ -12,6 +12,9 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+// Hooks/API
+import axios from '../../api/axios.jsx';
+import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
 
 function Copyright(props) {
   return (
@@ -27,15 +30,31 @@ function Copyright(props) {
 }
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  // API request
+  const [response, error, loading, axiosFetch] = useAxiosFunction();
+
+  // Handle sumbit of data
+  const handleSubmit = (event) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // Get submitted username and password
     console.log({
       username: data.get('username'),
       password: data.get('password'),
     });
+    axiosFetch({
+      axiosInstance: axios,
+      method: 'POST',
+      url: 'api/users/login',
+      requestConfig:{
+        username: data.get('username'),
+        password: data.get('password'),
+      }
+    })
+    console.log(response);
   };
 
+  // Render sign in component
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
