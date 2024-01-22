@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Link as RouterLink } from 'react-router-dom'
+import { useState } from 'react';
+import { Link as RouterLink, Navigate } from 'react-router-dom'
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +14,32 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+
+// Hooks/API
+import axios from '../../api/axios.jsx';
+import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
+// Local Components
+import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
+
+function AlertDisplay(props) {
+  var message = props.message;
+  // Change text accordingly if error indicated in message
+  if (message.includes("400")) {
+    message = "Username and Password must be at least 6 characters long."
+  }
+  if (message.includes("401")) {
+    message = "Invalid username or password."
+  }
+  // Alert display
+  return (
+    <Alert 
+      sx={{ mt: 2, mb: 4}}
+      {...props}
+    >
+      {message}
+    </Alert>
+  );
+}
 
 function Copyright(props) {
   return (
@@ -27,15 +55,28 @@ function Copyright(props) {
 }
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  // API request
+  const [response, error, loading, axiosFetch] = useAxiosFunction();
+
+  // Handle sumbit of data
+  const handleSubmit = (event) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
+    setHasSubmitted(true);
+    // Get submitted username and password
+    axiosFetch({
+      axiosInstance: axios,
+      method: 'POST',
+      url: 'api/users/login',
+      requestConfig:{
+        username: data.get('username'),
+        password: data.get('password'),
+      }
     });
   };
 
+  // Render sign in component
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -100,6 +141,19 @@ export default function SignIn() {
           </Grid>
         </Box>
       </Box>
+      {hasSubmitted && loading && <SimpleBackdrop />}
+      {hasSubmitted && !loading && error && 
+        <AlertDisplay severity="warning" message={error}/>
+      }
+      {hasSubmitted && !loading && !error && response &&
+        <>
+          <AlertDisplay 
+            severity="success"
+            message={"You are now logged in! Now taking you to dashboard."}
+          />
+          <Navigate to="/home "/>
+        </>
+      }
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );

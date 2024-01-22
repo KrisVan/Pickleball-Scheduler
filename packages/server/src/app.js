@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import pino from 'pino';
 import fjwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
+import cors from '@fastify/cors';
 
 import { userRoutes } from './modules/user/user.route.js';
 import { userSchemas } from './modules/user/user.schema.js';
@@ -27,6 +28,14 @@ export const start = async (port = 5000, host = '0.0.0.0') => {
   );
 };
 //----------------------------------------------------------------
+// Add CORS and CORS options
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.register(cors, corsOptions);
+
 // Register routes
 app.register(userRoutes, { prefix: 'api/users' });
 

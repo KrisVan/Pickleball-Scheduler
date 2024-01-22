@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "@fastify/cookie": "^9.3.0",
+    "@fastify/cors": "^8.5.0",
     "@fastify/jwt": "^8.0.0",
     "@prisma/client": "^5.7.1",
     "bcrypt": "^5.1.1",
