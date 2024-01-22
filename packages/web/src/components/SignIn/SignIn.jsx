@@ -25,7 +25,7 @@ function AlertDisplay(props) {
   var message = props.message;
   // Change text accordingly if error indicated in message
   if (message.includes("400")) {
-    message = "Username and Password must be at least 6 characters long."
+    message = "Password must be at least 6 characters long."
   }
   if (message.includes("401")) {
     message = "Invalid username or password."
