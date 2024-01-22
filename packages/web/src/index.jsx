@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -13,19 +12,15 @@ const theme = createTheme({
   }
 });
 
-const queryClient = new QueryClient();
-
 // Render App
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme} >
     <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
 );

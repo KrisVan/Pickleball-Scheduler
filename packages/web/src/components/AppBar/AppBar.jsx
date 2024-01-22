@@ -48,7 +48,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="false">
         <Toolbar disableGutters>
           <IconButton
             color="inherit"
@@ -156,7 +156,7 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                <Avatar sx={{ color: 'inherit' }} />
               </IconButton>
             </Tooltip>
             <Menu
