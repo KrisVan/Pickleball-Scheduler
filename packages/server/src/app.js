@@ -4,6 +4,7 @@ import fjwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 
+import { corsOptions } from './config/corsOptions.js';
 import { userRoutes } from './modules/user/user.route.js';
 import { userSchemas } from './modules/user/user.schema.js';
 
@@ -28,12 +29,7 @@ export const start = async (port = 5000, host = '0.0.0.0') => {
   );
 };
 //----------------------------------------------------------------
-// Add CORS and CORS options
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+// Cross Origin Resource Sharing
 app.register(cors, corsOptions);
 
 // Register routes

@@ -69,7 +69,7 @@ export async function login(req, reply) {
       message: 'Invalid username or password',
     });
   }
-  // Get user info and create token
+  // Get user info and create jwt
   const payload = {
     id: user.id,
     username: user.username,
