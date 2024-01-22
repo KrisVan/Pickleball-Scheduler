@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, Navigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,6 +17,8 @@ import Container from '@mui/material/Container';
 // Hooks/API
 import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
+// Local Components
+import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
 
 function AlertDisplay(props) {
   var message = props.message;
@@ -37,17 +37,6 @@ function AlertDisplay(props) {
     >
       {message}
     </Alert>
-  );
-}
-
-function SimpleBackdrop() {
-  return (
-    <Backdrop
-      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      open={true}
-    >
-      <CircularProgress color="inherit" />
-    </Backdrop>
   );
 }
 
@@ -156,10 +145,13 @@ export default function SignIn() {
         <AlertDisplay severity="warning" message={error}/>
       }
       {hasSubmitted && !loading && !error && response &&
-        <AlertDisplay 
-          severity="success"
-          message={"Success! You are now logged in."}
-        />
+        <>
+          <AlertDisplay 
+            severity="success"
+            message={"You are now logged in! Now taking you to dashboard."}
+          />
+          <Navigate to="/home "/>
+        </>
       }
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
