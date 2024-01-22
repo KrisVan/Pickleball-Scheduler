@@ -19,17 +19,14 @@ const useAxiosFunction = () => {
       setLoading(true);
       const ctrl = new AbortController();
       setController(ctrl);
-      console.log("Requst config\n")
-      console.log(requestConfig);
       const res = await axiosInstance[method.toLowerCase()](url, {
         ...requestConfig,
         signal: ctrl.signal,
       });
-      console.log(res);
       setResponse(res.data);
+      setError('');
     }
     catch (err) {
-      console.log(err.message);
       setError(err.message);
     }
     finally {
@@ -38,7 +35,6 @@ const useAxiosFunction = () => {
   }
   // Runs when component mounts
   useEffect(() => {
-    console.log(controller);
     // useEffect cleanup
     return () => controller && controller.abort();
   }, [controller])

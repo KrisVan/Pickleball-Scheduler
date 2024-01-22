@@ -29,11 +29,11 @@ export const start = async (port = 5000, host = '0.0.0.0') => {
 };
 //----------------------------------------------------------------
 // Add CORS and CORS options
-const corsOptions ={
-  origin:'http://localhost:3000', 
-  credentials:true,
-  optionSuccessStatus:200
-}
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
 app.register(cors, corsOptions);
 
 // Register routes

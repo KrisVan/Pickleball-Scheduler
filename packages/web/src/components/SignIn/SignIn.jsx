@@ -1,5 +1,9 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom'
+import Alert from '@mui/material/Alert';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +20,37 @@ import Container from '@mui/material/Container';
 import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
 
+function AlertDisplay(props) {
+  var message = props.message;
+  // Change text accordingly if error indicated in message
+  if (message.includes("400")) {
+    message = "Username and Password must be at least 6 characters long."
+  }
+  if (message.includes("401")) {
+    message = "Invalid username or password."
+  }
+  // Alert display
+  return (
+    <Alert 
+      sx={{ mt: 2, mb: 4}}
+      {...props}
+    >
+      {message}
+    </Alert>
+  );
+}
+
+export function SimpleBackdrop() {
+  return (
+    <Backdrop
+      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      open={true}
+    >
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
+}
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -30,6 +65,7 @@ function Copyright(props) {
 }
 
 export default function SignIn() {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
 
@@ -37,11 +73,8 @@ export default function SignIn() {
   const handleSubmit = (event) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    setHasSubmitted(true);
     // Get submitted username and password
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
     axiosFetch({
       axiosInstance: axios,
       method: 'POST',
@@ -50,8 +83,7 @@ export default function SignIn() {
         username: data.get('username'),
         password: data.get('password'),
       }
-    })
-    console.log(response);
+    });
   };
 
   // Render sign in component
@@ -119,6 +151,16 @@ export default function SignIn() {
           </Grid>
         </Box>
       </Box>
+      {hasSubmitted && loading && <SimpleBackdrop />}
+      {hasSubmitted && !loading && error && 
+        <AlertDisplay severity="warning" message={error}/>
+      }
+      {hasSubmitted && !loading && !error && response &&
+        <AlertDisplay 
+          severity="success"
+          message={"Success! You are now logged in."}
+        />
+      }
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
