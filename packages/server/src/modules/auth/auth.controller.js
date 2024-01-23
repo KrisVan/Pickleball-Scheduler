@@ -53,14 +53,12 @@ export async function handleLogout(req, reply) {
   const { cookies } = req;
   // No content to clear
   if (!cookies?.refreshJWT) return reply.code(204).send();
-  console.log('content cleared\n');
   // If refresh token in DB, clear DB
   const refreshToken = cookies.refreshJWT;
   const foundUser = await prisma.user.findUnique({
     where: { refreshToken },
   });
   if (foundUser) {
-    console.log('user found\n');
     // Clear DB refresh token
     await prisma.user.update({
       where: { refreshToken },
@@ -68,7 +66,6 @@ export async function handleLogout(req, reply) {
     });
   }
   // Clear cookies
-  console.log('clearing cookie\n');
   reply.clearCookie('refreshJWT', {
     path: '/',
     httpOnly: true,
@@ -82,13 +79,11 @@ export async function handleLogout(req, reply) {
 export async function handleRefreshToken(req, reply) {
   const { cookies } = req;
   // Check if cookie exists with jwt
-  console.log(`Cookie: ${JSON.stringify(cookies.refreshJWT)}`);
   if (!cookies?.refreshJWT) {
     return reply.code(401).send({
       message: 'No cookie',
     });
   }
-  console.log(`CookieJWT: ${cookies.refreshJWT}`);
   const refreshToken = cookies.refreshJWT;
   // Get if user has refresh token saved in DB
   const foundUser = await prisma.user.findUnique({
@@ -106,7 +101,7 @@ export async function handleRefreshToken(req, reply) {
   // Evaluate JWT
   req.jwt.verify(
     refreshToken,
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.JWT_TOKEN_SECRET,
     (err, decoded) => {
       // Check if token is valid or token doesn't match user
       if (err || foundUser.username !== decoded.username) {

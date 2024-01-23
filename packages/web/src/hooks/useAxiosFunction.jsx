@@ -22,6 +22,7 @@ const useAxiosFunction = () => {
       const res = await axiosInstance[method.toLowerCase()](url, {
         ...requestConfig,
         signal: ctrl.signal,
+        withCredentials: true,// FIXME: Only login&refresh?
       });
       setResponse(res.data);
       setError('');

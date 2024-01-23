@@ -68,7 +68,7 @@ export default function SignIn() {
     axiosFetch({
       axiosInstance: axios,
       method: 'POST',
-      url: 'api/users/login',
+      url: 'api/auth/login',
       requestConfig:{
         username: data.get('username'),
         password: data.get('password'),
@@ -151,7 +151,7 @@ export default function SignIn() {
             severity="success"
             message={"You are now logged in! Now taking you to dashboard."}
           />
-          <Navigate to="/dashboard "/>
+          {/*FIXME <Navigate to="/dashboard "/>*/}
         </>
       }
       <Copyright sx={{ mt: 8, mb: 4 }} />
