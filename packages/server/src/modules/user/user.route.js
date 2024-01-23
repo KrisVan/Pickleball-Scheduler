@@ -1,5 +1,5 @@
 import {
-  createUser, getUsers, login, logout,
+  handleCreateUser, handleGetUsers,
 } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
@@ -8,9 +8,9 @@ export async function userRoutes(app) {
   app.get(
     '/',
     {
-      preHandler: [app.authenticate],
+      preHandler: [app.verifyJWT],
     },
-    getUsers,
+    handleGetUsers,
   );
   // Register
   app.post(
@@ -23,25 +23,8 @@ export async function userRoutes(app) {
         },
       },
     },
-    createUser,
+    handleCreateUser,
   );
 
-  // Login
-  app.post(
-    '/login',
-    {
-      schema: {
-        body: $ref('loginSchema'),
-        response: {
-          201: $ref('loginResponseSchema'),
-        },
-      },
-    },
-    login,
-  );
-
-  // Logout. Login required.
-  app.delete('/logout', { preHandler: [app.authenticate] }, logout);
-
-  app.log.info('user routes registered');
+  app.log.info('User routes registered');
 }

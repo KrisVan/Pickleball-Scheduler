@@ -5,8 +5,10 @@ import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 
 import { corsOptions } from './config/corsOptions.js';
+import { authRoutes } from './modules/auth/auth.route.js';
 import { userRoutes } from './modules/user/user.route.js';
 import { userSchemas } from './modules/user/user.schema.js';
+import { verifyJWT } from './middleware/verifyJWT.js';
 
 const app = Fastify({ logger: true });
 const logger = pino();
@@ -34,14 +36,18 @@ app.register(cors, corsOptions);
 
 // Register routes
 app.register(userRoutes, { prefix: 'api/users' });
+app.register(authRoutes, { prefix: 'api/auth' });
 
 // Add schemas to Fastify
 Object.values(userSchemas).forEach((schema) => {
   app.addSchema(schema);
 });
 
-// Register fjwt
-app.register(fjwt, { secret: process.env.ACCESS_TOKEN_SECRET });
+// Register access fjwt
+app.register(fjwt, {
+  secret: process.env.ACCESS_TOKEN_SECRET,
+});
+
 // Hook to pass token to req obj as prehandler before route calls
 app.addHook('preHandler', (req, res, next) => {
   req.jwt = app.jwt;
@@ -54,21 +60,30 @@ app.register(fCookie, {
   hook: 'preHandler',
 });
 
-// Authenticate via logged in user coookie
+// Authenticate refresh via logged in user coookie
+// app.decorate(
+//   'authenticate',
+//   async (req, reply) => {
+//     // Bearer token
+//     const token = req.cookies.refreshJWT;
+//     // If no token, user not authenticated
+//     if (!token) {
+//       return reply.status(401).send({ message: 'Authentication required' });
+//     }
+//     // Verify token with jwt
+//     console.log(token);
+//     const decoded = req.jwt.verify(token);
+//     console.log(decoded);
+//     // Attach current user payload to req
+//     req.user = decoded;
+//     return req.user;
+//   },
+// );
+
+// Middleware to verify access JWT sent from client
 app.decorate(
-  'authenticate',
-  async (req, reply) => {
-    const token = req.cookies.access_token;
-    // If no token, user not authenticated
-    if (!token) {
-      return reply.status(401).send({ message: 'Authentication required' });
-    }
-    // Verify token with jwt
-    const decoded = req.jwt.verify(token);
-    // Attach current user payload to req
-    req.user = decoded;
-    return req.user;
-  },
+  'verifyJWT',
+  verifyJWT,
 );
 
 // Graceful shutdown
