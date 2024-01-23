@@ -16,7 +16,7 @@ model User {
   displayName  String
   password     String
   role         String
-  refreshToken String    @default("")
+  refreshToken String?   @unique
   sessions     Session[]
 }
 

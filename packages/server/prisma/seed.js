@@ -1,5 +1,5 @@
 import prisma from '../src/utils/prisma.js';
-
+// Passwords are password when not encrypted
 async function main() {
   console.log('Start seeding...');
   await prisma.user.upsert({
@@ -8,7 +8,7 @@ async function main() {
     create: {
       username: 'admin',
       displayName: 'admin',
-      password: 'password',
+      password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'ADMIN',
     },
   });
@@ -18,7 +18,7 @@ async function main() {
     create: {
       username: 'alice123',
       displayName: 'alice',
-      password: 'password1',
+      password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'BASIC',
       sessions: {
         create: {
@@ -34,7 +34,7 @@ async function main() {
     create: {
       username: 'cvan4',
       displayName: 'Chris Van',
-      password: 'password2',
+      password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'BASIC',
       sessions: {
         create: {
@@ -50,7 +50,7 @@ async function main() {
     create: {
       username: 'bobby',
       displayName: 'Bob',
-      password: 'password3',
+      password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'BASIC',
       sessions: {
         create: {
@@ -66,7 +66,7 @@ async function main() {
     create: {
       username: 'lazy@gmail.com',
       displayName: 'Lazy',
-      password: 'password4',
+      password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'BASIC',
     },
   });
