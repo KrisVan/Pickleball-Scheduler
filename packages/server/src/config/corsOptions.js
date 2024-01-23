@@ -1,8 +1,4 @@
-const whitelist = [
-  'https://www.yoursite.com',
-  'http://0.0.0.0:5000',
-  'http://localhost:3000',
-];
+import { whitelist } from './whitelist.js';
 
 export const corsOptions = {
   origin: (origin, callback) => {

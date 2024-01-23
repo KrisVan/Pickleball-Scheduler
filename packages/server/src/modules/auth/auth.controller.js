@@ -35,7 +35,8 @@ export async function handleLogin(req, reply) {
     path: '/',
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: true, // send cookie over HTTPS only
+    sameSite: 'None',
+    secure: true,
   });
 
   // Return access token, username, displayName, and role
@@ -70,8 +71,8 @@ export async function handleLogout(req, reply) {
   console.log('clearing cookie\n');
   reply.clearCookie('refreshJWT', {
     path: '/',
-    maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
+    sameSite: 'None',
     secure: true,
   });
   return reply.code(200).send();

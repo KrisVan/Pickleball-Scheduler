@@ -60,26 +60,6 @@ app.register(fCookie, {
   hook: 'preHandler',
 });
 
-// Authenticate refresh via logged in user coookie
-// app.decorate(
-//   'authenticate',
-//   async (req, reply) => {
-//     // Bearer token
-//     const token = req.cookies.refreshJWT;
-//     // If no token, user not authenticated
-//     if (!token) {
-//       return reply.status(401).send({ message: 'Authentication required' });
-//     }
-//     // Verify token with jwt
-//     console.log(token);
-//     const decoded = req.jwt.verify(token);
-//     console.log(decoded);
-//     // Attach current user payload to req
-//     req.user = decoded;
-//     return req.user;
-//   },
-// );
-
 // Middleware to verify access JWT sent from client
 app.decorate(
   'verifyJWT',
