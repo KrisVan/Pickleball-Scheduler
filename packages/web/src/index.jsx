@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './context/authProvider';
+import { UserProvider } from './context/UserContext';
 
 // Customize app styling theme
 const theme = createTheme({
@@ -17,14 +17,14 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <React.StrictMode>
-    <AuthProvider>
+    <UserProvider>
       <ThemeProvider theme={theme} >
         <CssBaseline />
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </ThemeProvider>
-    </AuthProvider>
+    </UserProvider>
   </React.StrictMode>,
 );
 

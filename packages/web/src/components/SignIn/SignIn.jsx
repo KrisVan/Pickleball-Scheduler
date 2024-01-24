@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link as RouterLink, Navigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
@@ -14,9 +14,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// Hooks/API
+// Hooks/API/Providers
 import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
+import UserContext from '../../context/UserContext.jsx';
 // Local Components
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
 import Copyright from '../Copyright/Copyright.jsx';
@@ -42,6 +43,7 @@ function AlertDisplay(props) {
 }
 
 export default function SignIn() {
+  const { user, setUser } = useContext(UserContext);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
@@ -62,6 +64,13 @@ export default function SignIn() {
       }
     });
   };
+
+  // Set context if successful response
+  useEffect(() => {
+    if (response) {
+      setUser(response);    
+    }
+  }, [response, user, setUser]);
 
   // Render sign in component
   return (
