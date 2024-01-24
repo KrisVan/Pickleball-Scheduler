@@ -14,12 +14,12 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
 // Hooks/API
 import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
 // Local Components
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
+import Copyright from '../Copyright/Copyright.jsx';
 
 function AlertDisplay(props) {
   var message = props.message;
@@ -38,19 +38,6 @@ function AlertDisplay(props) {
     >
       {message}
     </Alert>
-  );
-}
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/about">
-        PickLeTime
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
   );
 }
 
@@ -129,13 +116,13 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link component={RouterLink} to="/about" variant="body2">
+              Forgot password?
               </Link>
             </Grid>
             <Grid item>
               <Link component={RouterLink} to="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+                Don't have an account? Sign Up
               </Link>
             </Grid>
           </Grid>
