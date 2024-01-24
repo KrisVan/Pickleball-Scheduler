@@ -6,8 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -23,11 +21,8 @@ import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
 function AlertDisplay(props) {
   var message = props.message;
   // Change text accordingly if error indicated in message
-  if (message.includes("400")) {
-    message = "Password must be at least 6 characters long."
-  }
   if (message.includes("401")) {
-    message = "Invalid username or password."
+    message = "Username already in use"
   }
   // Alert display
   return (
@@ -53,13 +48,12 @@ function Copyright(props) {
   );
 }
 
-export default function SignIn() {
+export default function SignUp() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
 
-  // Handle sumbit of data
-  const handleSubmit = (event) => { 
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setHasSubmitted(true);
@@ -67,7 +61,7 @@ export default function SignIn() {
     axiosFetch({
       axiosInstance: axios,
       method: 'POST',
-      url: 'api/auth/login',
+      url: 'api/users/register',
       requestConfig:{
         username: data.get('username'),
         password: data.get('password'),
@@ -75,7 +69,6 @@ export default function SignIn() {
     });
   };
 
-  // Render sign in component
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -91,50 +84,44 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Sign Up
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link component={RouterLink} to="/about" variant="body2">
-              Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link component={RouterLink} to="/register" variant="body2">
-                Don't have an account? Sign Up
+              <Link component={RouterLink} to="/login" variant="body2">
+                Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
@@ -148,12 +135,12 @@ export default function SignIn() {
         <>
           <AlertDisplay 
             severity="success"
-            message={"You are now logged in! Now taking you to dashboard."}
+            message={"You are now registered! Now taking you to login."}
           />
-          <Navigate to="/dashboard "/>
+          {/*<Navigate to="/login "/>*/}
         </>
       }
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 }
