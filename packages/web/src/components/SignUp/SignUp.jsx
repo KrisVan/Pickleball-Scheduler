@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, Navigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
@@ -17,14 +17,15 @@ import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
 // Local Components
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
+import Copyright from '../Copyright/Copyright.jsx';
 
-function AlertDisplay(props) {
+// Alert for server responses
+function ResponseAlert(props) {
   var message = props.message;
   // Change text accordingly if error indicated in message
   if (message.includes("401")) {
     message = "Username already in use"
   }
-  // Alert display
   return (
     <Alert 
       sx={{ mt: 2, mb: 4}}
@@ -35,28 +36,25 @@ function AlertDisplay(props) {
   );
 }
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/about">
-        PickLeTime
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 export default function SignUp() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  // API request
-  const [response, error, loading, axiosFetch] = useAxiosFunction();
+  const [password, setPassword] = useState('');
+  const [confirmationPassword, setConfirmationPassword] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [matchError, setMatchError] = useState('');
+  const [isValidationError, setIsValidationError] = useState(false);
 
+  // Fetch API request
+  const [response, error, loading, axiosFetch] = useAxiosFunction();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setHasSubmitted(true);
+    // LOG
+    console.log(data.get('username'));
+    console.log(data.get('password'));
+    console.log("Fetching")
     // Get submitted username and password
     axiosFetch({
       axiosInstance: axios,
@@ -68,6 +66,69 @@ export default function SignUp() {
       }
     });
   };
+
+  // Check if error is present after error state changes
+  useEffect(() => {
+    if (usernameError || passwordError || matchError) {
+      setIsValidationError(true);
+    }
+    else {
+      setIsValidationError(false);
+    }
+  },[usernameError, passwordError, matchError])
+
+  // Validate username
+  const validateUsernameOnChange = (username) => {
+    // If not between 2-24 chars
+    if (!(/^.{2,24}$/.test(username))){
+      setUsernameError("Username must be between 2 and 24 characters");
+      return false;
+    }
+    // If not any combination of letters, digits, and underscores
+    if (!(/^[a-zA-Z0-9_]+$/.test(username))){
+      setUsernameError("Username can only contain letters, digits, and underscores");
+      return false;
+    }
+    setUsernameError("");
+    return true;
+  }
+
+  // Validate password
+  const validatePasswordOnChange = (password) => {
+    setPassword(password);
+    // If not between 6-24 chars
+    if (!(/^.{6,24}$/.test(password))){
+      setPasswordError("Password must be between 6 and 24 characters")
+      return false;
+    }
+    // If not any combination of letters, digits, or non closure special chars
+    else if (!(/^[a-zA-Z0-9!@#$%^&*_\-+=|:;<>,.?/\\~`"]+$/.test(password))){
+      setPasswordError("Password can only contain letters, digits, and non closure special characters");
+      return false;
+    }
+    // Check if password matches confirmation password
+    if (confirmationPassword === password){
+      setPasswordError('')
+      setMatchError('')
+    }
+    else{
+      setMatchError("Passwords must match");
+    }
+    setPasswordError('');
+    return true;
+  }
+
+  // Check if confirm passwords match
+  const matchPasswordOnChange = (confirmationPassword) => {
+    setConfirmationPassword(confirmationPassword);
+    // If confirm password does not match the password
+    if (confirmationPassword !== password){
+      setMatchError("Passwords must match");
+    }
+    else {
+      setMatchError('');
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -86,7 +147,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -96,6 +157,9 @@ export default function SignUp() {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                onChange={(event) => validateUsernameOnChange(event.target.value)}
+                error={usernameError && usernameError.length ? true : false}
+                helperText={usernameError}
               />
             </Grid>
             <Grid item xs={12}>
@@ -107,11 +171,29 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={(event) => validatePasswordOnChange(event.target.value)}
+                error={passwordError && passwordError.length ? true : false}
+                helperText={passwordError}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="new-password"
+                onChange={(event) => matchPasswordOnChange(event.target.value)}
+                error={matchError && matchError.length ? true : false}
+                helperText={matchError}
               />
             </Grid>
           </Grid>
           <Button
             type="submit"
+            disabled= { isValidationError ? true : false}
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
@@ -129,15 +211,15 @@ export default function SignUp() {
       </Box>
       {hasSubmitted && loading && <SimpleBackdrop />}
       {hasSubmitted && !loading && error && 
-        <AlertDisplay severity="warning" message={error}/>
+        <ResponseAlert severity="warning" message={error}/>
       }
       {hasSubmitted && !loading && !error && response &&
         <>
-          <AlertDisplay 
+          <ResponseAlert 
             severity="success"
             message={"You are now registered! Now taking you to login."}
           />
-          {/*<Navigate to="/login "/>*/}
+          <Navigate to="/login "/>
         </>
       }
       <Copyright sx={{ mt: 5 }} />
