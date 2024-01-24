@@ -76,9 +76,9 @@ export default function SignUp() {
 
   // Validate username
   const validateUsernameOnChange = (username) => {
-    // If not between 2-24 chars
-    if (!(/^.{2,24}$/.test(username))){
-      setUsernameError("Username must be between 2 and 24 characters");
+    // If not between 3-24 chars
+    if (!(/^.{3,24}$/.test(username))){
+      setUsernameError("Username must be between 3 and 24 characters");
       return false;
     }
     // If not any combination of letters, digits, and underscores
