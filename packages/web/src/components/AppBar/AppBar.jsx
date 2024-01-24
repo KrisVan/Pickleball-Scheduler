@@ -1,4 +1,5 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,6 +14,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
+import UserContext from '../../context/UserContext.jsx';
 
 const pages = [
   {display:'Scheduler', path:'scheduler'},
@@ -30,6 +32,7 @@ const settings = [
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { user } = useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -156,7 +159,9 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar sx={{ color: 'inherit' }} />
+                <Avatar sx={{ color: 'inherit' }}>
+                  {user?.username && user?.username[0].toUpperCase()}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -184,11 +189,9 @@ function ResponsiveAppBar() {
                     to={`/${setting.path}`}
                     key={setting.path}
                     sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
-                    
                   >
                     {setting.display}
                   </Typography>
-                  
                 </MenuItem>
               ))}
             </Menu>
