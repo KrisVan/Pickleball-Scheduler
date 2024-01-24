@@ -4,8 +4,11 @@ import fjwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 
+import { corsOptions } from './config/corsOptions.js';
+import { authRoutes } from './modules/auth/auth.route.js';
 import { userRoutes } from './modules/user/user.route.js';
 import { userSchemas } from './modules/user/user.schema.js';
+import { verifyJWT } from './middleware/verifyJWT.js';
 
 const app = Fastify({ logger: true });
 const logger = pino();
@@ -28,24 +31,23 @@ export const start = async (port = 5000, host = '0.0.0.0') => {
   );
 };
 //----------------------------------------------------------------
-// Add CORS and CORS options
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-  optionSuccessStatus: 200,
-};
+// Cross Origin Resource Sharing
 app.register(cors, corsOptions);
 
 // Register routes
 app.register(userRoutes, { prefix: 'api/users' });
+app.register(authRoutes, { prefix: 'api/auth' });
 
 // Add schemas to Fastify
 Object.values(userSchemas).forEach((schema) => {
   app.addSchema(schema);
 });
 
-// Register fjwt
-app.register(fjwt, { secret: process.env.JWT_SECRET_CODE });
+// Register access fjwt
+app.register(fjwt, {
+  secret: process.env.JWT_TOKEN_SECRET,
+});
+
 // Hook to pass token to req obj as prehandler before route calls
 app.addHook('preHandler', (req, res, next) => {
   req.jwt = app.jwt;
@@ -54,25 +56,14 @@ app.addHook('preHandler', (req, res, next) => {
 
 // Register cookie to fastify
 app.register(fCookie, {
-  secret: process.env.COOKIE_SECRET_KEY,
+  secret: process.env.JWT_TOKEN_SECRET,
   hook: 'preHandler',
 });
 
-// Authenticate via logged in user coookie
+// Middleware to verify access JWT sent from client
 app.decorate(
-  'authenticate',
-  async (req, reply) => {
-    const token = req.cookies.access_token;
-    // If no token, user not authenticated
-    if (!token) {
-      return reply.status(401).send({ message: 'Authentication required' });
-    }
-    // Verify token with jwt
-    const decoded = req.jwt.verify(token);
-    // Attach current user payload to req
-    req.user = decoded;
-    return req.user;
-  },
+  'verifyJWT',
+  verifyJWT,
 );
 
 // Graceful shutdown

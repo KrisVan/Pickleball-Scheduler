@@ -68,7 +68,7 @@ export default function SignIn() {
     axiosFetch({
       axiosInstance: axios,
       method: 'POST',
-      url: 'api/users/login',
+      url: 'api/auth/login',
       requestConfig:{
         username: data.get('username'),
         password: data.get('password'),

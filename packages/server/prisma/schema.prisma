@@ -11,16 +11,17 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  username       String    @unique
-  displayName String
-  password    String
-  role        String
-  sessions    Session[]
+  id           String    @id @default(uuid())
+  username     String    @unique
+  displayName  String
+  password     String
+  role         String
+  refreshToken String?   @unique
+  sessions     Session[]
 }
 
 model Session {
-  id           String      @id @default(uuid())
+  id           String   @id @default(uuid())
   creationDate DateTime @default(now())
   startTime    DateTime
   endTime      DateTime
