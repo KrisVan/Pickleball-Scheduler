@@ -151,7 +151,7 @@ export default function SignIn() {
             severity="success"
             message={"You are now logged in! Now taking you to dashboard."}
           />
-          {/*FIXME <Navigate to="/dashboard "/>*/}
+          <Navigate to="/dashboard "/>
         </>
       }
       <Copyright sx={{ mt: 8, mb: 4 }} />
