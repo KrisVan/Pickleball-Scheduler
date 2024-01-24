@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink, Navigate } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -214,9 +214,18 @@ export default function SignUp() {
         <>
           <ResponseAlert 
             severity="success"
-            message={"You are now registered! Now taking you to login."}
+            message={"You are now registered!"}
+            action={
+              <Button
+                color="inherit"
+                  size="small"
+                  component={RouterLink}
+                  to="/login"
+                >
+                Login
+              </Button>
+            }
           />
-          <Navigate to="/login "/>
         </>
       }
       <Copyright sx={{ mt: 5 }} />
