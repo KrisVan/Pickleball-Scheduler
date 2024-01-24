@@ -19,6 +19,7 @@ import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
 // Local Components
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
+import Copyright from '../Copyright/Copyright.jsx';
 
 function AlertDisplay(props) {
   var message = props.message;
@@ -37,19 +38,6 @@ function AlertDisplay(props) {
     >
       {message}
     </Alert>
-  );
-}
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" component={RouterLink} to="/about">
-        PickLeTime
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
   );
 }
 

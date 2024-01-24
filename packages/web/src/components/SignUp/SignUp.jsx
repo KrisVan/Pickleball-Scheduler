@@ -52,9 +52,6 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     setHasSubmitted(true);
     // LOG
-    console.log(data.get('username'));
-    console.log(data.get('password'));
-    console.log("Fetching")
     // Get submitted username and password
     axiosFetch({
       axiosInstance: axios,
