@@ -45,6 +45,7 @@ cd packages/server
 6. Generate Prisma Instance
 ```
 npx prisma generate
+npx prisma migrate dev --name init
 ```
 7. Configure .env.example
 8. Start the app
