@@ -47,9 +47,8 @@ export default function SignIn() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
-
   // Handle sumbit of data
-  const handleSubmit = (event) => { 
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setHasSubmitted(true);
@@ -65,12 +64,12 @@ export default function SignIn() {
     });
   };
 
-  // Set context if successful response
+  // Set user context if successful response
   useEffect(() => {
-    if (response) {
+    if (response.length !== 0 && hasSubmitted) {
       setUser(response);    
     }
-  }, [response, user, setUser]);
+  }, [response, hasSubmitted, user, setUser]);
 
   // Render sign in component
   return (
