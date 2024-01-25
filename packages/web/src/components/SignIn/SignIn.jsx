@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
-import { Link as RouterLink, Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -17,7 +17,7 @@ import Container from '@mui/material/Container';
 // Hooks/API/Providers
 import axios from '../../api/axios.jsx';
 import useAxiosFunction from '../../hooks/useAxiosFunction.jsx';
-import UserContext from '../../context/UserContext.jsx';
+import useUser from '../../hooks/useUser.jsx';
 // Local Components
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop.jsx';
 import Copyright from '../Copyright/Copyright.jsx';
@@ -43,13 +43,17 @@ function AlertDisplay(props) {
 }
 
 export default function SignIn() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/"
+
   const [hasSubmitted, setHasSubmitted] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
-
   // Handle sumbit of data
-  const handleSubmit = (event) => { 
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setHasSubmitted(true);
@@ -65,12 +69,12 @@ export default function SignIn() {
     });
   };
 
-  // Set context if successful response
+  // Set user context if successful response
   useEffect(() => {
-    if (response) {
+    if (response.length !== 0 && hasSubmitted) {
       setUser(response);    
     }
-  }, [response, user, setUser]);
+  }, [response, hasSubmitted, user, setUser]);
 
   // Render sign in component
   return (
@@ -147,7 +151,7 @@ export default function SignIn() {
             severity="success"
             message={"You are now logged in! Now taking you to dashboard."}
           />
-          <Navigate to="/dashboard "/>
+          {navigate(from, { replace: true })}
         </>
       }
       <Copyright sx={{ mt: 8, mb: 4 }} />

@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import pino from 'pino';
+import dotenv from 'dotenv';
 import fjwt from '@fastify/jwt';
 import fCookie from '@fastify/cookie';
 import cors from '@fastify/cors';
@@ -12,6 +13,7 @@ import { verifyJWT } from './middleware/verifyJWT.js';
 
 const app = Fastify({ logger: true });
 const logger = pino();
+dotenv.config({ debug: true });
 
 // Start server at port
 export const start = async (port = 5000, host = '0.0.0.0') => {
