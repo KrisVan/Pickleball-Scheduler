@@ -9,8 +9,10 @@ import NoPage from './pages/NoPage';
 import Register from './pages/Register';
 import Scheduler from './pages/Scheduler';
 import User from './pages/User';
+import Unauthorized from './pages/Unauthorized.jsx';
 // Component imports
 import Layout from './components/Layout.jsx/Layout.jsx';
+import RequireAuth from './components/RequireAuth.jsx/RequireAuth.jsx';
 
 const App = () => (
   <Routes>
@@ -23,8 +25,9 @@ const App = () => (
       <Route path="/about" element = {<About />} />
       <Route path="/login" element = {<Login />} />
       <Route path="/register" element = {<Register />} />
-      {/* Protected Authorized routes */}
-      <Route path="/admin" element = {<Admin />}>
+      <Route path="/unauthorized" element = {<Unauthorized />} />
+      {/* Protected Admin routes */}
+      <Route path="/admin" element = {<RequireAuth allowedRole="ADMIN"/>}>
         <Route index element = {<Admin />} />
         <Route path="/admin/dashboard" element = {<Admin />} />
       </Route>
