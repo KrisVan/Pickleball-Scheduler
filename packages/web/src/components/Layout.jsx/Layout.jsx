@@ -5,7 +5,7 @@ import AppBar from '../AppBar/AppBar.jsx';
 
 export default function Layout() {
   return (
-    <Box component="App">
+    <Box>
       <AppBar />
       <Outlet />
     </Box>
