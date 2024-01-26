@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom'
+import { Link as RouterLink, Navigate, useLocation } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -45,7 +45,6 @@ function AlertDisplay(props) {
 export default function SignIn() {
   const { user, setUser } = useUser();
 
-  const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/"
 
@@ -151,7 +150,7 @@ export default function SignIn() {
             severity="success"
             message={"You are now logged in! Now taking you to dashboard."}
           />
-          {navigate(from, { replace: true })}
+          <Navigate to={from} replace={true} />
         </>
       }
       <Copyright sx={{ mt: 8, mb: 4 }} />
