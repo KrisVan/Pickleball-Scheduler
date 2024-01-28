@@ -11,30 +11,35 @@ import Scheduler from './pages/Scheduler';
 import User from './pages/User';
 import Unauthorized from './pages/Unauthorized.jsx';
 // Component imports
-import Layout from './components/Layout.jsx/Layout.jsx';
-import RequireAuth from './components/RequireAuth.jsx/RequireAuth.jsx';
+import Layout from './components/Layout/Layout.jsx';
+import SignOut from './components/SignOut/SignOut.jsx';
+import RequireAuth from './components/RequireAuth/RequireAuth.jsx';
+import PersistLogin from './components/PersistLogin/PersistLogin.jsx';
 
 const App = () => (
   <Routes>
-    <Route path ="/" element={<Layout />}>
-      {/* Public routes */}
-      <Route index element = {<Home />} />
-      <Route path="/home" element = {<Home />} />
-      <Route path="/dashboard" element = {<Home />} />
-      <Route path="/scheduler" element = {<Scheduler />} />
-      <Route path="/about" element = {<About />} />
-      <Route path="/login" element = {<Login />} />
-      <Route path="/register" element = {<Register />} />
-      <Route path="/unauthorized" element = {<Unauthorized />} />
-      {/* Protected Admin routes */}
-      <Route path="/admin" element = {<RequireAuth allowedRole="ADMIN"/>}>
-        <Route index element = {<Admin />} />
-        <Route path="/admin/dashboard" element = {<Admin />} />
+    <Route element={<PersistLogin />}>
+      <Route path ="/" element={<Layout />}>
+        {/* Public routes */}
+        <Route index element = {<Home />} />
+        <Route path="/home" element = {<Home />} />
+        <Route path="/dashboard" element = {<Home />} />
+        <Route path="/scheduler" element = {<Scheduler />} />
+        <Route path="/about" element = {<About />} />
+        <Route path="/login" element = {<Login />} />
+        <Route path="/register" element = {<Register />} />
+        <Route path="/unauthorized" element = {<Unauthorized />} />
+        <Route path="/logout" element = {<SignOut />} />
+        {/* Protected Admin routes */}
+        <Route path="/admin" element = {<RequireAuth allowedRole="ADMIN"/>}>
+          <Route index element = {<Admin />} />
+          <Route path="/admin/dashboard" element = {<Admin />} />
+        </Route>
+        {/* Authenticated routes */}
+        <Route path="/user/:username" element = {<User />} />
+        {/* Catch All */}
+        <Route path="*" element = {<NoPage />} />
       </Route>
-      {/* Authenticated routes */}
-      <Route path="/user/:username" element = {<User />} />
-      {/* Catch All */}
-      <Route path="*" element = {<NoPage />} />
     </Route>
   </Routes>
 
