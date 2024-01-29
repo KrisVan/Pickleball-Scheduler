@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
-import UserContext from '../../context/UserContext.jsx';
+import UserContext from '../../context/UserProvider.jsx';
 
 const pages = [
   {display:'Scheduler', path:'scheduler'},
@@ -25,7 +25,7 @@ const settings = [
   {display:'Login', path:'login'},
   {display:'Register',path:'register'},
   {display:'Profile',path:'user'},
-  {display:'Logout',path:'login'},
+  {display:'Logout',path:'logout'},
 ];
 
 // Template: ResponsiveAppBar from MUI

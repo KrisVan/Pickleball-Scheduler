@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
-import UserContext from '../context/UserContext';
+import UserContext from '../context/UserProvider';
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useRefreshToken from "../hooks/useRefreshToken";

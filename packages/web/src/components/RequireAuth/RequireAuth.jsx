@@ -9,7 +9,7 @@ export default function RequireAuth({ allowedRole }) {
   return (
     user?.role?.includes(allowedRole)
       ? <Outlet />
-      : user?.username
+      : user?.accessToken
         ? < Navigate to="/unauthorized" replace state={{ from: location}} />
         : < Navigate to="/login" replace state={{ from: location}} />
   );
