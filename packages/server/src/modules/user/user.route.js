@@ -1,5 +1,6 @@
 import {
-  handleCreateUser, handleGetUsers,
+  handleCreateUser, handleGetUsers, handleGetUserByUsername,
+  handleGetSessionsByUser,
 } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
@@ -25,6 +26,22 @@ export async function userRoutes(app) {
     },
     handleCreateUser,
   );
-
+  // users/sessions/
+  // Get all sessions at /api/sessions/:username. Requires auth
+  app.get(
+    '/:username',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleGetUserByUsername,
+  );
+  // Get all sessions at /api/sessions/:username. Requires auth
+  app.get(
+    '/:username/sessions',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleGetSessionsByUser,
+  );
   app.log.info('User routes registered');
 }

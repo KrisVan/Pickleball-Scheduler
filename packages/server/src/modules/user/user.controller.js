@@ -52,3 +52,38 @@ export async function handleGetUsers(req, reply) {
   });
   return reply.code(200).send(users);
 }
+
+// Get user by username
+export async function handleGetUserByUsername(req, reply) {
+  const { username } = req.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      username: true,
+      id: true,
+      displayName: true,
+      role: true,
+    },
+  });
+  return reply.code(200).send(user);
+}
+
+// Get sessions that match username
+export async function handleGetSessionsByUser(req, reply) {
+  const { username } = req.params;
+  const sessions = await prisma.session.findMany({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      creationDate: true,
+      startTime: true,
+      endTime: true,
+      username: true,
+    },
+  });
+  return reply.code(200).send(sessions);
+}

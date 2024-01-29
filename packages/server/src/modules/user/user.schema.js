@@ -19,4 +19,4 @@ const createUserResponseSchema = z.object({
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserSchema,
   createUserResponseSchema,
-},{ $id: "userSchemas" });
+}, { $id: 'userSchemas' });
