@@ -9,9 +9,11 @@ import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop';
 export default function PersistLogin() {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const { user } = useUser();
+  const { user, persist } = useUser();
 
   useEffect(() => {
+    let isMounted = true;
+
     const verifyRefreshToken = async () => {
       try {
         await refresh();
@@ -20,22 +22,25 @@ export default function PersistLogin() {
         console.error(error);
       }
       finally {
-        setIsLoading(false);
+        isMounted && setIsLoading(false);
       }
     }
-    // Only run verifyRefreshToken if no access token 
-    !user?.accessToken ? verifyRefreshToken() : setIsLoading(false);
+    // Only run verifyRefreshToken if no access token or persist true
+    !user?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
+    return () => isMounted = false;
     // eslint-disable-next-line
   }, []);
 
   return (
     <>
-      {isLoading
-      ? <>
-          <SimpleBackdrop />
-          <Outlet />
-        </>
-      : <Outlet />
+      {!persist
+        ? <Outlet />
+        : isLoading
+            ? <>
+                <SimpleBackdrop />
+                <Outlet />
+              </>
+            : <Outlet />
       }
     </>
   );

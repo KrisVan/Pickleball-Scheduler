@@ -43,12 +43,13 @@ function AlertDisplay(props) {
 }
 
 export default function SignIn() {
-  const { user, setUser } = useUser();
+  const { user, setUser, setPersist } = useUser();
 
   const location = useLocation();
   const from = location.state?.from?.pathname || "/"
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
   // Handle sumbit of data
@@ -68,12 +69,19 @@ export default function SignIn() {
     });
   };
 
-  // Set user context if successful response
+  // Handle remember me checkboc
+  const handleTogglePersist = (event) => {
+    setRememberMe(event.target.checked);
+  };
+
+  // Set user context and persist if successful response
   useEffect(() => {
     if (response.length !== 0 && hasSubmitted) {
-      setUser(response);    
+      setUser(response);
+      localStorage.setItem("persist", rememberMe);
+      setPersist(rememberMe);
     }
-  }, [response, hasSubmitted, user, setUser]);
+  }, [response, hasSubmitted, user, setUser, rememberMe, setPersist]);
 
   // Render sign in component
   return (
@@ -115,7 +123,12 @@ export default function SignIn() {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox 
+              value="remember"
+              color="primary"
+              checked={rememberMe}
+              onChange={handleTogglePersist}
+            />}
             label="Remember me"
           />
           <Button
