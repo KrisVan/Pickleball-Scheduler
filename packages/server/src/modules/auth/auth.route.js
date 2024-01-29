@@ -21,9 +21,9 @@ export async function authRoutes(app) {
   );
 
   // Logout. Login required.
-  app.delete('/logout', { preHandler: [app.verifyJWT] }, handleLogout);
+  app.delete('/logout', handleLogout);
 
-  // Get all users at /api/users. Requires authentication of logged in user
+  //  Gives new access token if refresh token is still valid
   app.get(
     '/refreshtoken',
     handleRefreshToken,
