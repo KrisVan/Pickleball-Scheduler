@@ -7,8 +7,12 @@ import cors from '@fastify/cors';
 
 import { corsOptions } from './config/corsOptions.js';
 import { authRoutes } from './modules/auth/auth.route.js';
+import { authSchemas } from './modules/auth/auth.schema.js';
 import { userRoutes } from './modules/user/user.route.js';
 import { userSchemas } from './modules/user/user.schema.js';
+import { sessionRoutes } from './modules/session/session.route.js';
+import { sessionSchemas } from './modules/session/session.schema.js';
+
 import { verifyJWT } from './middleware/verifyJWT.js';
 
 const app = Fastify({ logger: true });
@@ -39,11 +43,19 @@ app.register(cors, corsOptions);
 // Register routes
 app.register(userRoutes, { prefix: 'api/users' });
 app.register(authRoutes, { prefix: 'api/auth' });
+app.register(sessionRoutes, { prefix: 'api/sessions' });
 
 // Add schemas to Fastify
 Object.values(userSchemas).forEach((schema) => {
   app.addSchema(schema);
 });
+Object.values(authSchemas).forEach((schema) => {
+  app.addSchema(schema);
+});
+Object.values(sessionSchemas).forEach((schema) => {
+  app.addSchema(schema);
+});
+
 
 // Register access fjwt
 app.register(fjwt, {
