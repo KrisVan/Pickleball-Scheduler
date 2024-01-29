@@ -56,7 +56,6 @@ Object.values(sessionSchemas).forEach((schema) => {
   app.addSchema(schema);
 });
 
-
 // Register access fjwt
 app.register(fjwt, {
   secret: process.env.JWT_TOKEN_SECRET,
