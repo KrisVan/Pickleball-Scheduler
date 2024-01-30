@@ -25,6 +25,6 @@ model Session {
   creationDate DateTime @default(now())
   startTime    DateTime
   endTime      DateTime
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
+  username     String
+  user         User     @relation(fields: [username], references: [username])
 }

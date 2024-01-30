@@ -52,3 +52,108 @@ export async function handleGetUsers(req, reply) {
   });
   return reply.code(200).send(users);
 }
+
+// Get user by username
+export async function handleGetUserByUsername(req, reply) {
+  const { username } = req.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      username: true,
+      id: true,
+      displayName: true,
+      role: true,
+    },
+  });
+  return reply.code(200).send(user);
+}
+
+// Delete user that matches username
+export async function handleDeleteUser(req, reply) {
+  let { username } = req.params;
+  // Validate data
+  username = username.toLowerCase();
+  // Check if user exists
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (!foundUser) {
+    return reply.code(404).send({
+      message: 'User not found',
+    });
+  }
+  // Delete user
+  await prisma.user.delete({
+    where: {
+      username,
+    },
+  });
+  return reply.code(204).send();
+}
+
+// Get sessions that match username
+export async function handleGetSessionsByUser(req, reply) {
+  let { username } = req.params;
+  // Validate data
+  username = username.toLowerCase();
+  // Check if user exists
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (!foundUser) {
+    return reply.code(404).send({
+      message: 'User not found',
+    });
+  }
+  const sessions = await prisma.session.findMany({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      creationDate: true,
+      startTime: true,
+      endTime: true,
+      username: true,
+    },
+  });
+  return reply.code(200).send(sessions);
+}
+
+// Create sessions from user
+export async function handlePostSessionsByUser(req, reply) {
+  let { username } = req.params;
+  const { startTime, endTime } = req.body;
+  // Validate data
+  username = username.toLowerCase();
+  // Check if user exists
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (!foundUser) {
+    return reply.code(404).send({
+      message: 'User not found',
+    });
+  }
+  // Create session
+  try {
+    const session = await prisma.session.create({
+      data: {
+        username,
+        startTime,
+        endTime,
+      },
+    });
+    return reply.code(201).send(session);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}

@@ -23,7 +23,6 @@ export default function PersistLogin() {
       }
       finally {
         isMounted && setIsLoading(false);
-        console.log("Finished loading "+ user?.username);
       }
     }
     // Only run verifyRefreshToken if no access token or persist true

@@ -1,5 +1,7 @@
 import {
-  handleCreateUser, handleGetUsers,
+  handleCreateUser, handleGetUsers, handleGetUserByUsername,
+  handleGetSessionsByUser, handlePostSessionsByUser,
+  handleDeleteUser,
 } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
@@ -12,7 +14,7 @@ export async function userRoutes(app) {
     },
     handleGetUsers,
   );
-  // Register
+  // Register new user
   app.post(
     '/register',
     {
@@ -24,6 +26,42 @@ export async function userRoutes(app) {
       },
     },
     handleCreateUser,
+  );
+  // Get user by username at /api/users/username. Requires auth
+  app.get(
+    '/:username',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleGetUserByUsername,
+  );
+  // Delete a user given username at /api/users/:username. Requires auth
+  app.delete(
+    '/:username',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleDeleteUser,
+  );
+
+  // Get all sessions at /api/users/:username/sessions. Requires auth
+  app.get(
+    '/:username/sessions',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleGetSessionsByUser,
+  );
+  // Create new session at /api/sessions/:username. Requires auth
+  app.post(
+    '/:username/sessions',
+    {
+      preHandler: [app.verifyJWT],
+      schema: {
+        body: $ref('createSessionSchema'),
+      },
+    },
+    handlePostSessionsByUser,
   );
 
   app.log.info('User routes registered');

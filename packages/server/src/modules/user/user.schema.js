@@ -14,21 +14,10 @@ const createUserResponseSchema = z.object({
   username: z.string(),
 });
 
-// Login: Login data, response schema
-const loginSchema = z.object({
-  username: z
-    .string({
-      required_error: 'Username is required',
-      invalid_type_error: 'Username must be a string',
-    }),
-  password: z.string().min(6),
-});
-
-const loginResponseSchema = z.object({
-  accessToken: z.string(),
-  username: z.string(),
-  displayName: z.string(),
-  role: z.string(),
+// Create Session
+const createSessionSchema = z.object({
+  startTime: z.date(),
+  endTime: z.date(),
 });
 
 // Export schemas as Jsons
@@ -36,6 +25,5 @@ const loginResponseSchema = z.object({
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserSchema,
   createUserResponseSchema,
-  loginSchema,
-  loginResponseSchema,
-});
+  createSessionSchema,
+}, { $id: 'userSchemas' });
