@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
   };
 
   const settings = [
-    {icon:<PersonOutlineIcon fontsize="small"/>, text:'Account',path:`user/${user?.username}`},
+    {icon:<PersonOutlineIcon fontSize="small"/>, text:'Account',path:`user/${user?.username}`},
     {icon:<Logout fontSize="small" />, text:'Sign out',path:'logout'},
   ];
   
