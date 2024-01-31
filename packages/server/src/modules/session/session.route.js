@@ -30,4 +30,6 @@ export async function sessionRoutes(app) {
     },
     handleDeleteSession,
   );
+
+  app.log.info('Session routes registered');
 }

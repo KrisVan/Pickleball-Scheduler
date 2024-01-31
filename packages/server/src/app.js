@@ -21,7 +21,7 @@ dotenv.config({ debug: true });
 
 // Start server at port
 export const start = async (port = 5000, host = '0.0.0.0') => {
-  logger.info('Starting PickleballService');
+  logger.info('Starting PickLeTimeService');
   await app.listen(
     {
       port,
