@@ -14,6 +14,7 @@ import Unauthorized from './pages/Unauthorized.jsx';
 import Layout from './components/Layout/Layout.jsx';
 import SignOut from './components/SignOut/SignOut.jsx';
 import RequireAuth from './components/RequireAuth/RequireAuth.jsx';
+import RequireUser from './components/RequireUser/RequireUser.jsx';
 import PersistLogin from './components/PersistLogin/PersistLogin.jsx';
 
 const App = () => (
@@ -35,8 +36,11 @@ const App = () => (
           <Route index element = {<Admin />} />
           <Route path="/admin/dashboard" element = {<Admin />} />
         </Route>
-        {/* Authenticated routes */}
-        <Route path="/user/:username" element = {<User />} />
+        {/* Private User routes */}
+        <Route path="/user" element = {<RequireUser allowedRole="ADMIN"/>}>
+          <Route index element = {<NoPage />} />
+          <Route path="/user/:username" element = {<User />} />
+        </Route>
         {/* Catch All */}
         <Route path="*" element = {<NoPage />} />
       </Route>
