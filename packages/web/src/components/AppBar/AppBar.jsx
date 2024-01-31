@@ -13,6 +13,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
+
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Logout from '@mui/icons-material/Logout';
+
 import useUser from '../../hooks/useUser.jsx';
 
 var pages = [];
@@ -39,22 +44,22 @@ function ResponsiveAppBar() {
   };
 
   const settings = [
-    {display:'Account',path:`user/${user.username}`},
-    {display:'Sign out',path:'logout'},
+    {icon:<PersonOutlineIcon fontsize="small"/>, text:'Account',path:`user/${user?.username}`},
+    {icon:<Logout fontSize="small" />, text:'Sign out',path:'logout'},
   ];
   
   // If admin, add admin page tab
   if (user?.role === 'ADMIN')  {
     pages = [
-      {display:'Scheduler', path:'scheduler'},
-      {display:'About', path:'about'},
-      {display:'Dashboard', path:'admin'},
+      {text:'Scheduler', path:'scheduler'},
+      {text:'About', path:'about'},
+      {text:'Dashboard', path:'admin'},
     ];
   }
   else {
     pages = [
-      {display:'Scheduler', path:'scheduler'},
-      {display:'About', path:'about'},
+      {text:'Scheduler', path:'scheduler'},
+      {text:'About', path:'about'},
     ];
   }
   
@@ -117,16 +122,19 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.display} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={page.text}
+                  onClick={handleCloseNavMenu}
+                  component={Link}
+                  to={`/${page.path}`}
+                >
                   <Typography
                     variant="body1"
                     textAlign="center"
-                    component={Link}
-                    to={`/${page.path}`}
                     key={page.path}
                     sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                   >
-                    {page.display}
+                    {page.text}
                   </Typography>
                 </MenuItem>
               ))}
@@ -160,7 +168,7 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page.display}
+                {page.text}
               </Button>
             ))}
           </Box>
@@ -192,16 +200,22 @@ function ResponsiveAppBar() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting.display} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={setting.text}
+                    onClick={handleCloseUserMenu}
+                    component={Link}
+                    to={`/${setting.path}`}
+                  >
+                    <ListItemIcon sx={{justifyContent: 'left'}}>
+                      {setting.icon}
+                    </ListItemIcon>
                     <Typography
+                      key={setting.path}
                       textAlign="center"
                       variant="body1"
-                      component={Link}
-                      to={`/${setting.path}`}
-                      key={setting.path}
                       sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
                     >
-                      {setting.display}
+                      {setting.text}
                     </Typography>
                   </MenuItem>
                 ))}
