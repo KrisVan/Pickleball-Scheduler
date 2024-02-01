@@ -17,7 +17,7 @@ export default function Admin() {
 					<button onClick={() => refresh()}>Refresh</button>
 					<h2>Users</h2>
 					<br />
-					< UserDataTable />
+					<UserDataTable />
 			</div>
 	)
 }

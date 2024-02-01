@@ -18,6 +18,7 @@ import {
 } from '@mui/x-data-grid';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAxiosFunction from '../../hooks/useAxiosFunction';
+import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop';
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel, getUsers } = props;
@@ -51,7 +52,9 @@ export default function UsersDataGrid() {
 
   const axiosPrivate = useAxiosPrivate();
 	const [UsersResponse, UsersError, UsersLoading, UsersAxiosFetch] = useAxiosFunction();
-  const [UsersDelResponse, UsersDelError, UsersDelLoading, UsersDelAxiosFetch] = useAxiosFunction();
+  const [UserDelResponse, UserDelError, UserDelLoading, UserDelAxiosFetch] = useAxiosFunction();
+  const [UserCreateResponse, UserCreateError, UserCreateLoading, UserCreateAxiosFetch] = useAxiosFunction();
+  const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
   const effectRan = useRef(false);
   const location = useLocation();
 
@@ -89,23 +92,44 @@ export default function UsersDataGrid() {
     }
   };
 
+  // Delete user message
+	useEffect (() => {
+		if (UserDelResponse?.length > 0) console.log(UserDelResponse);
+    else console.log(UserDelError);
+	},[UserDelResponse, UserDelError]);
+
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    const row = rows.find((row) => row.id === id)
+    console.log(row);
+    console.log(`api/users/${row.id}`,);
+    // If updating existing user, update
+    UserUpdateAxiosFetch({
+			axiosInstance: axiosPrivate,
+			method: 'PUT',
+			url: `api/users/${row.id}`,
+      requestConfig: {data:row},
+		});
+    // If new user, create new user
+
+    
+
+    // If error, show message and cancel
+    // Update db, create or update, upsert?
   };
 
   const handleDeleteClick = (id) => () => {
     const row = rows.find((row) => row.id === id)
     setRows(rows.filter((row) => row.id !== id));
-    UsersDelAxiosFetch({
+    UserDelAxiosFetch({
 			axiosInstance: axiosPrivate,
 			method: 'DELETE',
 			url: `api/users/${row.username}`,
 		});
-    console.log(UsersDelResponse);
   };
 
   const handleCancelClick = (id) => () => {
@@ -223,7 +247,6 @@ export default function UsersDataGrid() {
           toolbar: { setRows, setRowModesModel, getUsers },
         }}
       />
-      {UsersLoading && <b>Loading...</b>}
       {!UsersLoading && UsersError && <b><Navigate to="/login" replace state={{ from: location }} /></b>}
     </Box>
   );
