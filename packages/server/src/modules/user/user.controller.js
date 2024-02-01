@@ -70,6 +70,47 @@ export async function handleGetUserByUsername(req, reply) {
   return reply.code(200).send(user);
 }
 
+// Updates existing user.
+export async function handleUpdateUser(req, reply) {
+  const { id } = req.params;
+  let { username, password } = req.body;
+  const { ...props } = req.body;
+  // Validate data
+  username = username.toLowerCase();
+  // Hashes password and updates user in db
+  try {
+    // If new password, hash new.
+    const oldUser = await prisma.user.findMany({
+      where: {
+        id,
+      },
+      select: {
+        password: true,
+        sessions: true,
+      },
+    });
+    if (password !== oldUser?.password) {
+      password = await bcrypt.hash(password, SALT_ROUNDS);
+    }
+    if (oldUser.length <= 0) return reply.code(404).send();
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        username,
+        password,
+        sessions: oldUser.sessions,
+        refreshToken: oldUser.refreshToken,
+        ...props,
+      },
+    });
+    return reply.code(200).send(user);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}
+
 // Delete user that matches username
 export async function handleDeleteUser(req, reply) {
   let { username } = req.params;
