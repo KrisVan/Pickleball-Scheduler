@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import {
@@ -19,21 +20,26 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAxiosFunction from '../../hooks/useAxiosFunction';
 
 function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, getUsers } = props;
 
-  const handleClick = () => {
+  const handleRefreshClick = () => {
+    getUsers();
+  };
+
+  const handleAddClick = () => {
     const id = crypto.randomUUID();
     setRows((oldRows) => [...oldRows, { id: id, username: '', displayName: '', role: 'BASIC', sessions: [] }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'username' },
     }));
   };
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+      <Button color="primary" startIcon={<RefreshIcon />} onClick={handleRefreshClick}/>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
+        Add User
       </Button>
     </GridToolbarContainer>
   );
@@ -55,7 +61,6 @@ export default function UsersDataGrid() {
 			method: 'GET',
 			url: 'api/users',
 		});
-		console.log(UsersResponse)
 	}
 
 	// Get users on mount
@@ -197,6 +202,9 @@ export default function UsersDataGrid() {
         '& .textPrimary': {
           color: 'text.primary',
         },
+        display: 'flex',
+        flexDirection: 'column',
+        // alignItems: 'center',
       }}
     >
       <DataGrid
@@ -212,7 +220,7 @@ export default function UsersDataGrid() {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, getUsers },
         }}
       />
       {UsersLoading && <b>Loading...</b>}
