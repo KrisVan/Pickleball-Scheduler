@@ -44,6 +44,7 @@ export async function handleGetUsers(req, reply) {
   const users = await prisma.user.findMany({
     select: {
       username: true,
+      password: true,
       id: true,
       displayName: true,
       role: true,
@@ -75,34 +76,35 @@ export async function handleUpdateUser(req, reply) {
   const { id } = req.params;
   let { username, password } = req.body;
   const { ...props } = req.body;
+  let newPassword = password;
   // Validate data
   username = username.toLowerCase();
   // Hashes password and updates user in db
   try {
     // If new password, hash new.
-    const oldUser = await prisma.user.findMany({
+    const oldUsersList = await prisma.user.findMany({
       where: {
         id,
       },
       select: {
         password: true,
-        sessions: true,
+        refreshToken: true,
       },
     });
+    if (oldUsersList.length <= 0) return reply.code(404).send();
+    const oldUser = oldUsersList[0];
     if (password !== oldUser?.password) {
-      password = await bcrypt.hash(password, SALT_ROUNDS);
+      newPassword = await bcrypt.hash(password, SALT_ROUNDS);
     }
-    if (oldUser.length <= 0) return reply.code(404).send();
     const user = await prisma.user.update({
       where: {
         id,
       },
       data: {
-        username,
-        password,
-        sessions: oldUser.sessions,
-        refreshToken: oldUser.refreshToken,
         ...props,
+        username,
+        password: newPassword,
+        refreshToken: oldUser.refreshToken,
       },
     });
     return reply.code(200).send(user);

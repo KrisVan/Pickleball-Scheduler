@@ -17,7 +17,7 @@ const createUserResponseSchema = z.object({
 // Update user schema
 const updateUserSchema = z.object({
   username: z.string().min(3).max(24),
-  password: z.string().min(6).max(24),
+  password: z.string().min(6),
   displayName: z.string().min(3).max(24),
   role: z.string(),
 });
