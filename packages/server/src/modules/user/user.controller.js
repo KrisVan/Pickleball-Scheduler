@@ -74,8 +74,8 @@ export async function handleGetUserByUsername(req, reply) {
 // Updates existing user.
 export async function handleUpdateUser(req, reply) {
   const { id } = req.params;
-  let { username, password } = req.body;
-  const { ...props } = req.body;
+  let { username } = req.body;
+  const { password, ...props } = req.body;
   let newPassword = password;
   // Validate data
   username = username.toLowerCase();

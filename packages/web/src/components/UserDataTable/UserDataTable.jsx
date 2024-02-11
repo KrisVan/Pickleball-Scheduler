@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -20,7 +20,6 @@ import {
 } from '@mui/x-data-grid';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAxiosFunction from '../../hooks/useAxiosFunction';
-import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop';
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel, getUsers } = props;
@@ -48,38 +47,20 @@ function EditToolbar(props) {
   );
 }
 
-const useFakeMutation = () => {
-  return React.useCallback(
-    (user) =>
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (user.username?.trim() === '') {
-            reject(new Error("Error while saving user: name can't be empty."));
-          } else {
-            resolve({ ...user, username: user.username?.toLowerCase() });
-          }
-        }, 200);
-      }),
-    [],
-  );
-};
-
 export default function UsersDataGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   const axiosPrivate = useAxiosPrivate();
 	const [UsersResponse, UsersError, UsersLoading, UsersAxiosFetch] = useAxiosFunction();
-  const [UserDelResponse, UserDelError, UserDelLoading, UserDelAxiosFetch] = useAxiosFunction();
-  const [UserCreateResponse, UserCreateError, UserCreateLoading, UserCreateAxiosFetch] = useAxiosFunction();
-  const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
-  const mutateRow = useFakeMutation();
+  const [UserDelResponse, UserDelError, , UserDelAxiosFetch] = useAxiosFunction();
+  const [UserCreateResponse, UserCreateError, , UserCreateAxiosFetch] = useAxiosFunction();
+  const [UserUpdateResponse, UserUpdateError, , UserUpdateAxiosFetch] = useAxiosFunction();
   const [snackbar, setSnackbar] = useState(null);
   const effectRan = useRef(false);
   const location = useLocation();
 
   const handleCloseSnackbar = () => setSnackbar(null);
-
 
   const getUsers = () => {
 		UsersAxiosFetch({
@@ -88,6 +69,13 @@ export default function UsersDataGrid() {
 			url: 'api/users',
 		});
 	}
+
+  // Set users after mount
+	useEffect (() => {
+		if (UsersResponse?.length !== 0) {
+			setRows(UsersResponse);
+		}
+	},[UsersResponse]);
 
 	// Get users on mount
 	useEffect (() => {
@@ -100,14 +88,6 @@ export default function UsersDataGrid() {
 		// eslint-disable-next-line
 	},[]);
 
-	// Set users after mount
-	useEffect (() => {
-		if (UsersResponse?.length > 0) {
-			setRows(UsersResponse);
-		}
-    console.log(UsersResponse);
-	},[UsersResponse]);
-
   // Table Behavior
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -115,20 +95,12 @@ export default function UsersDataGrid() {
     }
   };
 
-  // Delete user message
-	useEffect (() => {
-		if (UserDelResponse?.length > 0) console.log(UserDelResponse);
-    else console.log(UserDelError);
-	},[UserDelResponse, UserDelError]);
-
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    const row = rows.find((row) => row.id === id)
-    // If error, show message and cancel TODO
   };
 
   const handleDeleteClick = (id) => () => {
@@ -153,71 +125,77 @@ export default function UsersDataGrid() {
     }
   };
 
-  // const processRowUpdate = useCallback(
-  //   (newRow) => {
-  //     console.log("processRowUpdate")
-      
-  //     const updatedRow = { ...newRow };
-  //     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-  //     console.log("UPDATED ROW"+JSON.stringify(updatedRow));
-  //     if (updatedRow.isNew !== true) {
-  //       console.log("SAVING EXISTING ROW");
-  //       UserUpdateAxiosFetch({
-  //         axiosInstance: axiosPrivate,
-  //         method: 'PUT',
-  //         url: `api/users/${updatedRow.id}`,
-  //         requestConfig: updatedRow,
-  //       });
-  //       console.log(UserUpdateError);
-  //       // Refresh table
-  //     }
-  //     else {
-  //       console.log("SAVING NEW ROW");
-  //       UserCreateAxiosFetch({
-  //         axiosInstance: axiosPrivate,
-  //         method: 'POST',
-  //         url: `api/users/register`,
-  //         requestConfig: updatedRow,
-  //       });
-  //       console.log("RESPONSE:"+UserCreateResponse)
-  //     }
-  //     return updatedRow;
-  //   }, [mutateRow],
-  // );
-
   const processRowUpdate = (newRow) => {
-    console.log("processRowUpdate")
-    
     const updatedRow = { ...newRow };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    console.log("UPDATED ROW"+JSON.stringify(updatedRow));
     if (updatedRow.isNew !== true) {
-      console.log("SAVING EXISTING ROW");
       UserUpdateAxiosFetch({
         axiosInstance: axiosPrivate,
         method: 'PUT',
         url: `api/users/${updatedRow.id}`,
         requestConfig: updatedRow,
       });
-      console.log(UserUpdateError);
-      // Refresh table
     }
     else {
-      console.log("SAVING NEW ROW");
       UserCreateAxiosFetch({
         axiosInstance: axiosPrivate,
         method: 'POST',
         url: `api/users/register`,
         requestConfig: updatedRow,
       });
-      console.log("RESPONSE:"+UserCreateResponse)
     }
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   }
 
-  const handleProcessRowUpdateError = useCallback((error) => {
-    setSnackbar({ children: error.message, severity: 'error' });
-  }, []);
+  // CRUD Error messages
+  const handleProcessRowUpdateError = (error) => {
+    setSnackbar({ children: error, severity: 'error' });
+  };
+
+  useEffect(() => {
+    if(UserCreateError) {
+      handleProcessRowUpdateError(UserCreateError);
+      getUsers();
+    }
+    // eslint-disable-next-line
+  },[UserCreateError]);
+  useEffect(() => {
+    if(UserUpdateError) {
+      handleProcessRowUpdateError(UserUpdateError);
+      getUsers();
+    }
+    // eslint-disable-next-line
+  },[UserUpdateError]);
+  useEffect(() => {
+    if(UserDelError) {
+      handleProcessRowUpdateError(UserDelError);
+    }
+  },[UserDelError]);
+
+  // CRUD Response messages
+  const handleProcessRowUpdateResponse = (response) => {
+    setSnackbar({ children: response, severity: 'success' });
+  };
+
+  useEffect(() => {
+    if(UserCreateResponse?.length !== 0) {
+      handleProcessRowUpdateResponse("User successfully created");
+      getUsers();
+    }
+    // eslint-disable-next-line
+  },[UserCreateResponse]);
+  useEffect(() => {
+    if(UserUpdateResponse?.length !== 0) {
+      handleProcessRowUpdateResponse("User successfully updated");
+      getUsers();
+    }
+    // eslint-disable-next-line
+  },[UserUpdateResponse]);
+  useEffect(() => {
+    if(UserDelResponse?.length !== 0) {
+      handleProcessRowUpdateResponse("User successfully deleted");
+    }
+  },[UserDelResponse]);
 
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -313,7 +291,7 @@ export default function UsersDataGrid() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleProcessRowUpdateError}
+        // onProcessRowUpdateError={handleProcessRowUpdateError}
         slots={{
           toolbar: EditToolbar,
         }}
