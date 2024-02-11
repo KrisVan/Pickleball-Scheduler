@@ -44,6 +44,7 @@ export async function handleGetUsers(req, reply) {
   const users = await prisma.user.findMany({
     select: {
       username: true,
+      password: true,
       id: true,
       displayName: true,
       role: true,
@@ -68,6 +69,48 @@ export async function handleGetUserByUsername(req, reply) {
     },
   });
   return reply.code(200).send(user);
+}
+
+// Updates existing user.
+export async function handleUpdateUser(req, reply) {
+  const { id } = req.params;
+  let { username } = req.body;
+  const { password, ...props } = req.body;
+  let newPassword = password;
+  // Validate data
+  username = username.toLowerCase();
+  // Hashes password and updates user in db
+  try {
+    // If new password, hash new.
+    const oldUsersList = await prisma.user.findMany({
+      where: {
+        id,
+      },
+      select: {
+        password: true,
+        refreshToken: true,
+      },
+    });
+    if (oldUsersList.length <= 0) return reply.code(404).send();
+    const oldUser = oldUsersList[0];
+    if (password !== oldUser?.password) {
+      newPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    }
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...props,
+        username,
+        password: newPassword,
+        refreshToken: oldUser.refreshToken,
+      },
+    });
+    return reply.code(200).send(user);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
 }
 
 // Delete user that matches username

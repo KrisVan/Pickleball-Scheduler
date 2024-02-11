@@ -14,6 +14,14 @@ const createUserResponseSchema = z.object({
   username: z.string(),
 });
 
+// Update user schema
+const updateUserSchema = z.object({
+  username: z.string().min(3).max(24),
+  password: z.string().min(6),
+  displayName: z.string().min(3).max(24),
+  role: z.string(),
+});
+
 // Create Session
 const createSessionSchema = z.object({
   startTime: z.date(),
@@ -26,4 +34,5 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserSchema,
   createUserResponseSchema,
   createSessionSchema,
+  updateUserSchema,
 }, { $id: 'userSchemas' });
