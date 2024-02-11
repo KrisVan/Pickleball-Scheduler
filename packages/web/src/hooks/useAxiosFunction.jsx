@@ -17,6 +17,8 @@ const useAxiosFunction = () => {
 
     try {
       setLoading(true);
+      setError('');
+      setResponse([]);
       const ctrl = new AbortController();
       setController(ctrl);
       const res = await axiosInstance[method.toLowerCase()](url, {
@@ -24,7 +26,6 @@ const useAxiosFunction = () => {
         signal: ctrl.signal,
       });
       setResponse(res.data);
-      setError('');
     }
     catch (err) {
       setError(err.message);
