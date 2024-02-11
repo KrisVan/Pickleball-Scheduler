@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -39,7 +40,17 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<RefreshIcon />} onClick={handleRefreshClick}/>
+      <Typography
+        sx={{ mx: 1 }}
+        variant="h5"
+        id="DataGridTitle"
+        component="div"
+      >
+        Users
+      </Typography>
+      <Button color="primary" startIcon={<RefreshIcon />} onClick={handleRefreshClick}>
+        Refresh
+      </Button>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
         Add User
       </Button>
@@ -208,15 +219,15 @@ export default function UsersDataGrid() {
     { field: 'username', headerName: 'Username', width: 180, align: 'left',
       headerAlign: 'left', editable: true
     },
-    { field: 'password', headerName: 'Password', width: 30, align: 'left',
-      headerAlign: 'left', editable: true},
     { field: 'displayName', headerName: 'DisplayName', width: 180,
       align: 'left', headerAlign: 'left', editable: true },
-    { field: 'role', headerName: 'Role', width: 180, align: 'left',
+    { field: 'password', headerName: 'Password', width: 30, align: 'left',
+      headerAlign: 'left', editable: true},
+    { field: 'role', headerName: 'Role', width: 120, align: 'left',
       headerAlign: 'left', editable: true, type:'singleSelect',
       valueOptions:['BASIC','ADMIN']
     },
-    { field: 'sessions', headerName: 'Sessions', width: 180, align: 'left',
+    { field: 'sessions', headerName: 'Sessions', width: 120, align: 'left',
       headerAlign: 'left',},
     {
       field: 'actions',
@@ -267,10 +278,12 @@ export default function UsersDataGrid() {
   ];
 
   return (
+    
     <Box
       sx={{
         height: 500,
         width: '100%',
+
         '& .actions': {
           color: 'text.secondary',
         },
@@ -293,7 +306,7 @@ export default function UsersDataGrid() {
         processRowUpdate={processRowUpdate}
         // onProcessRowUpdateError={handleProcessRowUpdateError}
         slots={{
-          toolbar: EditToolbar,
+          toolbar: EditToolbar
         }}
         slotProps={{
           toolbar: { setRows, setRowModesModel, getUsers },

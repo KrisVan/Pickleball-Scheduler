@@ -1,23 +1,37 @@
 import React from 'react';
 import { useContext } from 'react';
+
+import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
+
 import UserContext from '../context/UserProvider';
-import useRefreshToken from "../hooks/useRefreshToken";
 import UserDataTable from '../components/UserDataTable/UserDataTable';
 
 export default function Admin() {
 	const { user } = useContext(UserContext);
-	const refresh = useRefreshToken();
 
 	return(
-			<div>
-					<h2>Admin Page</h2>
-					{user?.role && <b> Your role is {user.role} </b>}
-					<br />
-					<h2>Testing</h2>
-					<button onClick={() => refresh()}>Refresh</button>
-					<h2>Users</h2>
-					<br />
-					<UserDataTable />
-			</div>
+			<Box
+				sx={{
+					bgcolor: 'background.paper',
+					boxShadow: 1,
+					borderRadius: 2,
+					p: 2,
+					minWidth: 300,
+				}}
+			>
+				<Typography
+						component="h1"
+						variant="h6"
+						color="inherit"
+						noWrap
+						sx={{ flexGrow: 1 }}
+				>
+					Dashboard
+				</Typography>
+				{user?.role && <body>Your role is {user.role}</body>}
+				<br />
+				<UserDataTable />
+			</Box>
 	)
 }
