@@ -203,9 +203,7 @@ export default function UsersDataGrid() {
     // eslint-disable-next-line
   },[UserUpdateResponse]);
   useEffect(() => {
-    if(UserDelResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User successfully deleted");
-    }
+    handleProcessRowUpdateResponse("User successfully deleted");
   },[UserDelResponse]);
 
 
