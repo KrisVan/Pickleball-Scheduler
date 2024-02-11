@@ -69,6 +69,7 @@ export default function UsersDataGrid() {
   const [UserUpdateResponse, UserUpdateError, , UserUpdateAxiosFetch] = useAxiosFunction();
   const [snackbar, setSnackbar] = useState(null);
   const effectRan = useRef(false);
+  const userDelRan = useRef(false);
   const location = useLocation();
 
   const handleCloseSnackbar = () => setSnackbar(null);
@@ -117,6 +118,7 @@ export default function UsersDataGrid() {
   const handleDeleteClick = (id) => () => {
     const row = rows.find((row) => row.id === id)
     setRows(rows.filter((row) => row.id !== id));
+    userDelRan.current = true;
     UserDelAxiosFetch({
 			axiosInstance: axiosPrivate,
 			method: 'DELETE',
@@ -203,7 +205,9 @@ export default function UsersDataGrid() {
     // eslint-disable-next-line
   },[UserUpdateResponse]);
   useEffect(() => {
-    handleProcessRowUpdateResponse("User successfully deleted");
+    if (UserDelResponse && userDelRan.current === true) {
+      handleProcessRowUpdateResponse("User successfully deleted");
+    }
   },[UserDelResponse]);
 
 

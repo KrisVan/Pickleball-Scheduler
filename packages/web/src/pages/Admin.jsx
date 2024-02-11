@@ -29,8 +29,14 @@ export default function Admin() {
 				>
 					Dashboard
 				</Typography>
-				{user?.role && <body>Your role is {user.role}</body>}
-				<br />
+				{user?.role && 
+				<Typography
+					variant="subtitle1"
+					color="inherit"
+				>
+					Your role is {user.role}
+				</Typography>
+				}
 				<UserDataTable />
 			</Box>
 	)
