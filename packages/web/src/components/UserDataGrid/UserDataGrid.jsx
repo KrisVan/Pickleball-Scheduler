@@ -192,21 +192,21 @@ export default function UsersDataGrid() {
 
   useEffect(() => {
     if(UserCreateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User successfully created");
+      handleProcessRowUpdateResponse("User created");
       getUsers();
     }
     // eslint-disable-next-line
   },[UserCreateResponse]);
   useEffect(() => {
     if(UserUpdateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User successfully updated");
+      handleProcessRowUpdateResponse("User updated");
       getUsers();
     }
     // eslint-disable-next-line
   },[UserUpdateResponse]);
   useEffect(() => {
     if (UserDelResponse && userDelRan.current === true) {
-      handleProcessRowUpdateResponse("User successfully deleted");
+      handleProcessRowUpdateResponse("User deleted");
     }
   },[UserDelResponse]);
 
@@ -229,8 +229,11 @@ export default function UsersDataGrid() {
       headerAlign: 'left', editable: true, type:'singleSelect',
       valueOptions:['BASIC','ADMIN']
     },
-    { field: 'sessions', headerName: 'Sessions', width: 120, align: 'left',
-      headerAlign: 'left',},
+    { field: 'sessions', headerName: 'Session Count', width: 120,
+      align: 'left', headerAlign: 'left', 
+      valueGetter: (params) => {
+        return params.row.sessions.length;
+      },},
     {
       field: 'actions',
       type: 'actions',

@@ -5,7 +5,8 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/material';
 
 import UserContext from '../context/UserProvider';
-import UserDataTable from '../components/UserDataTable/UserDataTable';
+import UserDataGrid from '../components/UserDataGrid/UserDataGrid';
+import SessionssDataGrid from '../components/SessionDataGrid/SessionDataGrid';
 
 export default function Admin() {
 	const { user } = useContext(UserContext);
@@ -37,7 +38,9 @@ export default function Admin() {
 					Your role is {user.role}
 				</Typography>
 				}
-				<UserDataTable />
+				<UserDataGrid />
+				<br/>
+				<SessionssDataGrid />
 			</Box>
 	)
 }
