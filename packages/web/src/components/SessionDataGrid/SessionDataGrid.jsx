@@ -100,7 +100,6 @@ export default function SessionsDataGrid() {
 	useEffect (() => {
 		if (SessionsResponse?.length !== 0) {
 			setRows(SessionsResponse);
-      console.log(SessionsResponse)
 		}
 	},[SessionsResponse]);
 
