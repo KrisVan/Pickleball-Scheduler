@@ -182,14 +182,26 @@ export default function SessionsDataGrid() {
 
   useEffect(() => {
     if(SessionCreateError) {
-      handleProcessRowUpdateError(SessionCreateError);
+      if (SessionCreateError.includes(404)) {
+        handleProcessRowUpdateError("User does not exist");
+      }
+      else if (SessionCreateError.includes(400)) {
+        handleProcessRowUpdateError("Start time must be before end time");
+      }
+      else handleProcessRowUpdateError(SessionCreateError);
       getSessions();
     }
     // eslint-disable-next-line
   },[SessionCreateError]);
   useEffect(() => {
     if(SessionUpdateError) {
-      handleProcessRowUpdateError(SessionUpdateError);
+      if (SessionUpdateError.includes(404)) {
+        handleProcessRowUpdateError("User does not exist");
+      }
+      else if (SessionUpdateError.includes(400)) {
+        handleProcessRowUpdateError("Start time must be before end time");
+      }
+      else handleProcessRowUpdateError(SessionCreateError);
       getSessions();
     }
     // eslint-disable-next-line

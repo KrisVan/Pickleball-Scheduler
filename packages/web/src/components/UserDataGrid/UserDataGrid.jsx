@@ -167,7 +167,10 @@ export default function UsersDataGrid() {
 
   useEffect(() => {
     if(UserCreateError) {
-      handleProcessRowUpdateError(UserCreateError);
+      if (UserCreateError.includes(401)) {
+        handleProcessRowUpdateError("User already exists with this username");
+      }
+      else handleProcessRowUpdateError(UserCreateError);
       getUsers();
     }
     // eslint-disable-next-line

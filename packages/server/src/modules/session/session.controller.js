@@ -36,7 +36,9 @@ export async function handleGetSessionsBySessionID(req, reply) {
 // Updates existing session.
 export async function handleUpdateSession(req, reply) {
   const { id } = req.params;
-  const { username, startTime, endTime, ...props } = req.body;
+  const {
+    username, startTime, endTime, ...props
+  } = req.body;
   // Validate data
   const validatedUsername = username.toLowerCase();
   if (startTime > endTime) {
