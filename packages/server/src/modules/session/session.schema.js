@@ -6,8 +6,16 @@ const getSessionByUserSchema = z.object({
   username: z.string().min(3),
 });
 
+// Update Session
+const updateSessionSchema = z.object({
+  creationDate: z.date(),
+  startTime: z.date(),
+  endTime: z.date(),
+  username: z.string().min(3),
+});
+
 // Export schemas as Jsons
 // Returns all the schemas to register and a ref to refer these schemas
 export const { schemas: sessionSchemas, $ref } = buildJsonSchemas({
-  getSessionByUserSchema,
+  getSessionByUserSchema, updateSessionSchema,
 }, { $id: 'sessionSchemas' });

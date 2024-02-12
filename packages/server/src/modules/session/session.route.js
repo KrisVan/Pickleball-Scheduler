@@ -1,7 +1,8 @@
 import {
   handleGetSessions, handleGetSessionsBySessionID,
-  handleDeleteSession,
+  handleUpdateSession, handleDeleteSession,
 } from './session.controller.js';
+import { $ref } from './session.schema.js';
 
 export async function sessionRoutes(app) {
   // Get all users at /api/sessions. Requires auth
@@ -20,6 +21,18 @@ export async function sessionRoutes(app) {
       preHandler: [app.verifyJWT],
     },
     handleGetSessionsBySessionID,
+  );
+
+  // Update user by id at Put /api/users/:id. Requires auth
+  app.put(
+    '/:id',
+    {
+      preHandler: [app.verifyJWT],
+      schema: {
+        body: $ref('updateSessionSchema'),
+      },
+    },
+    handleUpdateSession,
   );
 
   // Delete a session given ID at /api/sessions/. Requires auth
