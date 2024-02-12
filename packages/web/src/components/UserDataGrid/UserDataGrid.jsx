@@ -69,6 +69,7 @@ export default function UsersDataGrid() {
   const [UserUpdateResponse, UserUpdateError, , UserUpdateAxiosFetch] = useAxiosFunction();
   const [snackbar, setSnackbar] = useState(null);
   const effectRan = useRef(false);
+  const userDelRan = useRef(false);
   const location = useLocation();
 
   const handleCloseSnackbar = () => setSnackbar(null);
@@ -117,6 +118,7 @@ export default function UsersDataGrid() {
   const handleDeleteClick = (id) => () => {
     const row = rows.find((row) => row.id === id)
     setRows(rows.filter((row) => row.id !== id));
+    userDelRan.current = true;
     UserDelAxiosFetch({
 			axiosInstance: axiosPrivate,
 			method: 'DELETE',
@@ -165,7 +167,10 @@ export default function UsersDataGrid() {
 
   useEffect(() => {
     if(UserCreateError) {
-      handleProcessRowUpdateError(UserCreateError);
+      if (UserCreateError.includes(401)) {
+        handleProcessRowUpdateError("User already exists with this username");
+      }
+      else handleProcessRowUpdateError(UserCreateError);
       getUsers();
     }
     // eslint-disable-next-line
@@ -190,20 +195,22 @@ export default function UsersDataGrid() {
 
   useEffect(() => {
     if(UserCreateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User successfully created");
+      handleProcessRowUpdateResponse("User created");
       getUsers();
     }
     // eslint-disable-next-line
   },[UserCreateResponse]);
   useEffect(() => {
     if(UserUpdateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User successfully updated");
+      handleProcessRowUpdateResponse("User updated");
       getUsers();
     }
     // eslint-disable-next-line
   },[UserUpdateResponse]);
   useEffect(() => {
-    handleProcessRowUpdateResponse("User successfully deleted");
+    if (UserDelResponse && userDelRan.current === true) {
+      handleProcessRowUpdateResponse("User deleted");
+    }
   },[UserDelResponse]);
 
 
@@ -225,8 +232,11 @@ export default function UsersDataGrid() {
       headerAlign: 'left', editable: true, type:'singleSelect',
       valueOptions:['BASIC','ADMIN']
     },
-    { field: 'sessions', headerName: 'Sessions', width: 120, align: 'left',
-      headerAlign: 'left',},
+    { field: 'sessions', headerName: 'Session Count', width: 120,
+      align: 'left', headerAlign: 'left', 
+      valueGetter: (params) => {
+        return params.row.sessions.length;
+      },},
     {
       field: 'actions',
       type: 'actions',

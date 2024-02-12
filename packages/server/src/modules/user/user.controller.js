@@ -175,6 +175,11 @@ export async function handlePostSessionsByUser(req, reply) {
   const { startTime, endTime } = req.body;
   // Validate data
   username = username.toLowerCase();
+  if (startTime > endTime) {
+    return reply.code(400).send({
+      message: 'Start time cannot be after end time',
+    });
+  }
   // Check if user exists
   const foundUser = await prisma.user.findUnique({
     where: {
