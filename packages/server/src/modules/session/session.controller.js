@@ -36,9 +36,14 @@ export async function handleGetSessionsBySessionID(req, reply) {
 // Updates existing session.
 export async function handleUpdateSession(req, reply) {
   const { id } = req.params;
-  const { username, ...props } = req.body;
+  const { username, startTime, endTime, ...props } = req.body;
   // Validate data
   const validatedUsername = username.toLowerCase();
+  if (startTime > endTime) {
+    return reply.code(400).send({
+      message: 'Start time cannot be after end time',
+    });
+  }
   // Check if user exists
   const foundUser = await prisma.user.findUnique({
     where: {
@@ -58,6 +63,8 @@ export async function handleUpdateSession(req, reply) {
       },
       data: {
         ...props,
+        startTime,
+        endTime,
         username: validatedUsername,
       },
     });
