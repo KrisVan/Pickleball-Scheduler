@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom'
 import Alert from '@mui/material/Alert';

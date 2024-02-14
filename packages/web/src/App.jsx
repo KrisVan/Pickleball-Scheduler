@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom'
 // Page imports
 import About from './pages/About';

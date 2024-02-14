@@ -1,4 +1,3 @@
-import React from 'react';
 import Box from '@mui/system/Box';
 import Divider from '@mui/material/Divider';
 import Hero from '../components/Hero/Hero.jsx';

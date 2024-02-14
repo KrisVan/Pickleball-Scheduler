@@ -1,4 +1,3 @@
-import React from 'react';
 import useUser from '../hooks/useUser';
 import Landing from './Landing';
 

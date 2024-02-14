@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLocation, useParams, Navigate, Outlet } from "react-router-dom";
 import useUser from "../../hooks/useUser";
 

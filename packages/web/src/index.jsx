@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
@@ -19,7 +19,7 @@ const theme = createTheme({
 // Render App
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <React.StrictMode>
+  <StrictMode>
     <UserProvider>
       <ThemeProvider theme={theme} >
         <CssBaseline />
@@ -30,7 +30,7 @@ root.render(
         </BrowserRouter>
       </ThemeProvider>
     </UserProvider>
-  </React.StrictMode>
+  </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,4 +1,3 @@
-import React from 'react';
 import Box from '@mui/system/Box';
 // Component imports
 import SignUp from "../components/SignUp/SignUp.jsx"
@@ -9,4 +8,4 @@ export default function Register() {
         <SignUp />
     </Box>
     )
-};
+}
