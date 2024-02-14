@@ -26,5 +26,5 @@ model Session {
   startTime    DateTime
   endTime      DateTime
   username     String
-  user         User     @relation(fields: [username], references: [username])
+  user         User     @relation(fields: [username], references: [username], onDelete: Cascade)
 }
