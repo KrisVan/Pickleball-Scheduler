@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom'
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';

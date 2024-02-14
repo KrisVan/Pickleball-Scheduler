@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -39,7 +39,7 @@ const items = [
 ];
 
 export default function FeatureShowcase() {
-  const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 
   const handleItemClick = (index) => {
     setSelectedItemIndex(index);
