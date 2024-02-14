@@ -41,7 +41,8 @@ export default function Hero() {
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
             Effortlessly organize and share sessions on a collaborative calendar.<br />
-            See who's available, coordinate events, and never miss a beat with our intuitive interface
+            See who's available, coordinate events, and never miss a beat 
+            with our intuitive interface.
           </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
