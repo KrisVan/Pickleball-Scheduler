@@ -6,6 +6,11 @@ import { buildJsonSchemas } from 'fastify-zod';
 // Register: Register data, response schema
 const createUserSchema = z.object({
   username: z.string().min(3).max(24),
+  displayName: z.string()
+    .min(3)
+    .max(24)
+    .optional()
+    .or(z.literal('')),
   password: z.string().min(6).max(24),
 });
 
@@ -17,7 +22,7 @@ const createUserResponseSchema = z.object({
 // Update user schema
 const updateUserSchema = z.object({
   username: z.string().min(3).max(24),
-  password: z.string().min(6),
+  password: z.string().min(6).max(24),
   displayName: z.string().min(3).max(24),
   role: z.string(),
 });

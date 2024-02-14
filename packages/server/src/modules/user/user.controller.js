@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 // Creates a new user. Checks if username is unique, hashes passwrd,
 // and creates user in db.
 export async function handleCreateUser(req, reply) {
-  let { username } = req.body;
+  let { username, displayName } = req.body;
   const { password } = req.body;
   // Validate data
   username = username.toLowerCase();
@@ -21,13 +21,15 @@ export async function handleCreateUser(req, reply) {
       message: 'User already exists with this username',
     });
   }
+  // If no display name, set to username
+  if (!displayName) displayName = username;
   // Hashes password and creates user in db
   try {
     const hash = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await prisma.user.create({
       data: {
         username,
-        displayName: username,
+        displayName,
         password: hash,
         role: 'BASIC',
       },
