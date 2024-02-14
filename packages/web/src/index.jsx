@@ -10,7 +10,10 @@ import { UserProvider } from './context/UserProvider';
 const theme = createTheme({
   palette: {
     mode: 'dark',
-  }
+    // primary: {
+    //   main: '#00ff00'
+    // }
+  },
 });
 
 // Render App

@@ -15,8 +15,8 @@ test('Is App Bar Rendered', () => {
   expect(text[0]).toBeInTheDocument();
 });
 
-test('Is Home Rendered', () => {
-  render(<MemoryRouter><App /></MemoryRouter>);
-  const text = screen.getByText('Home');
-  expect(text).toBeInTheDocument();
-});
+// test('Is Home Rendered', () => {
+//   render(<MemoryRouter><App /></MemoryRouter>);
+//   const text = screen.getByText('Home');
+//   expect(text).toBeInTheDocument();
+// });

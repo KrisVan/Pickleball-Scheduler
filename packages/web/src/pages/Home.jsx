@@ -1,14 +1,14 @@
 import React from 'react';
-import { useContext } from 'react';
-import UserContext from '../context/UserProvider';
+import useUser from '../hooks/useUser';
+import Landing from './Landing';
 
 export default function Home() {
-    const { user } = useContext(UserContext);
+  const { user } = useUser();
 
-    return(
-        <div>
-            <h2>Home</h2>
-            {user?.username && <b> Welcome {user.username} </b>}
-        </div>
-    )
+  return(
+    // If not logged in, show landing, else show dashboard
+    user?.accessToken
+      ? <b>Welcome {user.username}</b>
+      : <Landing />
+  )
 }
