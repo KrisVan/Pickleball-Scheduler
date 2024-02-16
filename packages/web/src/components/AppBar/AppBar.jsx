@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import { Divider } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -179,7 +180,7 @@ function ResponsiveAppBar() {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar sx={{ color: 'inherit' }}>
-                    {user?.username && user?.username[0].toUpperCase()}
+                    {user.username && user.username[0].toUpperCase()}
                   </Avatar>
                 </IconButton>
               </Tooltip>
@@ -199,6 +200,36 @@ function ResponsiveAppBar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <Box
+                  display='flex'
+                  alignItems='center'
+                  flexWrap='wrap'
+                  minHeight={50}
+                  sx={{ px: 1, mb: 1 }}
+                >
+                  <Avatar sx={{ color: 'inherit' }}>
+                    {user.username && user.username[0].toUpperCase()}
+                  </Avatar>
+                  <Box
+                    alignItems='center'
+                    sx={{ ml: 1.0 }}
+                  >
+                    <Typography
+                      variant="body1"
+                      textAlign="left"
+                    >
+                      {user.displayName}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      textAlign="left"
+                    >
+                      {"@"+user.username}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Divider />
                 {settings.map((setting) => (
                   <MenuItem
                     key={setting.text}
