@@ -1,5 +1,6 @@
 
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction } from "react"
+import { useEffect } from "react"
+import { Link } from "react-router-dom"
 import {
   TextField,
   Dialog,
@@ -8,67 +9,90 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  Autocomplete,
   Box,
 } from "@mui/material"
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import compareDesc from "date-fns/compareDesc"
 
-export default function AddDateEventModal(props) {
-  const {open, handleClose, eventFormData, setEventFormData, onAddEvent, todos} = props;
+import useUser from "../../hooks/useUser"
 
-  const { description } = eventFormData
+export default function AddEventModal(props) {
+  const {open, handleClose, currentEvent, setCurrentEvent, onAddEvent} = props;
+  const { user } = useUser();
 
   const onClose = () => handleClose()
 
-  const onChange = (event) => {
-    setEventFormData((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }))
-  }
-
-  const handleTodoChange = (e, value) => { // FIXME: Todo Needed?
-    setEventFormData((prevState) => ({
-      ...prevState,
-      todoId: value?.id,
-    }))
-  }
-
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add event</DialogTitle>
-      <DialogContent>
-        <DialogContentText>To add a event, please fill in the information below.</DialogContentText>
-        <Box component="form">
-          <TextField
-            name="description"
-            value={description}
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            variant="outlined"
-            onChange={onChange}
-          />
-          <Autocomplete
-            onChange={handleTodoChange}
-            disablePortal
-            id="combo-box-demo"
-            options={todos}
-            sx={{ marginTop: 4 }}
-            getOptionLabel={(option) => option.title}
-            renderInput={(params) => <TextField {...params} label="Todo" />}
-          />
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button color="error" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button disabled={description === ""} color="success" onClick={onAddEvent}>
-          Add
-        </Button>
-      </DialogActions>
+      <DialogTitle>Add session</DialogTitle>
+
+      { user?.username ?
+        <>
+          <DialogContent>
+            <DialogContentText sx={{mx: 1}}>To create a session, please confirm the information below.</DialogContentText>
+            <Box component="form">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Box mb={2} mt={5}>
+                  <DateTimePicker
+                    label="Start date"
+                    value={currentEvent?.start}
+                    ampm={true}
+                    minutesStep={30}
+                    onChange={(newValue) =>
+                      setCurrentEvent((prevState) => ({
+                        ...prevState,
+                        start: new Date(newValue),
+                      }))
+                    }
+                    textField={(params) => <TextField {...params} />}
+                  />
+                </Box>
+                <DateTimePicker
+                  label="End date"
+                  minDate={currentEvent?.start}
+                  minutesStep={30}
+                  ampm={true}
+                  value={currentEvent?.end}
+                  onChange={(newValue) =>
+                    setCurrentEvent((prevState) => ({
+                      ...prevState,
+                      end: new Date(newValue),
+                    }))
+                  }
+                  textField={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button color="error" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button disabled={currentEvent?.start === null || currentEvent?.end === null || 
+              compareDesc(currentEvent?.start, currentEvent?.end) !== 1} color="success" onClick={onAddEvent}>
+              Add
+            </Button>
+          </DialogActions>
+        
+        </>
+        :
+        <>
+          <DialogContentText sx={{mx: 1}}>To create a session, please login</DialogContentText>
+          <DialogActions>
+            <Button color="error" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button 
+              component={Link}
+              to={`/login`}
+              key={'/login'}
+            >
+              Login
+            </Button>
+          </DialogActions>
+        </>
+      }
     </Dialog>
   );
 }
