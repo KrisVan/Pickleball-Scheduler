@@ -1,21 +1,26 @@
-import { useState, MouseEvent } from "react"
-import { Box, Button, ButtonGroup, Card, CardContent, CardHeader, Container, Divider } from "@mui/material"
+import { useEffect, useRef, useState } from "react"
+import { Navigate, useLocation } from 'react-router-dom';
+import { Box, Card, CardContent, CardHeader, Container, Divider } from "@mui/material"
 
 import { Calendar, dateFnsLocalizer } from "react-big-calendar"
 
 import format from "date-fns/format"
 import parse from "date-fns/parse"
+import parseISO from "date-fns/parseISO"
 import startOfWeek from "date-fns/startOfWeek"
 import getDay from "date-fns/getDay"
 import enUS from "date-fns/locale/en-US"
 
-import "react-big-calendar/lib/css/react-big-calendar.css"
+import "./EventCalendarDark.css"
 
 import EventInfo from "../EventInfo/EventInfo"
 import AddEventModal from "../AddEventModal/AddEventModal"
+import EditEventModal from "../EditEventModal/EditEventModal";
 import EventInfoModal from "../EventInfoModal/EventInfoModal"
-import AddTodoModal from "../AddTodoModal/AddTodoModal"
-import AddDatePickerEventModal from "../AddDatePickerEventModal/AddDatePickerEventModal"
+
+import useUser from "../../hooks/useUser";
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAxiosFunction from '../../hooks/useAxiosFunction';
 
 const locales = {
   "en-US": enUS,
@@ -29,33 +34,59 @@ const localizer = dateFnsLocalizer({
   locales,
 })
 
-const initialEventFormState = {
-  description: "",
-  eventId: undefined,
-}
-
-const initialDatePickerEventFormData = {
-  description: "",
-  todoId: undefined,
-  allDay: false,
-  start: undefined,
-  end: undefined,
-}
-
 export default function EventCalendar() {
-  const [openSlot, setOpenSlot] = useState(false)
-  const [openDatepickerModal, setOpenDatepickerModal] = useState(false)
-  const [openTodoModal, setOpenTodoModal] = useState(false)
-  const [currentEvent, setCurrentEvent] = useState(null)
+  const [openSlot, setOpenSlot] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
 
-  const [eventInfoModal, setEventInfoModal] = useState(false)
+  const [eventInfoModal, setEventInfoModal] = useState(false);
 
-  const [events, setEvents] = useState([])
-  const [todos, setTodos] = useState([])
+  const [events, setEvents] = useState([]);
 
-  const [eventFormData, setEventFormData] = useState(initialEventFormState)
 
-  const [datePickerEventFormData, setDatePickerEventFormData] = useState(initialDatePickerEventFormData)
+  const { user } = useUser();
+  const location = useLocation();
+  const axiosPrivate = useAxiosPrivate();
+  const effectRan = useRef(false);
+  const [SessionsResponse, SessionsError, SessionsLoading, SessionsAxiosFetch] = useAxiosFunction();
+  const [, SessionCreateError, SessionCreateLoading, SessionCreateAxiosFetch] = useAxiosFunction();
+  const [, SessionUpdateError, SessionUpdateLoading, SessionUpdateAxiosFetch] = useAxiosFunction();
+  const [, SessionDeleteError, SessionDeleteLoading, SessionDeleteAxiosFetch] = useAxiosFunction();
+  
+  const currentFormattedDate = format(new Date(), "MMMM d, yyyy");
+
+  // Fetch sessions
+  const getSessions = () => {
+		SessionsAxiosFetch({
+			axiosInstance: axiosPrivate,
+			method: 'GET',
+			url: 'api/sessions',
+		});
+	}
+
+	// Get sessions on mount
+	useEffect (() => {
+		if (effectRan.current === false) {
+			getSessions();
+		}
+		return () => {
+			effectRan.current = true;
+		}
+		// eslint-disable-next-line
+	},[]);
+
+  // Set sessions after mount
+	useEffect (() => {
+		if (SessionsResponse?.length !== 0) {
+      // Convert times to date objects
+      const SessionsDateObj = SessionsResponse.map(obj => ({
+        ...obj,
+        startTime: parseISO(obj.startTime),
+        endTime: parseISO(obj.endTime),
+      }));
+			setEvents(SessionsDateObj);
+		}
+	},[SessionsResponse]);
 
   // Event and modal handlers
   const handleSelectSlot = (event) => {
@@ -68,66 +99,71 @@ export default function EventCalendar() {
     setEventInfoModal(true)
   }
 
+  const handleEditSlot = (event) => {
+    setEventInfoModal(false)
+    setOpenEditModal(true);
+  }
+
+  const handleEditSlotClose = (event) => {
+    setOpenEditModal(false)
+  }
+
   const handleClose = () => {
-    setEventFormData(initialEventFormState)
     setOpenSlot(false)
   }
 
-  const handleDatePickerClose = () => {
-    setDatePickerEventFormData(initialDatePickerEventFormData)
-    setOpenDatepickerModal(false)
-  }
 
   // Create event
   const onAddEvent = (e) => {
     e.preventDefault()
-
     const data = {
-      ...eventFormData,
       id: crypto.randomUUID(),
-      start: currentEvent?.start,
-      end: currentEvent?.end,
+      username: user?.username,
+      startTime: currentEvent?.start,
+      endTime: currentEvent?.end,
     }
-
     const newEvents = [...events, data]
-
     setEvents(newEvents)
     handleClose()
+    SessionCreateAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'POST',
+      url: `api/users/${user.username}/sessions`,
+      requestConfig: data,
+    });
   }
 
-  const onAddEventFromDatePicker = (e) => {
+  // Edit event
+  const onEditEvent = (e) => {
     e.preventDefault()
-
-    const addHours = (date, hours) => {
-      return date ? date.setHours(date.getHours() + hours) : undefined
-    }
-
-    const setMinToZero = (date) => {
-      date.setSeconds(0)
-
-      return date
-    }
-
     const data = {
-      ...datePickerEventFormData,
-      id: crypto.randomUUID(),
-      start: setMinToZero(datePickerEventFormData.start),
-      end: datePickerEventFormData.allDay
-        ? addHours(datePickerEventFormData.start, 12)
-        : setMinToZero(datePickerEventFormData.end),
+      id: currentEvent.id,
+      username: currentEvent?.username,
+      startTime: currentEvent?.startTime,
+      endTime: currentEvent?.endTime,
     }
-
-    const newEvents = [...events, data]
-
+    // Close info and open editor
+    handleEditSlotClose()
+    SessionUpdateAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'PUT',
+      url: `api/sessions/${currentEvent?.id}`,
+      requestConfig: data,
+    });
+    const newEvents = events.map((event) => (event.id === data.id ? data : event))
     setEvents(newEvents)
-    setDatePickerEventFormData(initialDatePickerEventFormData)
+
   }
 
   const onDeleteEvent = () => {
+    SessionDeleteAxiosFetch({
+			axiosInstance: axiosPrivate,
+			method: 'DELETE',
+			url: `api/sessions/${currentEvent.id}`,
+		});
     setEvents(() => [...events].filter((e) => e.id !== currentEvent.id))
     setEventInfoModal(false)
   }
-
   return (
     <Box
       mt={2}
@@ -135,52 +171,36 @@ export default function EventCalendar() {
       component="main"
       sx={{
         flexGrow: 1,
-        py: 8,
+        py: 1,
       }}
     >
       <Container maxWidth={false}>
         <Card>
-          <CardHeader title="Calendar" subheader="Create Events and Todos and manage them easily" />
+          <CardHeader title="Calendar" subheader={currentFormattedDate} />
           <Divider />
           <CardContent>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <ButtonGroup size="large" variant="contained" aria-label="outlined primary button group">
-                <Button onClick={() => setOpenDatepickerModal(true)} size="small" variant="contained">
-                  Add event
-                </Button>
-                <Button onClick={() => setOpenTodoModal(true)} size="small" variant="contained">
-                  Create todo
-                </Button>
-              </ButtonGroup>
-            </Box>
-            <Divider style={{ margin: 10 }} />
             <AddEventModal
               open={openSlot}
               handleClose={handleClose}
-              eventFormData={eventFormData}
-              setEventFormData={setEventFormData}
+              currentEvent={currentEvent}
+              setCurrentEvent={setCurrentEvent}
               onAddEvent={onAddEvent}
-              todos={todos}
             />
-            <AddDatePickerEventModal
-              open={openDatepickerModal}
-              handleClose={handleDatePickerClose}
-              datePickerEventFormData={datePickerEventFormData}
-              setDatePickerEventFormData={setDatePickerEventFormData}
-              onAddEvent={onAddEventFromDatePicker}
-              todos={todos}
+            <EditEventModal
+              open={openEditModal}
+              handleClose={handleEditSlotClose}
+              currentEvent={currentEvent}
+              setCurrentEvent={setCurrentEvent}
+              onEditEvent={onEditEvent}
             />
             <EventInfoModal
               open={eventInfoModal}
               handleClose={() => setEventInfoModal(false)}
+              handleEditSlot={handleEditSlot}
+              onEditEvent={onEditEvent}
               onDeleteEvent={onDeleteEvent}
               currentEvent={currentEvent}
-            />
-            <AddTodoModal
-              open={openTodoModal}
-              handleClose={() => setOpenTodoModal(false)}
-              todos={todos}
-              setTodos={setTodos}
+              events={events}
             />
             <Calendar
               localizer={localizer}
@@ -188,26 +208,35 @@ export default function EventCalendar() {
               onSelectEvent={handleSelectEvent}
               onSelectSlot={handleSelectSlot}
               selectable
-              startAccessor="start"
+              startAccessor="startTime"
               components={{ event: EventInfo }}
-              endAccessor="end"
+              endAccessor="endTime"
               defaultView="week"
               eventPropGetter={(event) => {
-                const hasTodo = todos.find((todo) => todo._id === event.todoId)
+                const isUserEvent = user?.username === event.username;
                 return {
                   style: {
-                    backgroundColor: hasTodo ? hasTodo.color : "#b64fc8",
-                    borderColor: hasTodo ? hasTodo.color : "#b64fc8",
+                    backgroundColor: isUserEvent ? "#4e4d59" : "#394239",
+                    borderColor: "#ffffff",
                   },
                 }
               }}
               style={{
-                height: 900,
+                height: 1100,
               }}
             />
           </CardContent>
         </Card>
       </Container>
+      {/* Refresh token errors */}
+      {!SessionsLoading && SessionsError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionCreateLoading && SessionCreateError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionUpdateLoading && SessionUpdateError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionDeleteLoading && SessionDeleteError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
     </Box>
   );
 }
