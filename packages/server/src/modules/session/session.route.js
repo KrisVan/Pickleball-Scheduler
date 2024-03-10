@@ -5,12 +5,9 @@ import {
 import { $ref } from './session.schema.js';
 
 export async function sessionRoutes(app) {
-  // Get all users at /api/sessions. Requires auth
+  // Get all sessions at /api/sessions. Requires auth
   app.get(
     '/',
-    {
-      preHandler: [app.verifyJWT],
-    },
     handleGetSessions,
   );
 
@@ -23,7 +20,7 @@ export async function sessionRoutes(app) {
     handleGetSessionsBySessionID,
   );
 
-  // Update user by id at Put /api/users/:id. Requires auth
+  // Update session by id at Put /api/session/:id. Requires auth
   app.put(
     '/:id',
     {

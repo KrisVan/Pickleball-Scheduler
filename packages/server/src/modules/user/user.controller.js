@@ -174,6 +174,7 @@ export async function handleGetSessionsByUser(req, reply) {
 // Create sessions from user
 export async function handlePostSessionsByUser(req, reply) {
   let { username } = req.params;
+  let { id } = req.body;
   const { startTime, endTime } = req.body;
   // Validate data
   username = username.toLowerCase();
@@ -182,6 +183,7 @@ export async function handlePostSessionsByUser(req, reply) {
       message: 'Start time cannot be after end time',
     });
   }
+  if (!id) id = crypto.randomUUID();
   // Check if user exists
   const foundUser = await prisma.user.findUnique({
     where: {
@@ -197,6 +199,7 @@ export async function handlePostSessionsByUser(req, reply) {
   try {
     const session = await prisma.session.create({
       data: {
+        id,
         username,
         startTime,
         endTime,

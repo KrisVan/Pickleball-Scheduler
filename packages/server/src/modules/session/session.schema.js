@@ -8,10 +8,10 @@ const getSessionByUserSchema = z.object({
 
 // Update Session
 const updateSessionSchema = z.object({
-  creationDate: z.date(),
+  creationDate: z.date().optional(),
   startTime: z.date(),
   endTime: z.date(),
-  username: z.string().min(3),
+  username: z.string().min(3).optional(),
 });
 
 // Export schemas as Jsons
