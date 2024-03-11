@@ -9,6 +9,7 @@
   --border-light: #52585c;
   --border-dark: #272a2c;
   --background-primary: #121212;
+  --background-light: #242424;
 
 }
 .rbc-btn {
@@ -618,7 +619,6 @@ button.rbc-input::-moz-focus-inner {
   min-height: 1em;
 }
 .rbc-day-slot .rbc-time-slot {
-  /* border-top: 1px solid #f7f7f7; */
   border-top: 1px solid var(--border-primary);
 }
 
