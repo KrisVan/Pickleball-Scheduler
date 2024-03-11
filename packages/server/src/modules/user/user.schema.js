@@ -29,6 +29,7 @@ const updateUserSchema = z.object({
 
 // Create Session
 const createSessionSchema = z.object({
+  id: z.string().optional(),
   startTime: z.date(),
   endTime: z.date(),
 });

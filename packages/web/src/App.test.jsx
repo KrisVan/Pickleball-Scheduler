@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 
 // Set environment for unit tests
-jest.mock('./components/PickleballCalendar/PickleballCalendar', () => ({
+jest.mock('./components/EventCalendar/EventCalendar', () => ({
   PickleballCalendar: () => <div data-testid="pickleball-calendar" />
 }));
 

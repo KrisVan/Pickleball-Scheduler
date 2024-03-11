@@ -1,10 +1,9 @@
-import { PickleballCalendar } from '../components/PickleballCalendar/PickleballCalendar';
+import EventCalendar from '../components/EventCalendar/EventCalendar.jsx';
 
 export default function Scheduler() {
     return(
         <div>
-            <h2>Scheduler</h2>
-            <PickleballCalendar />
+            <EventCalendar />
         </div>
     )
 }
