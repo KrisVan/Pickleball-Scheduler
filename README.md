@@ -27,28 +27,19 @@ git clone <repo-name>
 ```
 cd <repo-name>
 ```
-5. Install dependencies
+4. Install dependencies
 ```
 cd <repo-name>
 npm install
 ```
-4. Install dependencies for frontend
-```
-cd packages/web
-npm install
-```
-5. Install dependencies for server
-```
-cd ..
-cd packages/server
-```
+5. Configure .env.example
 6. Generate Prisma Instance
 ```
+cd packages/server
 npx prisma generate
 npx prisma migrate dev --name init
 ```
-7. Configure .env.example
-8. Start the app
+7. Start the app
 ```
 cd ../..
 npm start
