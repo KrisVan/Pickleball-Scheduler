@@ -1,5 +1,6 @@
 import useUser from '../hooks/useUser';
 import Landing from './Landing';
+import UserDashboard from './UserDashboard';
 
 export default function Home() {
   const { user } = useUser();
@@ -7,7 +8,7 @@ export default function Home() {
   return(
     // If not logged in, show landing, else show dashboard
     user?.accessToken
-      ? <b>Welcome {user.username}</b>
+      ? <UserDashboard />
       : <Landing />
   )
 }
