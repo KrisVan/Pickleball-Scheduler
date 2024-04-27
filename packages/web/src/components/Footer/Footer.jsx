@@ -61,6 +61,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             href="https://github.com/KrisVan/Pickleball-Scheduler"
+            target={"_blank"}
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
@@ -69,6 +70,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             href="https://www.linkedin.com/in/kristopher-van-71b339274/"
+            target={"_blank"}
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >
