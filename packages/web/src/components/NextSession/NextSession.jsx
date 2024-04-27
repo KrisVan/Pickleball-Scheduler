@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 
-import { Button } from "@mui/material"
+import { Button, Divider } from "@mui/material"
 import { Paper } from '@mui/material/';
 import { Typography } from "@mui/material";
 
@@ -117,6 +117,7 @@ export default function NextSession() {
           <Typography variant="h5">
             at {nextSessionStartTime}
           </Typography>
+          <Divider sx={{my:1}}/>
           <UsersWithinInterval
             currentEvent={nextSession}
             events={events}
