@@ -21,6 +21,7 @@ import {
 } from '@mui/x-data-grid';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAxiosFunction from '../../hooks/useAxiosFunction';
+import useUser from '../../hooks/useUser';
 
 function ISOStringToDateTime(ISOString) {
   var b = ISOString.split(/\D+/);
@@ -29,6 +30,7 @@ function ISOStringToDateTime(ISOString) {
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel, getSessions } = props;
+  const { user } = useUser();
 
   const handleRefreshClick = () => {
     getSessions();
@@ -39,7 +41,7 @@ function EditToolbar(props) {
     const currentDate = new Date();
     currentDate.setTime(currentDate.getTime() + (60 * 60 * 1000))
     setRows((oldRows) => [...oldRows, 
-      { id: id, username: '', 
+      { id: id, username: user.username, 
         startTime: new Date().toISOString(),
         endTime: currentDate.toISOString(),
         creationDate: new Date().toISOString(),
@@ -72,7 +74,7 @@ function EditToolbar(props) {
   );
 }
 
-export default function SessionsDataGrid() {
+export default function BasicSessionsDataGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
@@ -87,12 +89,13 @@ export default function SessionsDataGrid() {
   const location = useLocation();
 
   const handleCloseSnackbar = () => setSnackbar(null);
+  const { user } = useUser();
 
   const getSessions = () => {
     SessionsAxiosFetch({
       axiosInstance: axiosPrivate,
       method: 'GET',
-      url: 'api/sessions',
+      url: `api/users/${user.username}/sessions`,
     });
 	}
 
@@ -241,11 +244,6 @@ export default function SessionsDataGrid() {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 30, align: 'left',
-      headerAlign: 'left'},
-    { field: 'username', headerName: 'User', width: 120, align: 'left',
-      headerAlign: 'left', editable: true
-    },
     { field: 'startTime', type: 'dateTime', headerName: 'Start Time', width: 200,
       align: 'left', headerAlign: 'left', editable: true, 
       valueGetter: (params) => {
