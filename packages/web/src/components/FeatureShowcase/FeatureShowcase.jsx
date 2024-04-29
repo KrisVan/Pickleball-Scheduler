@@ -17,24 +17,24 @@ const items = [
     title: 'See Who\'s Free',
     description:
       'See who and how many people are interested in meeting at any time.',
-    imageLight: 'url("")',
-    imageDark: 'url("")',
+    imageLight: 'url("images/seeWhosFreeDark.png")',
+    imageDark: 'url("images/seeWhosFreeDark.png")',
   },
   {
     icon: <ScheduleIcon />,
     title: 'Pick a Time',
     description:
       'Easily create sessions for others to view. Click and drag to select a time to schedule.',
-    imageLight: 'url("")',
-    imageDark: 'url("")',
+    imageLight: 'url("images/scheduleDark.png")',
+    imageDark: 'url("images/scheduleDark.png")',
   },
   {
     icon: <DashboardIcon />,
     title: 'Track Your Sessions',
     description:
       'Stay updated on the dashboard to see who has joined your sessions, when\'s the next session, and view your analytics.',
-    imageLight: 'url("")',
-    imageDark: 'url("")',
+    imageLight: 'url("images/dashboardDark.png")',
+    imageDark: 'url("images/dashboardDark.png")',
   },
 ];
 
@@ -217,13 +217,16 @@ export default function FeatureShowcase() {
             <Box
               sx={{
                 m: 'auto',
-                width: 420,
+                width: 500,
                 height: 500,
-                backgroundSize: 'contain',
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+                backgroundSize: "cover",
                 backgroundImage: (theme) =>
                   theme.palette.mode === 'light'
                     ? items[selectedItemIndex].imageLight
                     : items[selectedItemIndex].imageDark,
+                    
               }}
             />
           </Card>

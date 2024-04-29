@@ -68,11 +68,12 @@ export default function Hero() {
             alignSelf: 'center',
             height: { xs: 200, sm: 700 },
             width: '100%',
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center %40",
             backgroundImage:
               theme.palette.mode === 'light'
-                // FIXME: Placeholder. Put in demo gifs
-                ? "url('')"
-                : "url('')",
+                ? 'url("images/demoDark.gif")'
+                : 'url("images/demoDark.gif")',
             backgroundSize: 'cover',
             borderRadius: '10px',
             outline: '1px solid',
