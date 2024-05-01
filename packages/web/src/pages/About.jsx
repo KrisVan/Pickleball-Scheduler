@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { Container } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
@@ -31,13 +32,13 @@ export default function About() {
           About
         </Typography>
         <Grid container
-          direction="row"
           wrap='nowrap'
+          sx={{ flexDirection: { xs: "column", md: "row"} }}
           columnSpacing={{ xs: 2, sm: 4, md: 4 }}
           justifyContent="space-evenly"
           alignItems="flex-start"
         >
-          <Grid item xs={true} md={6}>
+          <Grid item xs={true} md={6} order={{ xs: 2, sm: 2, md: 1 }}>
             <Typography
               component="body1"
               variant="body1"
@@ -48,13 +49,13 @@ export default function About() {
               {bio}
             </Typography>
           </Grid>
-          <Grid item xs={true} md={6}>
+          <Grid item xs={true} md={6} order={{ xs: 1, sm: 1, md: 2 }}>
             <Box
               id="image"
               sx={{
                 alignSelf: 'center',
                 height: 550,
-                width: '100%',
+                width: { xs: 470, sm: 570, md: '100%' },
                 minWidth: 300,
                 mb: 1,
                 backgroundRepeat: "no-repeat",
@@ -113,6 +114,7 @@ export default function About() {
           </Grid>
         </Grid>
       </Container>
+      <Divider />
       <Footer />
     </>
     
