@@ -53,14 +53,12 @@ function ResponsiveAppBar() {
   if (user?.role === 'ADMIN')  {
     pages = [
       {text:'Scheduler', path:'scheduler'},
-      {text:'About', path:'about'},
       {text:'Dashboard', path:'admin'},
     ];
   }
   else {
     pages = [
       {text:'Scheduler', path:'scheduler'},
-      {text:'About', path:'about'},
     ];
   }
   
