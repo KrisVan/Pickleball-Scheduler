@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import useUser from '../hooks/useUser';
 
-import Copyright from '../components/Copyright/Copyright';
+import Footer from '../components/Footer/Footer';
 import NextSession from '../components/NextSession/NextSession';
 import BasicSessionDataGrid from '../components/SessionDataGrid/BasicSessionDataGrid';
 
@@ -22,7 +22,6 @@ export default function UserDashboard() {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[910],
             flexGrow: 1,
-            height: '100vh',
             overflow: 'auto',
           }}
         >
@@ -40,7 +39,7 @@ export default function UserDashboard() {
           </Container>
         </Box>
       </Box>
-      <Copyright sx={{mb: 4}}/>
+      <Footer sx={{mb: 4}}/>
     </>
   );
 }

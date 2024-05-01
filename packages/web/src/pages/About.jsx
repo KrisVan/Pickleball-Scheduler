@@ -37,7 +37,7 @@ export default function About() {
           justifyContent="space-evenly"
           alignItems="flex-start"
         >
-          <Grid item xs={false} md={6}>
+          <Grid item xs={true} md={6}>
             <Typography
               component="body1"
               variant="body1"
@@ -48,7 +48,7 @@ export default function About() {
               {bio}
             </Typography>
           </Grid>
-          <Grid item xs={6} md={7}>
+          <Grid item xs={true} md={6}>
             <Box
               id="image"
               sx={{
@@ -72,7 +72,6 @@ export default function About() {
               sx={{
                 color: 'text.secondary',
               }}
-              
             >
               <IconButton
                 color="inherit"
