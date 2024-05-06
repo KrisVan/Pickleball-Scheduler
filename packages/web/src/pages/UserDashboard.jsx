@@ -1,4 +1,5 @@
 import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { Box } from '@mui/material';
 
@@ -13,7 +14,7 @@ export default function UserDashboard() {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', mb: { xs: 2, sm: 4, md: 6 } }}>
         <Box
           component="main"
           sx={{
@@ -39,7 +40,8 @@ export default function UserDashboard() {
           </Container>
         </Box>
       </Box>
-      <Footer sx={{mb: 4}}/>
+      <Divider />
+      <Footer />
     </>
   );
 }
