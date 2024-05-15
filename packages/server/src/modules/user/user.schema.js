@@ -34,6 +34,13 @@ const createSessionSchema = z.object({
   endTime: z.date(),
 });
 
+// Update user settings schema
+const updateUserSettingsSchema = z.object({
+  username: z.string().min(3).max(24),
+  color: z.string(),
+  theme: z.string(),
+});
+
 // Export schemas as Jsons
 // Returns all the schemas to register and a ref to refer these schemas
 export const { schemas: userSchemas, $ref } = buildJsonSchemas({
@@ -41,4 +48,5 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserResponseSchema,
   createSessionSchema,
   updateUserSchema,
+  updateUserSettingsSchema,
 }, { $id: 'userSchemas' });

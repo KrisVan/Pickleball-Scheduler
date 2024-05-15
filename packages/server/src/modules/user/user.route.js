@@ -1,7 +1,8 @@
 import {
   handleCreateUser, handleGetUsers, handleGetUserByUsername,
   handleGetSessionsByUser, handlePostSessionsByUser,
-  handleUpdateUser, handleDeleteUser,
+  handleUpdateUser, handleDeleteUser, handleGetSettingByUsername,
+  handleUpdateSettingByUsername,
 } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
@@ -73,6 +74,26 @@ export async function userRoutes(app) {
       },
     },
     handlePostSessionsByUser,
+  );
+
+  // Get settings at /api/users/:username/settings. Requires auth
+  app.get(
+    '/:username/settings',
+    {
+      preHandler: [app.verifyJWT],
+    },
+    handleGetSettingByUsername,
+  );
+  // Update user settings by username at Put /api/users/:username/settings. Requires auth
+  app.put(
+    '/:username/settings',
+    {
+      preHandler: [app.verifyJWT],
+      schema: {
+        body: $ref('updateUserSettingsSchema'),
+      },
+    },
+    handleUpdateSettingByUsername,
   );
 
   app.log.info('User routes registered');

@@ -32,6 +32,7 @@ export async function handleCreateUser(req, reply) {
         displayName,
         password: hash,
         role: 'BASIC',
+        settings: { create: {} },
       },
     });
 
@@ -206,6 +207,74 @@ export async function handlePostSessionsByUser(req, reply) {
       },
     });
     return reply.code(201).send(session);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}
+
+// User Settings
+// Get user settings by username
+export async function handleGetSettingByUsername(req, reply) {
+  const { username } = req.params;
+  const settings = await prisma.setting.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      theme: true,
+      color: true,
+    },
+  });
+  return reply.code(200).send(settings);
+}
+
+// Update existing user settings by username
+export async function handleUpdateSettingByUsername(req, reply) {
+  const { username } = req.params;
+  const { theme, color, ...props } = req.body;
+  // Validate data
+  if (theme.toLowerCase() !== 'dark' && theme.toLowerCase() !== 'light') {
+    return reply.code(400).send({
+      message: 'Theme must be either light or dark',
+    });
+  }
+
+  const re = /^#[0-9A-F]{6}$/i;
+
+  if (!(re.test(color))) {
+    return reply.code(400).send({
+      message: 'Color must valid hex',
+    });
+  }
+
+  // Check if user exists
+  const validatedUsername = username.toLowerCase();
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      username: validatedUsername,
+    },
+  });
+  if (!foundUser) {
+    return reply.code(404).send({
+      message: 'User not found',
+    });
+  }
+  // Update settings
+  console.log(foundUser.username);
+  try {
+    const session = await prisma.setting.update({
+      where: {
+        username: foundUser.username,
+      },
+      data: {
+        ...props,
+        color,
+        theme: theme.toUpperCase(),
+        username: validatedUsername,
+      },
+    });
+    return reply.code(200).send(session);
   } catch (e) {
     return reply.code(500).send(e);
   }
