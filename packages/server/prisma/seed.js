@@ -10,7 +10,7 @@ async function main() {
       displayName: 'admin',
       password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'ADMIN',
-      settings: {create: {}},
+      settings: { create: {} },
     },
   });
   await prisma.user.upsert({
@@ -27,7 +27,7 @@ async function main() {
           endTime: '2024-01-06T22:00:00.000-04:00',
         },
       },
-      settings: {create: {}},
+      settings: { create: {} },
     },
   });
   await prisma.user.upsert({
@@ -44,7 +44,7 @@ async function main() {
           endTime: '2024-01-09T22:00:00.000-04:00',
         },
       },
-      settings: {create: {}},
+      settings: { create: {} },
     },
   });
   await prisma.user.upsert({
@@ -61,7 +61,7 @@ async function main() {
           endTime: '2024-01-09T22:00:00.000-04:00',
         },
       },
-      settings: {create: {}},
+      settings: { create: {} },
     },
   });
   await prisma.user.upsert({
@@ -72,7 +72,7 @@ async function main() {
       displayName: 'Lazy',
       password: '$2b$10$04xyjuFXfrfEqjY.hyzWR.Cx3dtzHsf6T1.9hBcIzmCfrqL5tKg2S',
       role: 'BASIC',
-      settings: {create: {}},
+      settings: { create: {} },
     },
   });
   console.log('Seeding finished.');

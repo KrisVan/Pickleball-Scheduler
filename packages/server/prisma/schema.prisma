@@ -33,7 +33,7 @@ model Session {
 model Setting {
   id       String @id @default(uuid())
   theme    String @default("DARK")
-  color    String @default("5e8550")
+  color    String @default("#5e8550")
   username String @unique
   user     User   @relation(fields: [username], references: [username], onDelete: Cascade)
 }
