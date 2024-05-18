@@ -221,7 +221,6 @@ export async function handleGetSettingByUsername(req, reply) {
       username,
     },
     select: {
-      id: true,
       theme: true,
       color: true,
     },

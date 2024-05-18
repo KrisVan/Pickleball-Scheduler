@@ -76,12 +76,9 @@ export async function userRoutes(app) {
     handlePostSessionsByUser,
   );
 
-  // Get settings at /api/users/:username/settings. Requires auth
+  // Get settings at /api/users/:username/settings.
   app.get(
     '/:username/settings',
-    {
-      preHandler: [app.verifyJWT],
-    },
     handleGetSettingByUsername,
   );
   // Update user settings by username at Put /api/users/:username/settings. Requires auth
