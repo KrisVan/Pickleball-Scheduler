@@ -177,7 +177,7 @@ function ResponsiveAppBar() {
             <>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar sx={{ color: 'inherit' }}>
+                  <Avatar sx={{ color: 'inherit', bgcolor: `${user.color}` }}>
                     {user.username && user.username[0].toUpperCase()}
                   </Avatar>
                 </IconButton>
