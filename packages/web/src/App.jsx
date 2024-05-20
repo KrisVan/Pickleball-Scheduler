@@ -1,13 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 // Page imports
 import About from './pages/About';
+import Account from './pages/Account';
 import Admin from './pages/Admin.jsx';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NoPage from './pages/NoPage';
 import Register from './pages/Register';
 import Scheduler from './pages/Scheduler';
-import User from './pages/User';
+import Profile from './pages/Profile.jsx';
 import Unauthorized from './pages/Unauthorized.jsx';
 // Component imports
 import Layout from './components/Layout/Layout.jsx';
@@ -35,10 +36,11 @@ const App = () => (
           <Route index element = {<Admin />} />
           <Route path="/admin/dashboard" element = {<Admin />} />
         </Route>
-        {/* Private User routes */}
+        {/* User routes */}
+        <Route path="/user/:username" element = {<Profile />} />
         <Route path="/user" element = {<RequireUser allowedRole="ADMIN"/>}>
           <Route index element = {<NoPage />} />
-          <Route path="/user/:username" element = {<User />} />
+          <Route path="/user/:username/account" element = {<Account />} />
         </Route>
         {/* Catch All */}
         <Route path="*" element = {<NoPage />} />
