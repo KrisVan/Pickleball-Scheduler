@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { Navigate, useLocation } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
@@ -17,11 +17,13 @@ import IconButton from '@mui/material/IconButton';
 import ColorPickerModal from '../components/ColorPickerModal/ColorPickerModal.jsx';
 import DeleteAccountModal from '../components/DeleteAccountModal/DeleteAccountModal';
 import useUser from '../hooks/useUser.jsx';
+import useRefreshToken from '../hooks/useRefreshToken.jsx';
 import useAxiosPrivate from '../hooks/useAxiosPrivate.jsx';
 import useAxiosFunction from '../hooks/useAxiosFunction.jsx';
 
 export default function Account() {
   const { user } = useUser();
+  const location = useLocation();
 
   const [isChange, setIsChange] = useState(false);
   const [isPasswordChange, setIsPasswordChange] = useState(false);
@@ -36,13 +38,15 @@ export default function Account() {
   const [openColorModal, setOpenColorModal] = useState(false);
 
   const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
-  
+  const [UserUpdateSettingsResponse, UserUpdateSettingsError, UserUpdateSettingsLoading, UserUpdateSettingsAxiosFetch] = useAxiosFunction();
+  const [UserDeleteResponse, UserDeleteError, UserDeleteLoading, UserDeleteAxiosFetch] = useAxiosFunction();
+
   const axiosPrivate = useAxiosPrivate();
+  const refresh = useRefreshToken();
   const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }]
 
   // Handlers
   function handleCancel() {
-    console.log("cancel");
     // Set fields to default values
     document.getElementById("settings").reset();
     // Set states to initial values
@@ -59,9 +63,8 @@ export default function Account() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log("confirm");
-    console.log(data.get('displayName'));
 
-    // Request to update user and user settings
+    // Request to update user
     // UserUpdateAxiosFetch({
     //   axiosInstance: axiosPrivate,
     //   method: 'PUT',
@@ -69,15 +72,39 @@ export default function Account() {
     //   requestConfig: {
     //   },
     // });
-    // Update user context by refreshing info
+
+    // Update user settings
+    UserUpdateSettingsAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'PUT',
+      url: `api/users/${user.username}/settings`,
+      requestConfig: {
+        username: user.username,
+        color: userColor,
+        theme: data.get('theme')
+      },
+    });
     
     // Set states to initial values
-    handleCancel();
+    setConfirmationPassword('');
+    setDisplayNameError('');
+    setPasswordError('');
+    setMatchError('');
+    setIsPasswordChange(false);
+    setIsChange(false);
   }
+
+  // Update user context by refreshing info
+  useEffect(() => { 
+    refresh();
+  },[UserUpdateResponse, UserUpdateSettingsResponse]);
 
   function handleDelete() {
     console.log("Account deleted");
     setOpenDeleteModal(false);
+
+    // Logout and take to home
+
   }
 
   function handleCloseDeleteModal() {
@@ -230,35 +257,35 @@ export default function Account() {
                 helperText={displayNameError}
               />
               <>
-              <TextField
-                variant="standard"
-                id="password"
-                label="Password"
-                name="password"
-                type="password"
-                placeholder={"••••••"}
-                autoComplete="new-password"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(event) => validatePasswordOnChange(event.target.value)}
-                error={passwordError && passwordError.length ? true : false}
-                helperText={passwordError}
-              />
-              {isPasswordChange === true &&
                 <TextField
                   variant="standard"
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  name="confirmPassword"
+                  id="password"
+                  label="Password"
+                  name="password"
                   type="password"
-                  defaultValue=""
+                  placeholder={"••••••"}
                   autoComplete="new-password"
-                  onChange={(event) => matchPasswordOnChange(event.target.value)}
-                  error={matchError && matchError.length ? true : false}
-                  helperText={matchError}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={(event) => validatePasswordOnChange(event.target.value)}
+                  error={passwordError && passwordError.length ? true : false}
+                  helperText={passwordError}
                 />
-              }
+                {isPasswordChange === true &&
+                  <TextField
+                    variant="standard"
+                    id="confirmPassword"
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    defaultValue=""
+                    autoComplete="new-password"
+                    onChange={(event) => matchPasswordOnChange(event.target.value)}
+                    error={matchError && matchError.length ? true : false}
+                    helperText={matchError}
+                  />
+                }
               </>
               <TextField
                 select
@@ -353,6 +380,12 @@ export default function Account() {
       />
       <Divider />
       <Footer />
+      {!UserUpdateLoading && UserUpdateError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
+      {!UserUpdateSettingsLoading && UserUpdateSettingsError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
+      {!UserDeleteLoading && UserDeleteError.includes("500") &&
+        <Navigate to="/login" replace state={{ from: location }} />}
     </>
     
 )
