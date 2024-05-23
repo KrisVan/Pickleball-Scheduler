@@ -27,6 +27,14 @@ const updateUserSchema = z.object({
   role: z.string(),
 });
 
+// Patch user schema
+const patchUserSchema = z.object({
+  username: z.string().min(3).max(24).optional(),
+  password: z.string().min(6).optional(),
+  displayName: z.string().min(3).max(24).optional(),
+  role: z.string().optional(),
+});
+
 // Create Session
 const createSessionSchema = z.object({
   id: z.string().optional(),
@@ -48,5 +56,6 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserResponseSchema,
   createSessionSchema,
   updateUserSchema,
+  patchUserSchema,
   updateUserSettingsSchema,
 }, { $id: 'userSchemas' });
