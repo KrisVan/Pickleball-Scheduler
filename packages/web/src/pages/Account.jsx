@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Footer from '../components/Footer/Footer.jsx';
 
+import DeleteAccountModal from '../components/DeleteAccountModal/DeleteAccountModal';
 import useUser from '../hooks/useUser.jsx';
 
 export default function Account() {
@@ -23,6 +24,8 @@ export default function Account() {
   const [passwordError, setPasswordError] = useState('');
   const [matchError, setMatchError] = useState('');
   const [isValidationError, setIsValidationError] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   const { user } = useUser();
 
@@ -52,6 +55,15 @@ export default function Account() {
 
   function handleDelete() {
     console.log("Are you sure you want to delete your account?");
+    setOpen(false);
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function handleClickOpen() {
+    setOpen(true);
   }
 
   // Validate username
@@ -161,7 +173,6 @@ export default function Account() {
               divider={<Divider flexItem />}
               sx={{width: { xs: 470, sm: 570, md:'100%' }}}
             >
-              
               <TextField
                 disabled
                 variant="standard"
@@ -225,7 +236,13 @@ export default function Account() {
                   </MenuItem>
                 ))}
               </TextField>
-              <Button variant="outlined" color="error" onClick={handleDelete}> Delete Account </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleClickOpen}
+              >
+                  Delete Account
+              </Button>
               {isChange === true && 
               <Stack spacing={2} direction="row">
                 <Button variant="outlined" onClick={handleCancel}> Cancel </Button>
@@ -255,6 +272,11 @@ export default function Account() {
           </Grid>
         </Grid>
       </Container>
+      <DeleteAccountModal
+        open={open}
+        onClose={handleClose}
+        onDelete={handleDelete}
+      />
       <Divider />
       <Footer />
     </>
