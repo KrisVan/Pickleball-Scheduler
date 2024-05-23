@@ -1,34 +1,43 @@
 import { useState, useEffect } from 'react';
 
-import { Avatar } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
-import { Container } from '@mui/material';
+import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Footer from '../components/Footer/Footer.jsx';
+import PaletteIcon from '@mui/icons-material/Palette';
+import IconButton from '@mui/material/IconButton';
 
+import ColorPickerModal from '../components/ColorPickerModal/ColorPickerModal.jsx';
 import DeleteAccountModal from '../components/DeleteAccountModal/DeleteAccountModal';
 import useUser from '../hooks/useUser.jsx';
+import useAxiosPrivate from '../hooks/useAxiosPrivate.jsx';
+import useAxiosFunction from '../hooks/useAxiosFunction.jsx';
 
 export default function Account() {
+  const { user } = useUser();
+
   const [isChange, setIsChange] = useState(false);
   const [isPasswordChange, setIsPasswordChange] = useState(false);
-
+  const [userColor, setUserColor] = useState(user.color);
   const [password, setPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
   const [displayNameError, setDisplayNameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [matchError, setMatchError] = useState('');
   const [isValidationError, setIsValidationError] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openColorModal, setOpenColorModal] = useState(false);
 
-  const [open, setOpen] = useState(false);
-
-  const { user } = useUser();
-
+  const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
+  
+  const axiosPrivate = useAxiosPrivate();
   const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }]
 
   // Handlers
@@ -37,6 +46,7 @@ export default function Account() {
     // Set fields to default values
     document.getElementById("settings").reset();
     // Set states to initial values
+    setUserColor(user.color);
     setConfirmationPassword('');
     setDisplayNameError('');
     setPasswordError('');
@@ -51,23 +61,44 @@ export default function Account() {
     console.log("confirm");
     console.log(data.get('displayName'));
 
-    // Request to edit
-
+    // Request to update user and user settings
+    // UserUpdateAxiosFetch({
+    //   axiosInstance: axiosPrivate,
+    //   method: 'PUT',
+    //   url: `api/users/${user.id}`,
+    //   requestConfig: {
+    //   },
+    // });
+    // Update user context by refreshing info
+    
     // Set states to initial values
     handleCancel();
   }
 
   function handleDelete() {
-    console.log("Are you sure you want to delete your account?");
-    setOpen(false);
+    console.log("Account deleted");
+    setOpenDeleteModal(false);
   }
 
-  function handleClose() {
-    setOpen(false);
+  function handleCloseDeleteModal() {
+    setOpenDeleteModal(false);
   }
 
-  function handleClickOpen() {
-    setOpen(true);
+  function handleClickDeleteOpenModal() {
+    setOpenDeleteModal(true);
+  }
+
+  function handleColorSubmit() {
+    setIsChange(true);
+    setOpenColorModal(false);
+  }
+
+  function handleCloseColorModal() {
+    setOpenColorModal(false);
+  }
+
+  function handleClickOpenColorModal() {
+    setOpenColorModal(true);
   }
 
   // Validate username
@@ -247,7 +278,7 @@ export default function Account() {
               <Button
                 variant="outlined"
                 color="error"
-                onClick={handleClickOpen}
+                onClick={handleClickDeleteOpenModal}
               >
                   Delete Account
               </Button>
@@ -265,25 +296,60 @@ export default function Account() {
             </Stack>
           </Grid>
           <Grid item xs={true} md={6} order={{ xs: 1, sm: 1, md: 1 }}>
-            <Avatar 
-              sx={{
-                alignSelf: 'center',
-                color: 'inherit',
-                bgcolor: `${user.color}`, 
-                height: { xs: 470, sm: 570, md:300 },
-                width: { xs: 470, sm: 570, md:300 },
-                mb: { xs: 8, sm: 10, md: 2 },
+            <Badge
+              badgeContent={
+                <PaletteIcon
+                  color='text.primary'
+                  sx={{
+                    height: { xs: 80, sm: 100, md: 50 },
+                    width: { xs: 80, sm: 100, md: 50 },
+                  }}
+                />
+              }
+              overlap="circular"
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
               }}
             >
-              {user.username && user.username[0].toUpperCase()}
-            </Avatar>
+              <IconButton
+                aria-label="Profile Color"
+                onClick={handleClickOpenColorModal}
+                sx={{
+                  justifyContent: 'center',
+                  height: { xs: 490, sm: 590, md:320 },
+                  width: { xs: 490, sm: 590, md:320 },
+                  pt:{ xs: 9, sm: 11, md:3 },
+                }}
+              >
+              <Avatar
+                sx={{
+                  alignSelf: 'center',
+                  color: 'inherit',
+                  bgcolor: `${userColor}`, 
+                  height: { xs: 470, sm: 570, md:300 },
+                  width: { xs: 470, sm: 570, md:300 },
+                  mb: { xs: 8, sm: 10, md: 2 },
+                }}
+              >
+                {user.username && user.username[0].toUpperCase()}
+              </Avatar>
+              </IconButton>
+            </Badge>
           </Grid>
         </Grid>
       </Container>
       <DeleteAccountModal
-        open={open}
-        onClose={handleClose}
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
         onDelete={handleDelete}
+      />
+      <ColorPickerModal
+        open={openColorModal}
+        onClose={handleCloseColorModal}
+        onSubmit={handleColorSubmit}
+        userColor={userColor}
+        setUserColor={setUserColor}
       />
       <Divider />
       <Footer />
