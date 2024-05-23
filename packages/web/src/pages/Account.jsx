@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Container } from '@mui/material';
@@ -15,6 +16,14 @@ import useUser from '../hooks/useUser.jsx';
 export default function Account() {
   const [isChange, setIsChange] = useState(false);
   const [isPasswordChange, setIsPasswordChange] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [confirmationPassword, setConfirmationPassword] = useState('');
+  const [displayNameError, setDisplayNameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [matchError, setMatchError] = useState('');
+  const [isValidationError, setIsValidationError] = useState(false);
+
   const { user } = useUser();
 
   const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }]
@@ -23,7 +32,7 @@ export default function Account() {
   function handleCancel() {
     console.log("cancel");
     // Set fields to default values
-
+    
     // Set change states to false
     setIsPasswordChange(false);
     setIsChange(false);
@@ -44,6 +53,74 @@ export default function Account() {
   function handleDelete() {
     console.log("Are you sure you want to delete your account?");
   }
+
+  // Validate username
+  const validateDisplayNameOnChange = (displayName) => {
+    setIsChange(true)
+    // If not between 3-24 chars
+    if (!(/^.{3,24}$/.test(displayName))){
+      setDisplayNameError("Display name must be between 3 and 24 characters");
+      return false;
+    }
+    // If not any combination of letters, digits, and underscores
+    if (!(/^[a-zA-Z0-9_]+$/.test(displayName))){
+      setDisplayNameError("Display name can only contain letters, digits, and underscores");
+      return false;
+    }
+    setDisplayNameError("");
+    return true;
+  }
+
+  // Validate password
+  const validatePasswordOnChange = (password) => {
+    setIsChange(true);
+    setIsPasswordChange(true);
+    setPassword(password);
+    // If not between 6-24 chars
+    if (!(/^.{6,24}$/.test(password))){
+      setPasswordError("Password must be between 6 and 24 characters")
+      return false;
+    }
+    // If not any combination of letters, digits, or non closure special chars
+    else if (!(/^[a-zA-Z0-9!@#$%^&*_\-+=|:;<>,.?/\\~`"]+$/.test(password))){
+      setPasswordError("Password can only contain letters, digits, and non closure special characters");
+      return false;
+    }
+    // Check if password matches confirmation password
+    if (confirmationPassword === password){
+      setPasswordError('')
+      setMatchError('')
+    }
+    else{
+      setMatchError("Passwords must match");
+    }
+    setPasswordError('');
+    return true;
+  }
+
+  // Check if confirm passwords match
+  const matchPasswordOnChange = (confirmationPassword) => {
+    setIsChange(true)
+    setConfirmationPassword(confirmationPassword);
+    // If confirm password does not match the password
+    if (confirmationPassword !== password){
+      setMatchError("Passwords must match");
+    }
+    else {
+      setMatchError('');
+    }
+  }
+
+  // Check if error is present after error state changes
+  useEffect(() => {
+    if (displayNameError || passwordError || matchError) {
+      setIsValidationError(true);
+    }
+    else {
+      setIsValidationError(false);
+    }
+  },[displayNameError, passwordError, matchError])
+
 
 	return(
     <>
@@ -101,7 +178,9 @@ export default function Account() {
                 name="displayName"
                 autoComplete='off'
                 defaultValue={user.displayName}
-                onChange={()=>setIsChange(true)}
+                onChange={(event) => validateDisplayNameOnChange(event.target.value)}
+                error={displayNameError && displayNameError.length ? true : false}
+                helperText={displayNameError}
               />
               <>
               <TextField
@@ -111,11 +190,10 @@ export default function Account() {
                 name="password"
                 type="password"
                 defaultValue="••••••"
-                autoComplete='off'
-                onChange={()=>{
-                  setIsPasswordChange(true)
-                  setIsChange(true)}
-                }
+                autoComplete="new-password"
+                onChange={(event) => validatePasswordOnChange(event.target.value)}
+                error={passwordError && passwordError.length ? true : false}
+                helperText={passwordError}
               />
               {isPasswordChange === true &&
                 <TextField
@@ -125,7 +203,10 @@ export default function Account() {
                   name="confirmPassword"
                   type="password"
                   defaultValue=""
-                  autoComplete='off'
+                  autoComplete="new-password"
+                  onChange={(event) => matchPasswordOnChange(event.target.value)}
+                  error={matchError && matchError.length ? true : false}
+                  helperText={matchError}
                 />
               }
               </>
@@ -148,7 +229,13 @@ export default function Account() {
               {isChange === true && 
               <Stack spacing={2} direction="row">
                 <Button variant="outlined" onClick={handleCancel}> Cancel </Button>
-                <Button variant="contained" type="submit"> Confirm Changes </Button> 
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled= { isValidationError ? true : false}
+                >
+                  Confirm Changes
+                </Button> 
               </Stack>}
             </Stack>
           </Grid>
