@@ -38,7 +38,7 @@ export default function DeleteAccountModal({ open, onClose, onDelete}) {
           fullWidth
           variant="outlined"
           id="username"
-          label={user.username}
+          placeholder={user.username}
           name="username"
           type="username"
           helperText="Type in your username to confirm deletion"

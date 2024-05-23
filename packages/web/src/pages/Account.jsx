@@ -35,11 +35,14 @@ export default function Account() {
   function handleCancel() {
     console.log("cancel");
     // Set fields to default values
-    
-    // Set change states to false
+    document.getElementById("settings").reset();
+    // Set states to initial values
+    setConfirmationPassword('');
+    setDisplayNameError('');
+    setPasswordError('');
+    setMatchError('');
     setIsPasswordChange(false);
     setIsChange(false);
-
   }
 
   function handleConfirm(event) {
@@ -48,9 +51,10 @@ export default function Account() {
     console.log("confirm");
     console.log(data.get('displayName'));
 
-    // Set change states to false
-    setIsPasswordChange(false);
-    setIsChange(false);
+    // Request to edit
+
+    // Set states to initial values
+    handleCancel();
   }
 
   function handleDelete() {
@@ -156,6 +160,7 @@ export default function Account() {
         </Typography>
         <Grid container
           component="form"
+          id="settings"
           onSubmit={handleConfirm}
           noValidate
           wrap='nowrap'
@@ -200,8 +205,11 @@ export default function Account() {
                 label="Password"
                 name="password"
                 type="password"
-                defaultValue="••••••"
+                placeholder={"••••••"}
                 autoComplete="new-password"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 onChange={(event) => validatePasswordOnChange(event.target.value)}
                 error={passwordError && passwordError.length ? true : false}
                 helperText={passwordError}
