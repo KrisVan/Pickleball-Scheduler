@@ -1,8 +1,8 @@
 import {
   handleCreateUser, handleGetUsers, handleGetUserByUsername,
   handleGetSessionsByUser, handlePostSessionsByUser,
-  handleUpdateUser, handleDeleteUser, handleGetSettingByUsername,
-  handleUpdateSettingByUsername,
+  handleUpdateUser, handlePatchUser, handleDeleteUser,
+  handleGetSettingByUsername, handleUpdateSettingByUsername,
 } from './user.controller.js';
 import { $ref } from './user.schema.js';
 
@@ -46,6 +46,17 @@ export async function userRoutes(app) {
       },
     },
     handleUpdateUser,
+  );
+  // Patch user by id at Put /api/users/:id. Use optional values Requires auth
+  app.patch(
+    '/:id',
+    {
+      preHandler: [app.verifyJWT],
+      schema: {
+        body: $ref('patchUserSchema'),
+      },
+    },
+    handlePatchUser,
   );
   // Delete a user given username at /api/users/:username. Requires auth
   app.delete(
