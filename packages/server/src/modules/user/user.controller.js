@@ -116,6 +116,52 @@ export async function handleUpdateUser(req, reply) {
   }
 }
 
+// Patches existing user.
+export async function handlePatchUser(req, reply) {
+  const { id } = req.params;
+  let { username } = req.body;
+  const { password, ...props } = req.body;
+
+  // Validate data
+  if (username != null) username = username.toLowerCase();
+ 
+  let newPassword = password;
+  try {
+    // Hashes password and updates user in db
+    if (password != null) {
+      // If new password, hash new.
+      const oldUsersList = await prisma.user.findMany({
+        where: {
+          id,
+        },
+        select: {
+          password: true,
+        },
+      });
+      if (oldUsersList.length <= 0) return reply.code(404).send();
+      const oldUser = oldUsersList[0];
+      if (password !== oldUser?.password) {
+        newPassword = await bcrypt.hash(password, SALT_ROUNDS);
+      }
+    }
+
+    // Patch user
+    const user = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...props,
+        username,
+        password: newPassword,
+      },
+    });
+    return reply.code(200).send(user);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}
+
 // Delete user that matches username
 export async function handleDeleteUser(req, reply) {
   let { username } = req.params;
