@@ -36,6 +36,7 @@ export default function Account() {
   const [isValidationError, setIsValidationError] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openColorModal, setOpenColorModal] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(user.theme);
 
   const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
   const [UserUpdateSettingsResponse, UserUpdateSettingsError, UserUpdateSettingsLoading, UserUpdateSettingsAxiosFetch] = useAxiosFunction();
@@ -51,6 +52,7 @@ export default function Account() {
     document.getElementById("settings").reset();
     // Set states to initial values
     setUserColor(user.color);
+    setSelectedTheme(user.theme);
     setConfirmationPassword('');
     setDisplayNameError('');
     setPasswordError('');
@@ -62,16 +64,19 @@ export default function Account() {
   function handleConfirm(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log("confirm");
+    const requestConfig={}
+
+    // Add changes to config
+    if (data.get('displayName')) requestConfig.displayName = data.get('displayName');
+    if (data.get('password')) requestConfig.password = data.get('password');
 
     // Request to update user
-    // UserUpdateAxiosFetch({
-    //   axiosInstance: axiosPrivate,
-    //   method: 'PUT',
-    //   url: `api/users/${user.id}`,
-    //   requestConfig: {
-    //   },
-    // });
+    UserUpdateAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'PATCH',
+      url: `api/users/${user.username}`,
+      requestConfig: requestConfig,
+    });
 
     // Update user settings
     UserUpdateSettingsAxiosFetch({
@@ -97,6 +102,7 @@ export default function Account() {
   // Update user context by refreshing info
   useEffect(() => { 
     refresh();
+    // eslint-disable-next-line
   },[UserUpdateResponse, UserUpdateSettingsResponse]);
 
   function handleDelete() {
@@ -126,6 +132,11 @@ export default function Account() {
 
   function handleClickOpenColorModal() {
     setOpenColorModal(true);
+  }
+
+  function handleThemeChange(event) {
+    setIsChange(true);
+    setSelectedTheme(event);
   }
 
   // Validate username
@@ -294,7 +305,8 @@ export default function Account() {
                 label="Theme"
                 name="theme"
                 defaultValue={user.theme}
-                onChange={()=>setIsChange(true)}
+                value={selectedTheme}
+                onChange={(event) => handleThemeChange(event.target.value)}
               >
                 {themes.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -307,7 +319,7 @@ export default function Account() {
                 color="error"
                 onClick={handleClickDeleteOpenModal}
               >
-                  Delete Account
+                Delete Account
               </Button>
               {isChange === true && 
               <Stack spacing={2} direction="row">

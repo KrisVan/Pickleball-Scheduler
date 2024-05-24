@@ -117,14 +117,14 @@ export async function handleUpdateUser(req, reply) {
 }
 
 // Patches existing user.
-export async function handlePatchUser(req, reply) {
-  const { id } = req.params;
+export async function handlePatchUserByUsername(req, reply) {
+  const { username: oldUsername } = req.params;
   let { username } = req.body;
   const { password, ...props } = req.body;
 
   // Validate data
   if (username != null) username = username.toLowerCase();
- 
+
   let newPassword = password;
   try {
     // Hashes password and updates user in db
@@ -132,7 +132,7 @@ export async function handlePatchUser(req, reply) {
       // If new password, hash new.
       const oldUsersList = await prisma.user.findMany({
         where: {
-          id,
+          username: oldUsername,
         },
         select: {
           password: true,
@@ -148,7 +148,7 @@ export async function handlePatchUser(req, reply) {
     // Patch user
     const user = await prisma.user.update({
       where: {
-        id,
+        username: oldUsername,
       },
       data: {
         ...props,
@@ -306,7 +306,6 @@ export async function handleUpdateSettingByUsername(req, reply) {
     });
   }
   // Update settings
-  console.log(foundUser.username);
   try {
     const session = await prisma.setting.update({
       where: {
