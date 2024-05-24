@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import ColorPickerModal from '../components/ColorPickerModal/ColorPickerModal.jsx';
 import DeleteAccountModal from '../components/DeleteAccountModal/DeleteAccountModal';
 import useUser from '../hooks/useUser.jsx';
+import useLogout from '../hooks/useLogout.jsx';
 import useRefreshToken from '../hooks/useRefreshToken.jsx';
 import useAxiosPrivate from '../hooks/useAxiosPrivate.jsx';
 import useAxiosFunction from '../hooks/useAxiosFunction.jsx';
@@ -24,6 +25,7 @@ import useAxiosFunction from '../hooks/useAxiosFunction.jsx';
 export default function Account() {
   const { user } = useUser();
   const location = useLocation();
+  const logout = useLogout();
 
   const [isChange, setIsChange] = useState(false);
   const [isPasswordChange, setIsPasswordChange] = useState(false);
@@ -42,8 +44,13 @@ export default function Account() {
   const [UserUpdateSettingsResponse, UserUpdateSettingsError, UserUpdateSettingsLoading, UserUpdateSettingsAxiosFetch] = useAxiosFunction();
   const [UserDeleteResponse, UserDeleteError, UserDeleteLoading, UserDeleteAxiosFetch] = useAxiosFunction();
 
+  const userUpdateRan = useRef(false);
+  const userDeleteRan = useRef(false);
+
   const axiosPrivate = useAxiosPrivate();
   const refresh = useRefreshToken();
+  const logoutFunction = async () => { await logout(); }
+
   const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }]
 
   // Handlers
@@ -63,6 +70,7 @@ export default function Account() {
 
   function handleConfirm(event) {
     event.preventDefault();
+    userUpdateRan.currrent = true;
     const data = new FormData(event.currentTarget);
     const requestConfig={}
 
@@ -100,18 +108,29 @@ export default function Account() {
   }
 
   // Update user context by refreshing info
-  useEffect(() => { 
-    refresh();
+  useEffect(() => {
+    if (UserUpdateResponse && userUpdateRan.currrent === true) refresh();
     // eslint-disable-next-line
-  },[UserUpdateResponse, UserUpdateSettingsResponse]);
+  },[UserUpdateResponse]);
 
   function handleDelete() {
-    console.log("Account deleted");
     setOpenDeleteModal(false);
-
-    // Logout and take to home
-
+    userDeleteRan.currrent = true;
+    // Delete user from DB
+    UserDeleteAxiosFetch({
+			axiosInstance: axiosPrivate,
+			method: 'DELETE',
+			url: `api/users/${user.username}`,
+		});
   }
+
+  useEffect(() => {
+    // Logout and take to home
+    if (UserDeleteResponse && userDeleteRan.currrent === true) {
+      logoutFunction();
+    }
+    // eslint-disable-next-line
+  },[UserDeleteResponse]);
 
   function handleCloseDeleteModal() {
     setOpenDeleteModal(false);
