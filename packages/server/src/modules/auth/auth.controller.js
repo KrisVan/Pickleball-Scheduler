@@ -93,12 +93,18 @@ export async function handleRefreshToken(req, reply) {
   if (!foundUser) {
     return reply.code(403).send('No user found');
   }
+  // Get user settings
+  const userSettings = await prisma.setting.findUnique({
+    where: {
+      username: foundUser.username,
+    },
+  });
+  // Evaluate JWT
   const payload = {
     id: foundUser.id,
     username: foundUser.username,
     role: foundUser.role,
   };
-  // Evaluate JWT
   req.jwt.verify(
     refreshToken,
     process.env.JWT_TOKEN_SECRET,
@@ -116,5 +122,7 @@ export async function handleRefreshToken(req, reply) {
     username: foundUser.username,
     displayName: foundUser.displayName,
     role: foundUser.role,
+    theme: userSettings.theme,
+    color: userSettings.color,
   });
 }

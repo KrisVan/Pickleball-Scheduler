@@ -18,6 +18,7 @@ model User {
   role         String
   refreshToken String?   @unique
   sessions     Session[]
+  settings     Setting?
 }
 
 model Session {
@@ -27,4 +28,12 @@ model Session {
   endTime      DateTime
   username     String
   user         User     @relation(fields: [username], references: [username], onDelete: Cascade)
+}
+
+model Setting {
+  id       String @id @default(uuid())
+  theme    String @default("DARK")
+  color    String @default("#4caf50")
+  username String @unique
+  user     User   @relation(fields: [username], references: [username], onDelete: Cascade)
 }

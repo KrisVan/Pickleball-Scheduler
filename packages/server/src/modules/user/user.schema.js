@@ -27,11 +27,30 @@ const updateUserSchema = z.object({
   role: z.string(),
 });
 
+// Patch user schema
+const patchUserByUsernameSchema = z.object({
+  username: z.string().min(3).max(24).optional(),
+  password: z.string().min(6).optional(),
+  displayName: z.string().min(3).max(24).optional(),
+  role: z.string().optional(),
+  settings: z.object({
+    color: z.string().optional(),
+    theme: z.string().optional(),
+  }).optional(),
+});
+
 // Create Session
 const createSessionSchema = z.object({
   id: z.string().optional(),
   startTime: z.date(),
   endTime: z.date(),
+});
+
+// Update user settings schema
+const updateUserSettingsSchema = z.object({
+  username: z.string().min(3).max(24),
+  color: z.string(),
+  theme: z.string(),
 });
 
 // Export schemas as Jsons
@@ -41,4 +60,6 @@ export const { schemas: userSchemas, $ref } = buildJsonSchemas({
   createUserResponseSchema,
   createSessionSchema,
   updateUserSchema,
+  patchUserByUsernameSchema,
+  updateUserSettingsSchema,
 }, { $id: 'userSchemas' });

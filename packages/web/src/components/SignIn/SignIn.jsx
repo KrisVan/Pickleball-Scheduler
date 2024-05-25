@@ -51,6 +51,8 @@ export default function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
   // API request
   const [response, error, loading, axiosFetch] = useAxiosFunction();
+  const [settingsResponse, settingsError, settingsLoading, settingsAxiosFetch] = useAxiosFunction();
+  
   // Handle sumbit of data
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -66,6 +68,12 @@ export default function SignIn() {
         password: data.get('password'),
       }
     });
+    // Get user settings
+    settingsAxiosFetch({
+      axiosInstance: axios,
+      method: 'GET',
+      url: `api/users/${data.get('username')}/settings`,
+    });
   };
 
   // Handle remember me checkboc
@@ -73,14 +81,14 @@ export default function SignIn() {
     setRememberMe(event.target.checked);
   };
 
-  // Set user context and persist if successful response
+  // Set user context with user data and user settings, and persist
   useEffect(() => {
-    if (response.length !== 0 && hasSubmitted) {
-      setUser(response);
+    if (response.length !== 0 && settingsResponse.length !== 0 && hasSubmitted) {
+      setUser({...response, ...settingsResponse});
       localStorage.setItem("persist", rememberMe);
       setPersist(rememberMe);
     }
-  }, [response, hasSubmitted, user, setUser, rememberMe, setPersist]);
+  }, [response, settingsResponse, hasSubmitted, user, setUser, rememberMe, setPersist]);
 
   // Render sign in component
   return (
@@ -152,11 +160,15 @@ export default function SignIn() {
           </Grid>
         </Box>
       </Box>
-      {hasSubmitted && loading && <SimpleBackdrop />}
-      {hasSubmitted && !loading && error && 
+      {hasSubmitted && loading && settingsLoading && <SimpleBackdrop />}
+      {hasSubmitted && !loading && !loading && error && 
         <AlertDisplay severity="warning" message={error}/>
       }
-      {hasSubmitted && !loading && !error && response &&
+      {hasSubmitted && !settingsLoading && settingsError && 
+        <AlertDisplay severity="warning" message={settingsError}/>
+      }
+      {hasSubmitted && !loading && !error && response && !settingsLoading
+        && !settingsError && settingsResponse &&
         <>
           <AlertDisplay 
             severity="success"

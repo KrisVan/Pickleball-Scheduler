@@ -15,7 +15,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LogoIcon from '../Logo/LogoIcon.jsx';
 
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PersonIcon from '@mui/icons-material/Person';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
 
@@ -45,7 +46,8 @@ function ResponsiveAppBar() {
   };
 
   const settings = [
-    {icon:<PersonOutlineIcon fontSize="small"/>, text:'Account',path:`user/${user?.username}`},
+    {icon:<PersonIcon fontSize="small"/>, text:'Profile',path:`user/${user?.username}`},
+    {icon:<ManageAccountsIcon fontSize="small"/>, text:'Account',path:`user/${user?.username}/account`},
     {icon:<Logout fontSize="small" />, text:'Sign out',path:'logout'},
   ];
   
@@ -177,7 +179,7 @@ function ResponsiveAppBar() {
             <>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar sx={{ color: 'inherit' }}>
+                  <Avatar sx={{ color: 'inherit', bgcolor: `${user.color}` }}>
                     {user.username && user.username[0].toUpperCase()}
                   </Avatar>
                 </IconButton>
@@ -205,7 +207,7 @@ function ResponsiveAppBar() {
                   minHeight={50}
                   sx={{ px: 1, mb: 1 }}
                 >
-                  <Avatar sx={{ color: 'inherit' }}>
+                  <Avatar sx={{ color: 'inherit', bgcolor: `${user.color}` }}>
                     {user.username && user.username[0].toUpperCase()}
                   </Avatar>
                   <Box

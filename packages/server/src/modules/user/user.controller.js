@@ -32,6 +32,7 @@ export async function handleCreateUser(req, reply) {
         displayName,
         password: hash,
         role: 'BASIC',
+        settings: { create: {} },
       },
     });
 
@@ -107,6 +108,60 @@ export async function handleUpdateUser(req, reply) {
         username,
         password: newPassword,
         refreshToken: oldUser.refreshToken,
+      },
+    });
+    return reply.code(200).send(user);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}
+
+// Patches existing user.
+export async function handlePatchUserByUsername(req, reply) {
+  const { username: oldUsername } = req.params;
+  let { username } = req.body;
+  const { password, settings, ...props } = req.body;
+
+  // Validate data
+  if (username != null) username = username.toLowerCase();
+
+  let newPassword = password;
+  try {
+    // Hashes password and updates user in db
+    if (password != null) {
+      // If new password, hash new.
+      const oldUsersList = await prisma.user.findMany({
+        where: {
+          username: oldUsername,
+        },
+        select: {
+          password: true,
+        },
+      });
+      if (oldUsersList.length <= 0) return reply.code(404).send();
+      const oldUser = oldUsersList[0];
+      if (password !== oldUser?.password) {
+        newPassword = await bcrypt.hash(password, SALT_ROUNDS);
+      }
+    }
+
+    // Patch user
+    const user = await prisma.user.update({
+      where: {
+        username: oldUsername,
+      },
+      data: {
+        ...props,
+        username,
+        password: newPassword,
+        settings: {
+          update: {
+            ...settings,
+          },
+        },
+      },
+      include: {
+        settings: true,
       },
     });
     return reply.code(200).send(user);
@@ -206,6 +261,72 @@ export async function handlePostSessionsByUser(req, reply) {
       },
     });
     return reply.code(201).send(session);
+  } catch (e) {
+    return reply.code(500).send(e);
+  }
+}
+
+// User Settings
+// Get user settings by username
+export async function handleGetSettingByUsername(req, reply) {
+  const { username } = req.params;
+  const settings = await prisma.setting.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      theme: true,
+      color: true,
+    },
+  });
+  return reply.code(200).send(settings);
+}
+
+// Update existing user settings by username
+export async function handleUpdateSettingByUsername(req, reply) {
+  const { username } = req.params;
+  const { theme, color, ...props } = req.body;
+  // Validate data
+  if (theme.toLowerCase() !== 'dark' && theme.toLowerCase() !== 'light') {
+    return reply.code(400).send({
+      message: 'Theme must be either light or dark',
+    });
+  }
+
+  const re = /^#[0-9A-F]{6}$/i;
+
+  if (!(re.test(color))) {
+    return reply.code(400).send({
+      message: 'Color must valid hex',
+    });
+  }
+
+  // Check if user exists
+  const validatedUsername = username.toLowerCase();
+  const foundUser = await prisma.user.findUnique({
+    where: {
+      username: validatedUsername,
+    },
+  });
+  if (!foundUser) {
+    return reply.code(404).send({
+      message: 'User not found',
+    });
+  }
+  // Update settings
+  try {
+    const session = await prisma.setting.update({
+      where: {
+        username: foundUser.username,
+      },
+      data: {
+        ...props,
+        color,
+        theme: theme.toUpperCase(),
+        username: validatedUsername,
+      },
+    });
+    return reply.code(200).send(session);
   } catch (e) {
     return reply.code(500).send(e);
   }

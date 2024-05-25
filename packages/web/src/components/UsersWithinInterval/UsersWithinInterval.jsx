@@ -42,7 +42,7 @@ export default function EventsWithinInterval({currentEvent, events}) {
           sx={{ px: 1 }}
         >
           <Avatar sx={{ color: 'inherit' }}>
-            {event?.username && event?.username[0].toUpperCase()}
+            {event?.user?.displayName && event?.user?.displayName[0].toUpperCase()}
           </Avatar>
           <Box
             alignItems='left'
@@ -52,7 +52,7 @@ export default function EventsWithinInterval({currentEvent, events}) {
               variant="body1"
               textAlign="left"
             >
-              {event?.username}
+              {event?.user?.displayName}
             </Typography>
             <Typography
               variant="body2"

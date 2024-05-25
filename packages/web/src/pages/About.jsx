@@ -16,10 +16,11 @@ export default function About() {
     <>
       <Container
         sx={{
-          my: { xs: 2, sm: 4, md: 6 },
+          my: { xs: 2, sm: 4, md: 6},
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'left',
+          justifyContent: 'center',
+          alignItems: {xs: 'center', md: 'flex-start'},
         }}
       >
         <Typography
@@ -27,16 +28,18 @@ export default function About() {
           variant="h3"
           color="inherit"
           noWrap
-          sx={{ flexGrow: 1, mb:1}}
+          sx={{ flexGrow: 1, mb:1, textAlign: {xs: "center", md: "left"}, }}
         >
           About
         </Typography>
         <Grid container
           wrap='nowrap'
-          sx={{ flexDirection: { xs: "column", md: "row"} }}
-          columnSpacing={{ xs: 2, sm: 4, md: 4 }}
+          spacing={2}
+          sx={{
+            flexDirection: { xs: "column", md: "row" },
+          }}
           justifyContent="space-evenly"
-          alignItems="flex-start"
+          alignItems={{xs: 'center', md: 'flex-start'}}
         >
           <Grid item xs={true} md={6} order={{ xs: 2, sm: 2, md: 1 }}>
             <Typography
