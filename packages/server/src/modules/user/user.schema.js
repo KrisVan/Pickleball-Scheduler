@@ -33,6 +33,10 @@ const patchUserByUsernameSchema = z.object({
   password: z.string().min(6).optional(),
   displayName: z.string().min(3).max(24).optional(),
   role: z.string().optional(),
+  settings: z.object({
+    color: z.string().optional(),
+    theme: z.string().optional(),
+  }).optional(),
 });
 
 // Create Session

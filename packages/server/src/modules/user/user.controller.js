@@ -120,7 +120,7 @@ export async function handleUpdateUser(req, reply) {
 export async function handlePatchUserByUsername(req, reply) {
   const { username: oldUsername } = req.params;
   let { username } = req.body;
-  const { password, ...props } = req.body;
+  const { password, settings, ...props } = req.body;
 
   // Validate data
   if (username != null) username = username.toLowerCase();
@@ -154,6 +154,14 @@ export async function handlePatchUserByUsername(req, reply) {
         ...props,
         username,
         password: newPassword,
+        settings: {
+          update: {
+            ...settings,
+          },
+        },
+      },
+      include: {
+        settings: true,
       },
     });
     return reply.code(200).send(user);
