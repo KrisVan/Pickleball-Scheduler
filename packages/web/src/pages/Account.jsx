@@ -45,7 +45,6 @@ export default function Account() {
   const [selectedTheme, setSelectedTheme] = useState(user.theme);
 
   const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
-  const [UserUpdateSettingsResponse, UserUpdateSettingsError, UserUpdateSettingsLoading, UserUpdateSettingsAxiosFetch] = useAxiosFunction();
   const [UserDeleteResponse, UserDeleteError, UserDeleteLoading, UserDeleteAxiosFetch] = useAxiosFunction();
 
   const userUpdateRan = useRef(false);
@@ -76,12 +75,15 @@ export default function Account() {
     event.preventDefault();
     userUpdateRan.currrent = true;
     const data = new FormData(event.currentTarget);
-    const requestConfig={}
-
-    // Add changes to config
-    if (data.get('displayName')) requestConfig.displayName = data.get('displayName');
-    if (data.get('password')) requestConfig.password = data.get('password');
-
+    const requestConfig={
+      ...(data.get('displayName') && {displayName: data.get('displayName')}),
+      ...(data.get('password') && {password: data.get('password')}),
+      settings:{
+        color: userColor,
+        ...(data.get('theme') && {theme: data.get('theme')}),
+      }
+    }
+  
     // Request to update user
     UserUpdateAxiosFetch({
       axiosInstance: axiosPrivate,
@@ -90,18 +92,6 @@ export default function Account() {
       requestConfig: requestConfig,
     });
 
-    // Update user settings
-    UserUpdateSettingsAxiosFetch({
-      axiosInstance: axiosPrivate,
-      method: 'PUT',
-      url: `api/users/${user.username}/settings`,
-      requestConfig: {
-        username: user.username,
-        color: userColor,
-        theme: data.get('theme')
-      },
-    });
-    
     // Set states to initial values
     setConfirmationPassword('');
     setDisplayNameError('');
@@ -118,17 +108,14 @@ export default function Account() {
       if(UserUpdateError) {
         setSnackbar({ children: UserUpdateError, severity: 'error' });
       }
-      else if(UserUpdateSettingsError) {
-        setSnackbar({ children: UserUpdateSettingsError, severity: 'error' });
-      }
-      else if(UserUpdateResponse?.length !== 0 && UserUpdateSettingsResponse?.length !== 0) {
+      else if(UserUpdateResponse?.length !== 0) {
         setSnackbar({ children: "Account updated", severity: 'success' });
         refresh();
       }
       setOpenSnackbar(true);
     }
     // eslint-disable-next-line
-  },[UserUpdateResponse, UserUpdateSettingsResponse, UserUpdateError, UserUpdateSettingsError]);
+  },[UserUpdateResponse, UserUpdateError]);
 
   function handleDelete() {
     setOpenDeleteModal(false);
@@ -435,12 +422,10 @@ export default function Account() {
       </Snackbar>
       <Divider />
       <Footer />
-      {/* {!UserUpdateLoading && UserUpdateError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
-      {!UserUpdateSettingsLoading && UserUpdateSettingsError.includes("500") &&
+      {!UserUpdateLoading && UserUpdateError.includes("500") &&
         <Navigate to="/login" replace state={{ from: location }} />}
       {!UserDeleteLoading && UserDeleteError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />} */}
+        <Navigate to="/login" replace state={{ from: location }} />}
     </>
     
 )
