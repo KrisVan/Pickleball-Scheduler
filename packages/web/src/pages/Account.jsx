@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
@@ -10,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
 import Footer from '../components/Footer/Footer.jsx';
 import PaletteIcon from '@mui/icons-material/Palette';
 import IconButton from '@mui/material/IconButton';
@@ -38,6 +40,8 @@ export default function Account() {
   const [isValidationError, setIsValidationError] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openColorModal, setOpenColorModal] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbar, setSnackbar] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState(user.theme);
 
   const [UserUpdateResponse, UserUpdateError, UserUpdateLoading, UserUpdateAxiosFetch] = useAxiosFunction();
@@ -107,11 +111,24 @@ export default function Account() {
     setIsChange(false);
   }
 
-  // Update user context by refreshing info
+  // Update user context by refreshing info and display success/failure
   useEffect(() => {
-    if (UserUpdateResponse && userUpdateRan.currrent === true) refresh();
+    if (userUpdateRan.currrent === true) {
+      // Response and refresh if success or show error message
+      if(UserUpdateError) {
+        setSnackbar({ children: UserUpdateError, severity: 'error' });
+      }
+      else if(UserUpdateSettingsError) {
+        setSnackbar({ children: UserUpdateSettingsError, severity: 'error' });
+      }
+      else if(UserUpdateResponse?.length !== 0 && UserUpdateSettingsResponse?.length !== 0) {
+        setSnackbar({ children: "Account updated", severity: 'success' });
+        refresh();
+      }
+      setOpenSnackbar(true);
+    }
     // eslint-disable-next-line
-  },[UserUpdateResponse]);
+  },[UserUpdateResponse, UserUpdateSettingsResponse, UserUpdateError, UserUpdateSettingsError]);
 
   function handleDelete() {
     setOpenDeleteModal(false);
@@ -224,7 +241,6 @@ export default function Account() {
       setIsValidationError(false);
     }
   },[displayNameError, passwordError, matchError])
-
 
 	return(
     <>
@@ -409,14 +425,22 @@ export default function Account() {
         userColor={userColor}
         setUserColor={setUserColor}
       />
+      <Snackbar
+        open={openSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        autoHideDuration={5000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert {...snackbar} onClose={() => setOpenSnackbar(false)} />
+      </Snackbar>
       <Divider />
       <Footer />
-      {!UserUpdateLoading && UserUpdateError.includes("500") &&
+      {/* {!UserUpdateLoading && UserUpdateError.includes("500") &&
         <Navigate to="/login" replace state={{ from: location }} />}
       {!UserUpdateSettingsLoading && UserUpdateSettingsError.includes("500") &&
         <Navigate to="/login" replace state={{ from: location }} />}
       {!UserDeleteLoading && UserDeleteError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
+        <Navigate to="/login" replace state={{ from: location }} />} */}
     </>
     
 )
