@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-
+import Skeleton from '@mui/material/Skeleton';
 import { Button, Divider } from "@mui/material"
 import { Paper } from '@mui/material/';
 import { Typography } from "@mui/material";
@@ -100,6 +100,13 @@ export default function NextSession() {
 
   return (
     <>
+      {SessionsLoading &&
+        <Skeleton
+          sx={{
+            height: 280,
+          }}
+        />
+      }
       {!SessionsLoading && SessionsResponse.length !== 0 && timeUntilNextSession &&
         <Paper
           sx={{
