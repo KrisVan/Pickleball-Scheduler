@@ -129,12 +129,19 @@ export default function Account() {
   }
 
   useEffect(() => {
-    // Logout and take to home
-    if (UserDeleteResponse && userDeleteRan.currrent === true) {
-      logoutFunction();
+    // Response and refresh if success or show error message
+    if (userDeleteRan.currrent === true) {
+      if(UserDeleteError) {
+        setSnackbar({ children: UserDeleteError, severity: 'error' });
+      }
+      else {
+        setSnackbar({ children: "Account deleted", severity: 'success' });
+        logoutFunction();
+      }
+      setOpenSnackbar(true);
     }
     // eslint-disable-next-line
-  },[UserDeleteResponse]);
+  },[UserDeleteResponse, UserDeleteError]);
 
   function handleCloseDeleteModal() {
     setOpenDeleteModal(false);
