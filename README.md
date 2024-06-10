@@ -1,5 +1,5 @@
 # Pickleball Scheduler
-Welcome to PickLeTime! This web application is designed to help users to organize and schedule their games. It is built with React for the frontend, Prisma for database management, Fastify as the backend framework, and SQLite as the database.
+Welcome to PickLeTime! This web application is designed to help users to organize and schedule their games. It is built using Javascript and uses React, Fastify for back end routing, Prisma for database management, and SQLite as the database.
 
 ## Features
 
@@ -23,28 +23,29 @@ Follow these steps to get the Pickleball Scheduler Web App up and running on you
 ```
 git clone <repo-name>
 ```
-3. Navigate to the project directory:
+2. Navigate to the project directory:
 ```
 cd <repo-name>
 ```
-4. Install dependencies
+3. Install dependencies
 ```
 cd <repo-name>
 npm install
 ```
-5. Configure .env.example
-6. Generate Prisma Instance
+4. Configure .env.example and rename to .env
+5. Generate Prisma Instance
 ```
 cd packages/server
 npx prisma generate
 npx prisma migrate dev --name init
 ```
-7. Start the app
+6. Start the app
 ```
 cd ../..
-npm start
+npm run start
 ```
 
+After executing these commands, your React frontend should now be running on [localhost:3000](http://localhost:3000/). You can visit this page in your web browser to view your front-end user interface.
 
 ## Deployment
 
@@ -53,14 +54,3 @@ To deploy this with your current local version, run
 ```sh
 npm run deploy
 ```
-
-See deployement [here](https://krisvan.github.io/Pickleball-Scheduler/).
-
-After executing these commands, your React frontend should now be running on [localhost:3000](http://localhost:3000/). You can visit this page in your web browser to view your front-end user interface.
-
-## Testing with Continuous Integration
-
-TODO
-
-## Additional Resources
-
