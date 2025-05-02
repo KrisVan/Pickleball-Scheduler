@@ -10,7 +10,8 @@
     "@fastify/jwt": "^8.0.0",
     "@prisma/client": "^5.7.1",
     "bcrypt": "^5.1.1",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
     "fastify": "^4.24.3",
     "fastify-zod": "^1.4.0",
     "pino": "8.16.2",
@@ -23,6 +24,8 @@
     "seed": "npx prisma db seed",
     "studio": "npx prisma studio",
     "start": "node ./src/index.js",
+    "start:dev": "set NODE_ENV=development&& dotenv -e .env.development -- npm start",
+    "start:prod": "set NODE_ENV=production&& dotenv -e .env.production -- npm start",
     "dev": "nodemon --quiet ./src/index.js"
   },
   "devDependencies": {

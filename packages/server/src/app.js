@@ -15,9 +15,16 @@ import { sessionSchemas } from './modules/session/session.schema.js';
 
 import { verifyJWT } from './middleware/verifyJWT.js';
 
+// Set environment variables
+const env = process.env.NODE_ENV || 'development';
+if (env === 'development') {
+  dotenv.config({ path: '.env.development', debug: true, encoding: 'UTF-8' });
+} else if (env === 'production') {
+  dotenv.config({ path: '.env.production' });
+}
+
 const app = Fastify({ logger: true });
 const logger = pino();
-dotenv.config({ debug: true });
 
 // Start server at port
 export const start = async (port = 5000, host = '0.0.0.0') => {

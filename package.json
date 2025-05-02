@@ -15,6 +15,8 @@
     "deploy": "gh-pages -d build",
     "lint": "eslint . --ext .jsx,.js",
     "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
+    "start:dev": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:dev --prefix packages\\server\" --kill-others", 
+    "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others", 
     "server": "node ./packages/server/src/index.js",
     "client": "npm start --prefix packages/web",
     "test": "jest"
