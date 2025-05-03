@@ -5,10 +5,10 @@ import UserDashboard from './UserDashboard';
 export default function Home() {
   const { user } = useUser();
 
-  return(
+  return (
     // If not logged in, show landing, else show dashboard
     user?.accessToken
       ? <UserDashboard />
       : <Landing />
-  )
+  );
 }

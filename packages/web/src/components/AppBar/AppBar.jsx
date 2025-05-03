@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import { Divider } from '@mui/material';
@@ -13,16 +13,16 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import LogoIcon from '../Logo/LogoIcon.jsx';
 
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PersonIcon from '@mui/icons-material/Person';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Logout from '@mui/icons-material/Logout';
+import LogoIcon from '../Logo/LogoIcon.jsx';
 
 import useUser from '../../hooks/useUser.jsx';
 
-var pages = [];
+let pages = [];
 
 // Template: ResponsiveAppBar from MUI
 function ResponsiveAppBar() {
@@ -46,24 +46,23 @@ function ResponsiveAppBar() {
   };
 
   const settings = [
-    {icon:<PersonIcon fontSize="small"/>, text:'Profile',path:`user/${user?.username}`},
-    {icon:<ManageAccountsIcon fontSize="small"/>, text:'Account',path:`user/${user?.username}/account`},
-    {icon:<Logout fontSize="small" />, text:'Sign out',path:'logout'},
+    { icon: <PersonIcon fontSize="small" />, text: 'Profile', path: `user/${user?.username}` },
+    { icon: <ManageAccountsIcon fontSize="small" />, text: 'Account', path: `user/${user?.username}/account` },
+    { icon: <Logout fontSize="small" />, text: 'Sign out', path: 'logout' },
   ];
-  
+
   // If admin, add admin page tab
-  if (user?.role === 'ADMIN')  {
+  if (user?.role === 'ADMIN') {
     pages = [
-      {text:'Scheduler', path:'scheduler'},
-      {text:'Dashboard', path:'admin'},
+      { text: 'Scheduler', path: 'scheduler' },
+      { text: 'Dashboard', path: 'admin' },
+    ];
+  } else {
+    pages = [
+      { text: 'Scheduler', path: 'scheduler' },
     ];
   }
-  else {
-    pages = [
-      {text:'Scheduler', path:'scheduler'},
-    ];
-  }
-  
+
   return (
     <AppBar position="static">
       <Container maxWidth="false">
@@ -71,7 +70,7 @@ function ResponsiveAppBar() {
           <IconButton
             color="inherit"
             component={Link}
-            to={'/'}
+            to="/"
           >
             <LogoIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           </IconButton>
@@ -79,7 +78,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component={Link}
-            to={'/'}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -87,7 +86,7 @@ function ResponsiveAppBar() {
               fontWeight: 700,
               letterSpacing: '.1rem',
               color: 'inherit',
-              textDecoration: 'none', 
+              textDecoration: 'none',
             }}
           >
             PickLeTime
@@ -133,7 +132,7 @@ function ResponsiveAppBar() {
                     variant="body1"
                     textAlign="center"
                     key={page.path}
-                    sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
+                    sx={{ color: 'inherit', display: 'block', textDecoration: 'none' }}
                   >
                     {page.text}
                   </Typography>
@@ -141,12 +140,12 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          {/*<AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />*/}
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
             component={Link}
-            to={'/scheduler'}
+            to="/scheduler"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -175,7 +174,8 @@ function ResponsiveAppBar() {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             {/* If logged in, open menu, if not go to login */}
-            {user?.accessToken && 
+            {user?.accessToken
+            && (
             <>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -201,9 +201,9 @@ function ResponsiveAppBar() {
                 onClose={handleCloseUserMenu}
               >
                 <Box
-                  display='flex'
-                  alignItems='center'
-                  flexWrap='wrap'
+                  display="flex"
+                  alignItems="center"
+                  flexWrap="wrap"
                   minHeight={50}
                   sx={{ px: 1, mb: 1 }}
                 >
@@ -211,7 +211,7 @@ function ResponsiveAppBar() {
                     {user.username && user.username[0].toUpperCase()}
                   </Avatar>
                   <Box
-                    alignItems='center'
+                    alignItems="center"
                     sx={{ ml: 1.0 }}
                   >
                     <Typography
@@ -225,7 +225,7 @@ function ResponsiveAppBar() {
                       color="text.secondary"
                       textAlign="left"
                     >
-                      {"@"+user.username}
+                      {`@${user.username}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -237,14 +237,14 @@ function ResponsiveAppBar() {
                     component={Link}
                     to={`/${setting.path}`}
                   >
-                    <ListItemIcon sx={{justifyContent: 'left'}}>
+                    <ListItemIcon sx={{ justifyContent: 'left' }}>
                       {setting.icon}
                     </ListItemIcon>
                     <Typography
                       key={setting.path}
                       textAlign="center"
                       variant="body1"
-                      sx={{color: 'inherit', display: 'block', textDecoration: 'none' }}
+                      sx={{ color: 'inherit', display: 'block', textDecoration: 'none' }}
                     >
                       {setting.text}
                     </Typography>
@@ -252,20 +252,19 @@ function ResponsiveAppBar() {
                 ))}
               </Menu>
             </>
-            }
-            {!user?.accessToken && 
-            <>
-              <Tooltip title="Sign In">
-                <IconButton
-                  component={Link}
-                  to={'/login'}
-                  sx={{ p: 0 }}
-                >
-                  <Avatar sx={{ color: 'inherit' }} />
-                </IconButton>
-              </Tooltip>
-            </>
-            }
+            )}
+            {!user?.accessToken
+            && (
+            <Tooltip title="Sign In">
+              <IconButton
+                component={Link}
+                to="/login"
+                sx={{ p: 0 }}
+              >
+                <Avatar sx={{ color: 'inherit' }} />
+              </IconButton>
+            </Tooltip>
+            )}
           </Box>
         </Toolbar>
       </Container>

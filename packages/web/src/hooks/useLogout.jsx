@@ -11,12 +11,11 @@ const useLogout = () => {
     try {
       const response = await axiosPrivate.delete('api/auth/logout');
       console.log(response);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
   return logout;
-}
+};
 
 export default useLogout;

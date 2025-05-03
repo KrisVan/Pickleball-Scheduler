@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -17,11 +17,11 @@ const theme = createTheme({
 });
 
 // Render App
-const root = ReactDOM.createRoot(document.getElementById("root"))
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
     <UserProvider>
-      <ThemeProvider theme={theme} >
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
           <Routes>
@@ -30,12 +30,10 @@ root.render(
         </BrowserRouter>
       </ThemeProvider>
     </UserProvider>
-  </StrictMode>
+  </StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
-
-

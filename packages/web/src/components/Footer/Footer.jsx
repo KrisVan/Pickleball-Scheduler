@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
@@ -34,7 +34,7 @@ export default function Footer() {
           <Link
             color="text.secondary"
             component={RouterLink}
-            to={'/about'}
+            to="/about"
           >
             About
           </Link>
@@ -44,11 +44,12 @@ export default function Footer() {
           <Link
             color="text.secondary"
             component={RouterLink}
-            to={'/about'}>
+            to="/about"
+          >
             Contact
           </Link>
         </div>
-        <Copyright sx={{ mx: 0.5}}/>
+        <Copyright sx={{ mx: 0.5 }} />
         <Stack
           direction="row"
           justifyContent="left"
@@ -61,7 +62,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             href="https://github.com/KrisVan/Pickleball-Scheduler"
-            target={"_blank"}
+            target="_blank"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
@@ -70,7 +71,7 @@ export default function Footer() {
           <IconButton
             color="inherit"
             href="https://www.linkedin.com/in/kristopher-van-71b339274/"
-            target={"_blank"}
+            target="_blank"
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >

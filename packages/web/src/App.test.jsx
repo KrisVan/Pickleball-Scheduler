@@ -4,7 +4,7 @@ import App from './App';
 
 // Set environment for unit tests
 vi.mock('./components/EventCalendar/EventCalendar', () => ({
-  PickleballCalendar: () => <div data-testid="pickleball-calendar" />
+  PickleballCalendar: () => <div data-testid="pickleball-calendar" />,
 }));
 
 test('Is App Bar Rendered', () => {

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from "@mui/material"
+import { useState } from 'react';
+import {
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button,
+} from '@mui/material';
 import TextField from '@mui/material/TextField';
-import useUser from "../../hooks/useUser.jsx"
+import useUser from '../../hooks/useUser.jsx';
 
-export default function DeleteAccountModal({ open, onClose, onDelete}) {
+export default function DeleteAccountModal({ open, onClose, onDelete }) {
   const { user } = useUser();
   const [isUsernameMatching, setIsUsernameMatching] = useState(false);
 
@@ -11,28 +13,27 @@ export default function DeleteAccountModal({ open, onClose, onDelete}) {
   const handleClose = () => {
     setIsUsernameMatching(false);
     onClose();
-  }
+  };
 
   const handleDelete = () => {
     onDelete();
-  }
+  };
 
   // Check if field and username match
   const matchUsernameOnChange = (username) => {
-    if (user.username !== username){
+    if (user.username !== username) {
       setIsUsernameMatching(false);
-    }
-    else {
+    } else {
       setIsUsernameMatching(true);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle sx={{ pb: 2 }}>Delete Account?</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-        All data will be lost. Deleting your account will be irreversible.
+          All data will be lost. Deleting your account will be irreversible.
         </DialogContentText>
         <TextField
           fullWidth
@@ -44,7 +45,7 @@ export default function DeleteAccountModal({ open, onClose, onDelete}) {
           helperText="Type in your username to confirm deletion"
           autoComplete="off"
           onChange={(event) => matchUsernameOnChange(event.target.value)}
-          sx={{mt:2}}
+          sx={{ mt: 2 }}
         />
       </DialogContent>
       <DialogActions>

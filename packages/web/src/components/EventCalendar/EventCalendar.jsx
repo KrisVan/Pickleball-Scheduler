@@ -1,30 +1,32 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Box, Card, CardContent, CardHeader, Container, Divider } from "@mui/material"
+import {
+  Box, Card, CardContent, CardHeader, Container, Divider,
+} from '@mui/material';
 
-import { Calendar, dateFnsLocalizer } from "react-big-calendar"
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 
-import format from "date-fns/format"
-import parse from "date-fns/parse"
-import parseISO from "date-fns/parseISO"
-import startOfWeek from "date-fns/startOfWeek"
-import getDay from "date-fns/getDay"
-import enUS from "date-fns/locale/en-US"
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
+import parseISO from 'date-fns/parseISO';
+import startOfWeek from 'date-fns/startOfWeek';
+import getDay from 'date-fns/getDay';
+import enUS from 'date-fns/locale/en-US';
 
-import "./EventCalendarDark.css"
+import './EventCalendarDark.css';
 
-import EventInfo from "../EventInfo/EventInfo"
-import AddEventModal from "../AddEventModal/AddEventModal"
-import EditEventModal from "../EditEventModal/EditEventModal";
-import EventInfoModal from "../EventInfoModal/EventInfoModal"
+import EventInfo from '../EventInfo/EventInfo';
+import AddEventModal from '../AddEventModal/AddEventModal';
+import EditEventModal from '../EditEventModal/EditEventModal';
+import EventInfoModal from '../EventInfoModal/EventInfoModal';
 
-import useUser from "../../hooks/useUser";
+import useUser from '../../hooks/useUser';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import useAxiosFunction from '../../hooks/useAxiosFunction';
 
 const locales = {
-  "en-US": enUS,
-}
+  'en-US': enUS,
+};
 
 const localizer = dateFnsLocalizer({
   format,
@@ -32,7 +34,7 @@ const localizer = dateFnsLocalizer({
   startOfWeek,
   getDay,
   locales,
-})
+});
 
 export default function EventCalendar() {
   const [openSlot, setOpenSlot] = useState(false);
@@ -43,7 +45,6 @@ export default function EventCalendar() {
 
   const [events, setEvents] = useState([]);
 
-
   const { user } = useUser();
   const location = useLocation();
   const axiosPrivate = useAxiosPrivate();
@@ -52,118 +53,116 @@ export default function EventCalendar() {
   const [, SessionCreateError, SessionCreateLoading, SessionCreateAxiosFetch] = useAxiosFunction();
   const [, SessionUpdateError, SessionUpdateLoading, SessionUpdateAxiosFetch] = useAxiosFunction();
   const [, SessionDeleteError, SessionDeleteLoading, SessionDeleteAxiosFetch] = useAxiosFunction();
-  
-  const currentFormattedDate = format(new Date(), "MMMM d, yyyy");
+
+  const currentFormattedDate = format(new Date(), 'MMMM d, yyyy');
 
   // Fetch sessions
   const getSessions = () => {
-		SessionsAxiosFetch({
-			axiosInstance: axiosPrivate,
-			method: 'GET',
-			url: 'api/sessions',
-		});
-	}
+    SessionsAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'GET',
+      url: 'api/sessions',
+    });
+  };
 
-	// Get sessions on mount
-	useEffect (() => {
-		if (effectRan.current === false) {
-			getSessions();
-		}
-		return () => {
-			effectRan.current = true;
-		}
-		// eslint-disable-next-line
+  // Get sessions on mount
+  useEffect(() => {
+    if (effectRan.current === false) {
+      getSessions();
+    }
+    return () => {
+      effectRan.current = true;
+    };
+    // eslint-disable-next-line
 	},[]);
 
   // Set sessions after mount
-	useEffect (() => {
-		if (SessionsResponse?.length !== 0) {
+  useEffect(() => {
+    if (SessionsResponse?.length !== 0) {
       // Convert times to date objects
-      const SessionsDateObj = SessionsResponse.map(obj => ({
+      const SessionsDateObj = SessionsResponse.map((obj) => ({
         ...obj,
         startTime: parseISO(obj.startTime),
         endTime: parseISO(obj.endTime),
       }));
-			setEvents(SessionsDateObj);
-		}
-	},[SessionsResponse]);
+      setEvents(SessionsDateObj);
+    }
+  }, [SessionsResponse]);
 
   // Event and modal handlers
   const handleSelectSlot = (event) => {
-    setOpenSlot(true)
-    setCurrentEvent(event)
-  }
+    setOpenSlot(true);
+    setCurrentEvent(event);
+  };
 
   const handleSelectEvent = (eventInfo) => {
-    setCurrentEvent(eventInfo)
-    setEventInfoModal(true)
-  }
+    setCurrentEvent(eventInfo);
+    setEventInfoModal(true);
+  };
 
-  const handleEditSlot = (event) => {
-    setEventInfoModal(false)
+  const handleEditSlot = () => {
+    setEventInfoModal(false);
     setOpenEditModal(true);
-  }
+  };
 
-  const handleEditSlotClose = (event) => {
-    setOpenEditModal(false)
-  }
+  const handleEditSlotClose = () => {
+    setOpenEditModal(false);
+  };
 
   const handleClose = () => {
-    setOpenSlot(false)
-  }
-
+    setOpenSlot(false);
+  };
 
   // Create event
   const onAddEvent = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       id: crypto.randomUUID(),
       username: user?.username,
       startTime: currentEvent?.start,
       endTime: currentEvent?.end,
-    }
-    const newEvents = [...events, data]
-    setEvents(newEvents)
-    handleClose()
+    };
+    const newEvents = [...events, data];
+    setEvents(newEvents);
+    handleClose();
     SessionCreateAxiosFetch({
       axiosInstance: axiosPrivate,
       method: 'POST',
       url: `api/users/${user.username}/sessions`,
       requestConfig: data,
     });
-  }
+  };
 
   // Edit event
   const onEditEvent = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       id: currentEvent.id,
       username: currentEvent?.username,
       startTime: currentEvent?.startTime,
       endTime: currentEvent?.endTime,
-    }
+    };
     // Close info and open editor
-    handleEditSlotClose()
+    handleEditSlotClose();
     SessionUpdateAxiosFetch({
       axiosInstance: axiosPrivate,
       method: 'PUT',
       url: `api/sessions/${currentEvent?.id}`,
       requestConfig: data,
     });
-    const newEvents = events.map((event) => (event.id === data.id ? data : event))
-    setEvents(newEvents)
-
-  }
+    const newEvents = events.map((event) => (event.id === data.id ? data : event));
+    setEvents(newEvents);
+  };
 
   const onDeleteEvent = () => {
     SessionDeleteAxiosFetch({
-			axiosInstance: axiosPrivate,
-			method: 'DELETE',
-			url: `api/sessions/${currentEvent.id}`,
-		});
-    setEvents(() => [...events].filter((e) => e.id !== currentEvent.id))
-    setEventInfoModal(false)
-  }
+      axiosInstance: axiosPrivate,
+      method: 'DELETE',
+      url: `api/sessions/${currentEvent.id}`,
+    });
+    setEvents(() => [...events].filter((e) => e.id !== currentEvent.id));
+    setEventInfoModal(false);
+  };
   return (
     <Box
       mt={2}
@@ -216,10 +215,10 @@ export default function EventCalendar() {
                 const isUserEvent = user?.username === event.username;
                 return {
                   style: {
-                    backgroundColor: isUserEvent ? user?.color : "#4e4d59",
-                    borderColor: "#ffffff",
+                    backgroundColor: isUserEvent ? user?.color : '#4e4d59',
+                    borderColor: '#ffffff',
                   },
-                }
+                };
               }}
               style={{
                 height: 1100,
@@ -229,14 +228,14 @@ export default function EventCalendar() {
         </Card>
       </Container>
       {/* Refresh token errors */}
-      {!SessionsLoading && SessionsError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
-      {!SessionCreateLoading && SessionCreateError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
-      {!SessionUpdateLoading && SessionUpdateError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
-      {!SessionDeleteLoading && SessionDeleteError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionsLoading && SessionsError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionCreateLoading && SessionCreateError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionUpdateLoading && SessionUpdateError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
+      {!SessionDeleteLoading && SessionDeleteError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
     </Box>
   );
 }

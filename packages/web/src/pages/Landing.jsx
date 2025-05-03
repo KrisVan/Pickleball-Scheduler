@@ -13,5 +13,5 @@ export default function Landing() {
       <Divider />
       <Footer />
     </Box>
-  )
+  );
 }

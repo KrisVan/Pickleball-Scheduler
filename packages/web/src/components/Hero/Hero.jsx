@@ -2,7 +2,7 @@ import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -39,8 +39,9 @@ export default function Hero() {
             Schedule Sessions Together
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            Effortlessly organize and share sessions on a collaborative calendar.<br />
-            See who's available, coordinate events, and never miss a beat 
+            Effortlessly organize and share sessions on a collaborative calendar.
+            <br />
+            See who&apos;s available, coordinate events, and never miss a beat
             with our intuitive interface.
           </Typography>
           <Stack
@@ -54,8 +55,8 @@ export default function Hero() {
               variant="contained"
               color="primary"
               component={Link}
-              to={`/register`}
-              key={'/register'}
+              to="/register"
+              key="/register"
             >
               Sign up
             </Button>
@@ -68,8 +69,8 @@ export default function Hero() {
             alignSelf: 'center',
             height: { xs: 200, sm: 700 },
             width: '100%',
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center %40",
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center %40',
             backgroundImage:
               theme.palette.mode === 'light'
                 ? 'url("images/demoDark.gif")'
