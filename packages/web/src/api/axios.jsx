@@ -1,5 +1,4 @@
 import axios from "axios";
-// const API_HOST_URL = process.env.API_HOST_URL;
 const API_HOST_URL = import.meta.env.VITE_API_HOST_URL;
 
 export const axiosPublic = new axios.create({
