@@ -1,10 +1,9 @@
 import { MemoryRouter } from 'react-router-dom';
-import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
 // Set environment for unit tests
-jest.mock('./components/EventCalendar/EventCalendar', () => ({
+vi.mock('./components/EventCalendar/EventCalendar', () => ({
   PickleballCalendar: () => <div data-testid="pickleball-calendar" />
 }));
 

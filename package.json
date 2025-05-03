@@ -12,14 +12,12 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "lint": "eslint . --ext .jsx,.js",
     "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
-    "start:dev": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:dev --prefix packages\\server\" --kill-others", 
-    "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others", 
+    "start:dev": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:dev --prefix packages\\server\" --kill-others",
+    "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others",
     "server": "node ./packages/server/src/index.js",
-    "client": "npm start --prefix packages/web",
-    "test": "jest"
+    "client": "npm start --prefix packages/web"
   },
   "eslintConfig": {
     "extends": [
@@ -42,7 +40,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "7.23.3",
-    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
     "babel-jest": "29.7.0",
@@ -53,7 +51,6 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "gh-pages": "^6.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.0.1",
     "react-test-renderer": "^18.2.0"
