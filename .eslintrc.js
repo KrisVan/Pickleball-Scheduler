@@ -11,7 +11,7 @@ module.exports = {
   ],
   overrides: [
     {
-      // For test files, disable `no-undef`
+      // For test files, disable `no-undef` for vitest vars
       files: ['**/*.test.jsx'],
       rules: {
         'no-undef': 'off',
