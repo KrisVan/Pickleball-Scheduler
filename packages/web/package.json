@@ -12,7 +12,6 @@
         "@mui/material": "^5.15.4",
         "@mui/x-data-grid": "^6.19.2",
         "@mui/x-date-pickers": "^6.19.5",
-        "@testing-library/user-event": "^12.8.3",
         "axios": "^1.6.5",
         "date-fns": "^3.3.1",
         "dotenv": "^16.3.2",
@@ -26,11 +25,12 @@
         "web-vitals": "^3.5.0"
     },
     "scripts": {
-        "predeploy": "npm run build",
         "start": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest",
+        "lint": "eslint . --ext .jsx,.js",
+        "lint:fix": "eslint . --ext .jsx,.js --fix"
     },
     "browserslist": {
         "production": [
@@ -45,8 +45,17 @@
         ]
     },
     "devDependencies": {
+        "@eslint/compat": "^1.2.9",
+        "@eslint/eslintrc": "^3.3.1",
+        "@eslint/js": "^9.26.0",
+        "@testing-library/jest-dom": "^6.6.3",
+        "@testing-library/react": "^16.3.0",
         "@vitejs/plugin-react": "^4.4.1",
+        "eslint": "^9.26.0",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-vitest": "^0.5.4",
+        "globals": "^16.0.0",
         "vitest": "^3.1.2"
     },
     "proxy": "http://localhost:5000"
