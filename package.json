@@ -7,18 +7,12 @@
     "packages/server",
     "packages/web"
   ],
-  "dependencies": {
-    "babel-jest": "26.6.0"
-  },
   "scripts": {
-    "predeploy": "npm run build",
-    "lint": "eslint . --ext .jsx,.js",
-    "lint:fix": "eslint . --ext .jsx,.js --fix",
-    "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
-    "start:dev": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:dev --prefix packages\\server\" --kill-others",
-    "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others",
-    "server": "node ./packages/server/src/index.js",
-    "client": "npm start --prefix packages/web",
+    
+    "lint": "concurrently \"npm run lint --prefix packages/web\" \"npm run lint --prefix packages/server\"",
+    "lint:fix": "npm run lint:fix --prefix packages/web",
+    "start:dev": "concurrently \"npm run start --prefix packages/web\" \"npm run start:dev --prefix packages/server\" --kill-others",
+    "start:prod": "concurrently \"npm run start --prefix packages/web\" \"npm run start:production --prefix packages/server\" --kill-others",
     "test": "npm run test --prefix packages/web"
   },
   "browserslist": {
@@ -34,23 +28,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.27.1",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/preset-env": "7.23.3",
-    "@babel/preset-react": "^7.27.1",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^14.1.2",
-    "@testing-library/user-event": "^14.5.2",
-    "babel-jest": "29.7.0",
     "concurrently": "^8.2.2",
-    "eslint": "^8.54.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-vitest": "^0.5.4",
-    "jest-environment-jsdom": "^29.7.0",
-    "nodemon": "^3.0.1",
-    "vitest": "^3.1.2"
+    "nodemon": "^3.0.1"
   }
 }

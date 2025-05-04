@@ -45,7 +45,7 @@ cd ../..
 npm run start
 ```
 
-After executing these commands, your React frontend should now be running on [localhost:3000](http://localhost:3000/). You can visit this page in your web browser to view your front-end user interface.
+After executing these commands, your React frontend should now be running on [localhost:5173](http://localhost:5173/). You can visit this page in your web browser to view your front-end user interface.
 
 ## Deployment
 
