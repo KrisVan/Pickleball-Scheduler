@@ -26,10 +26,15 @@
     "start": "echo Use npm run start:dev or npm run start:prod",
     "start:dev": "set NODE_ENV=development&& dotenv -e .env.development -- npm start",
     "start:prod": "set NODE_ENV=production&& dotenv -e .env.production -- npm start",
-    "dev": "nodemon --quiet ./src/index.js"
+    "dev": "nodemon --quiet ./src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
     "@types/bcrypt": "^5.0.2",
+    "eslint": "^9.26.0",
+    "globals": "^16.0.0",
     "prisma": "^5.7.1"
   }
 }
