@@ -23,10 +23,9 @@
   "scripts": {
     "seed": "npx prisma db seed",
     "studio": "npx prisma studio",
-    "start": "echo Use npm run start:dev or npm run start:prod",
+    "start": "node ./src/index.js",
     "start:dev": "set NODE_ENV=development&& dotenv -e .env.development -- npm start",
     "start:prod": "set NODE_ENV=production&& dotenv -e .env.production -- npm start",
-    "dev": "nodemon --quiet ./src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
