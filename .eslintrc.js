@@ -25,7 +25,6 @@ module.exports = {
         '*.jsx',
         '.eslintrc.{cjs,js,jsx}',
       ],
-      parser: '@babel/eslint-parser',
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
