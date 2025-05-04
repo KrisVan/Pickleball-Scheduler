@@ -19,7 +19,7 @@
     "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others",
     "server": "node ./packages/server/src/index.js",
     "client": "npm start --prefix packages/web",
-    "test":"npm run test --prefix packages/web"
+    "test": "npm run test --prefix packages/web"
   },
   "browserslist": {
     "production": [
@@ -51,7 +51,6 @@
     "eslint-plugin-vitest": "^0.5.4",
     "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.0.1",
-    "react-test-renderer": "^18.2.0",
     "vitest": "^3.1.2"
   }
 }
