@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
-import Footer from '../components/Footer/Footer.jsx';
 import PaletteIcon from '@mui/icons-material/Palette';
 import IconButton from '@mui/material/IconButton';
+import Footer from '../components/Footer/Footer.jsx';
 
 import ColorPickerModal from '../components/ColorPickerModal/ColorPickerModal.jsx';
 import DeleteAccountModal from '../components/DeleteAccountModal/DeleteAccountModal';
@@ -52,14 +52,14 @@ export default function Account() {
 
   const axiosPrivate = useAxiosPrivate();
   const refresh = useRefreshToken();
-  const logoutFunction = async () => { await logout(); }
+  const logoutFunction = async () => { await logout(); };
 
-  const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }]
+  const themes = [{ value: 'DARK', label: 'Dark' }, { value: 'LIGHT', label: 'Light' }];
 
   // Handlers
   function handleCancel() {
     // Set fields to default values
-    document.getElementById("settings").reset();
+    document.getElementById('settings').reset();
     // Set states to initial values
     setUserColor(user.color);
     setSelectedTheme(user.theme);
@@ -75,21 +75,21 @@ export default function Account() {
     event.preventDefault();
     userUpdateRan.currrent = true;
     const data = new FormData(event.currentTarget);
-    const requestConfig={
-      ...(data.get('displayName') && {displayName: data.get('displayName')}),
-      ...(data.get('password') && {password: data.get('password')}),
-      settings:{
+    const requestConfig = {
+      ...(data.get('displayName') && { displayName: data.get('displayName') }),
+      ...(data.get('password') && { password: data.get('password') }),
+      settings: {
         color: userColor,
-        ...(data.get('theme') && {theme: data.get('theme')}),
-      }
-    }
-  
+        ...(data.get('theme') && { theme: data.get('theme') }),
+      },
+    };
+
     // Request to update user
     UserUpdateAxiosFetch({
       axiosInstance: axiosPrivate,
       method: 'PATCH',
       url: `api/users/${user.username}`,
-      requestConfig: requestConfig,
+      requestConfig,
     });
 
     // Set states to initial values
@@ -105,11 +105,10 @@ export default function Account() {
   useEffect(() => {
     if (userUpdateRan.currrent === true) {
       // Response and refresh if success or show error message
-      if(UserUpdateError) {
+      if (UserUpdateError) {
         setSnackbar({ children: UserUpdateError, severity: 'error' });
-      }
-      else if(UserUpdateResponse?.length !== 0) {
-        setSnackbar({ children: "Account updated", severity: 'success' });
+      } else if (UserUpdateResponse?.length !== 0) {
+        setSnackbar({ children: 'Account updated', severity: 'success' });
         refresh();
       }
       setOpenSnackbar(true);
@@ -122,20 +121,19 @@ export default function Account() {
     userDeleteRan.currrent = true;
     // Delete user from DB
     UserDeleteAxiosFetch({
-			axiosInstance: axiosPrivate,
-			method: 'DELETE',
-			url: `api/users/${user.username}`,
-		});
+      axiosInstance: axiosPrivate,
+      method: 'DELETE',
+      url: `api/users/${user.username}`,
+    });
   }
 
   useEffect(() => {
     // Response and refresh if success or show error message
     if (userDeleteRan.currrent === true) {
-      if(UserDeleteError) {
+      if (UserDeleteError) {
         setSnackbar({ children: UserDeleteError, severity: 'error' });
-      }
-      else {
-        setSnackbar({ children: "Account deleted", severity: 'success' });
+      } else {
+        setSnackbar({ children: 'Account deleted', severity: 'success' });
         logoutFunction();
       }
       setOpenSnackbar(true);
@@ -171,20 +169,20 @@ export default function Account() {
 
   // Validate username
   const validateDisplayNameOnChange = (displayName) => {
-    setIsChange(true)
+    setIsChange(true);
     // If not between 3-24 chars
-    if (!(/^.{3,24}$/.test(displayName))){
-      setDisplayNameError("Display name must be between 3 and 24 characters");
+    if (!(/^.{3,24}$/.test(displayName))) {
+      setDisplayNameError('Display name must be between 3 and 24 characters');
       return false;
     }
     // If not any combination of letters, digits, and underscores
-    if (!(/^[a-zA-Z0-9_]+$/.test(displayName))){
-      setDisplayNameError("Display name can only contain letters, digits, and underscores");
+    if (!(/^[a-zA-Z0-9_]+$/.test(displayName))) {
+      setDisplayNameError('Display name can only contain letters, digits, and underscores');
       return false;
     }
-    setDisplayNameError("");
+    setDisplayNameError('');
     return true;
-  }
+  };
 
   // Validate password
   const validatePasswordOnChange = (password) => {
@@ -192,59 +190,56 @@ export default function Account() {
     setIsPasswordChange(true);
     setPassword(password);
     // If not between 6-24 chars
-    if (!(/^.{6,24}$/.test(password))){
-      setPasswordError("Password must be between 6 and 24 characters")
+    if (!(/^.{6,24}$/.test(password))) {
+      setPasswordError('Password must be between 6 and 24 characters');
       return false;
     }
     // If not any combination of letters, digits, or non closure special chars
-    else if (!(/^[a-zA-Z0-9!@#$%^&*_\-+=|:;<>,.?/\\~`"]+$/.test(password))){
-      setPasswordError("Password can only contain letters, digits, and non closure special characters");
+    if (!(/^[a-zA-Z0-9!@#$%^&*_\-+=|:;<>,.?/\\~`"]+$/.test(password))) {
+      setPasswordError('Password can only contain letters, digits, and non closure special characters');
       return false;
     }
     // Check if password matches confirmation password
-    if (confirmationPassword === password){
-      setPasswordError('')
-      setMatchError('')
-    }
-    else{
-      setMatchError("Passwords must match");
+    if (confirmationPassword === password) {
+      setPasswordError('');
+      setMatchError('');
+    } else {
+      setMatchError('Passwords must match');
     }
     setPasswordError('');
     return true;
-  }
+  };
 
   // Check if confirm passwords match
   const matchPasswordOnChange = (confirmationPassword) => {
-    setIsChange(true)
+    setIsChange(true);
     setConfirmationPassword(confirmationPassword);
     // If confirm password does not match the password
-    if (confirmationPassword !== password){
-      setMatchError("Passwords must match");
-    }
-    else {
+    if (confirmationPassword !== password) {
+      setMatchError('Passwords must match');
+    } else {
       setMatchError('');
     }
-  }
+  };
 
   // Check if error is present after error state changes
   useEffect(() => {
     if (displayNameError || passwordError || matchError) {
       setIsValidationError(true);
-    }
-    else {
+    } else {
       setIsValidationError(false);
     }
-  },[displayNameError, passwordError, matchError])
+  }, [displayNameError, passwordError, matchError]);
 
-	return(
+  return (
     <>
       <Container
         sx={{
-          my: { xs: 2, sm: 4, md: 6},
+          my: { xs: 2, sm: 4, md: 6 },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: {xs: 'center', md: 'flex-start'},
+          alignItems: { xs: 'center', md: 'flex-start' },
         }}
       >
         <Typography
@@ -252,29 +247,30 @@ export default function Account() {
           variant="h3"
           color="inherit"
           noWrap
-          sx={{ flexGrow: 1, mb:1, textAlign: {xs: "center", md: "left"}, }}
+          sx={{ flexGrow: 1, mb: 1, textAlign: { xs: 'center', md: 'left' } }}
         >
           Account Settings
         </Typography>
-        <Grid container
+        <Grid
+          container
           component="form"
           id="settings"
           onSubmit={handleConfirm}
           noValidate
-          wrap='nowrap'
+          wrap="nowrap"
           spacing={2}
           sx={{
-            mt:4,
-            flexDirection: { xs: "column", md: "row" },
+            mt: 4,
+            flexDirection: { xs: 'column', md: 'row' },
           }}
           justifyContent="space-evenly"
-          alignItems={{xs: 'center', md: 'flex-start'}}
+          alignItems={{ xs: 'center', md: 'flex-start' }}
         >
-          <Grid item xs={true} md={6} order={{ xs: 2, sm: 2, md: 2 }}>
+          <Grid item xs md={6} order={{ xs: 2, sm: 2, md: 2 }}>
             <Stack
               spacing={2}
               divider={<Divider flexItem />}
-              sx={{width: { xs: 470, sm: 570, md:'100%' }}}
+              sx={{ width: { xs: 470, sm: 570, md: '100%' } }}
             >
               <TextField
                 disabled
@@ -282,7 +278,7 @@ export default function Account() {
                 id="username"
                 label="Username"
                 name="username"
-                autoComplete='off'
+                autoComplete="off"
                 defaultValue={user.username}
               />
               <TextField
@@ -290,10 +286,10 @@ export default function Account() {
                 id="displayName"
                 label="Display Name"
                 name="displayName"
-                autoComplete='off'
+                autoComplete="off"
                 defaultValue={user.displayName}
                 onChange={(event) => validateDisplayNameOnChange(event.target.value)}
-                error={displayNameError && displayNameError.length ? true : false}
+                error={!!(displayNameError && displayNameError.length)}
                 helperText={displayNameError}
               />
               <>
@@ -303,16 +299,17 @@ export default function Account() {
                   label="Password"
                   name="password"
                   type="password"
-                  placeholder={"••••••"}
+                  placeholder="••••••"
                   autoComplete="new-password"
                   InputLabelProps={{
                     shrink: true,
                   }}
                   onChange={(event) => validatePasswordOnChange(event.target.value)}
-                  error={passwordError && passwordError.length ? true : false}
+                  error={!!(passwordError && passwordError.length)}
                   helperText={passwordError}
                 />
-                {isPasswordChange === true &&
+                {isPasswordChange === true
+                  && (
                   <TextField
                     variant="standard"
                     id="confirmPassword"
@@ -322,10 +319,10 @@ export default function Account() {
                     defaultValue=""
                     autoComplete="new-password"
                     onChange={(event) => matchPasswordOnChange(event.target.value)}
-                    error={matchError && matchError.length ? true : false}
+                    error={!!(matchError && matchError.length)}
                     helperText={matchError}
                   />
-                }
+                  )}
               </>
               <TextField
                 select
@@ -350,30 +347,32 @@ export default function Account() {
               >
                 Delete Account
               </Button>
-              {isChange === true && 
+              {isChange === true
+              && (
               <Stack spacing={2} direction="row">
                 <Button variant="outlined" onClick={handleCancel}> Cancel </Button>
                 <Button
                   variant="contained"
                   type="submit"
-                  disabled= { isValidationError ? true : false}
+                  disabled={!!isValidationError}
                 >
                   Confirm Changes
-                </Button> 
-              </Stack>}
+                </Button>
+              </Stack>
+              )}
             </Stack>
           </Grid>
-          <Grid item xs={true} md={6} order={{ xs: 1, sm: 1, md: 1 }}>
+          <Grid item xs md={6} order={{ xs: 1, sm: 1, md: 1 }}>
             <Badge
-              badgeContent={
+              badgeContent={(
                 <PaletteIcon
-                  color='text.primary'
+                  color="text.primary"
                   sx={{
                     height: { xs: 80, sm: 100, md: 50 },
                     width: { xs: 80, sm: 100, md: 50 },
                   }}
                 />
-              }
+              )}
               overlap="circular"
               anchorOrigin={{
                 vertical: 'bottom',
@@ -385,23 +384,23 @@ export default function Account() {
                 onClick={handleClickOpenColorModal}
                 sx={{
                   justifyContent: 'center',
-                  height: { xs: 490, sm: 590, md:320 },
-                  width: { xs: 490, sm: 590, md:320 },
-                  pt:{ xs: 9, sm: 11, md:3 },
+                  height: { xs: 490, sm: 590, md: 320 },
+                  width: { xs: 490, sm: 590, md: 320 },
+                  pt: { xs: 9, sm: 11, md: 3 },
                 }}
               >
-              <Avatar
-                sx={{
-                  alignSelf: 'center',
-                  color: 'inherit',
-                  bgcolor: `${userColor}`, 
-                  height: { xs: 470, sm: 570, md:300 },
-                  width: { xs: 470, sm: 570, md:300 },
-                  mb: { xs: 8, sm: 10, md: 2 },
-                }}
-              >
-                {user.username && user.username[0].toUpperCase()}
-              </Avatar>
+                <Avatar
+                  sx={{
+                    alignSelf: 'center',
+                    color: 'inherit',
+                    bgcolor: `${userColor}`,
+                    height: { xs: 470, sm: 570, md: 300 },
+                    width: { xs: 470, sm: 570, md: 300 },
+                    mb: { xs: 8, sm: 10, md: 2 },
+                  }}
+                >
+                  {user.username && user.username[0].toUpperCase()}
+                </Avatar>
               </IconButton>
             </Badge>
           </Grid>
@@ -429,11 +428,11 @@ export default function Account() {
       </Snackbar>
       <Divider />
       <Footer />
-      {!UserUpdateLoading && UserUpdateError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
-      {!UserDeleteLoading && UserDeleteError.includes("500") &&
-        <Navigate to="/login" replace state={{ from: location }} />}
+      {!UserUpdateLoading && UserUpdateError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
+      {!UserDeleteLoading && UserDeleteError.includes('500')
+        && <Navigate to="/login" replace state={{ from: location }} />}
     </>
-    
-)
+
+  );
 }

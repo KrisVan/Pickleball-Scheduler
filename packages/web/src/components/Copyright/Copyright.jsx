@@ -1,4 +1,4 @@
-import { Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { Typography } from '@mui/material';
 
@@ -8,9 +8,10 @@ export default function Copyright(props) {
       {'Copyright © '}
       <Link color="inherit" component={RouterLink} to="/about">
         PickLeTime
-      </Link>{' '}
+      </Link>
+      {' '}
       {new Date().getFullYear()}
-      {'.'}
+      .
     </Typography>
   );
 }

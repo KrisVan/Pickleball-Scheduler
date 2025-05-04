@@ -31,7 +31,9 @@ function EditToolbar(props) {
 
   const handleAddClick = () => {
     const id = crypto.randomUUID();
-    setRows((oldRows) => [...oldRows, { id: id, username: '', displayName: '', role: 'BASIC', sessions: [], isNew: true }]);
+    setRows((oldRows) => [...oldRows, {
+      id, username: '', displayName: '', role: 'BASIC', sessions: [], isNew: true,
+    }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'username' },
@@ -63,7 +65,7 @@ export default function UsersDataGrid() {
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   const axiosPrivate = useAxiosPrivate();
-	const [UsersResponse, UsersError, UsersLoading, UsersAxiosFetch] = useAxiosFunction();
+  const [UsersResponse, UsersError, UsersLoading, UsersAxiosFetch] = useAxiosFunction();
   const [UserDelResponse, UserDelError, , UserDelAxiosFetch] = useAxiosFunction();
   const [UserCreateResponse, UserCreateError, , UserCreateAxiosFetch] = useAxiosFunction();
   const [UserUpdateResponse, UserUpdateError, , UserUpdateAxiosFetch] = useAxiosFunction();
@@ -75,29 +77,29 @@ export default function UsersDataGrid() {
   const handleCloseSnackbar = () => setSnackbar(null);
 
   const getUsers = () => {
-		UsersAxiosFetch({
-			axiosInstance: axiosPrivate,
-			method: 'GET',
-			url: 'api/users',
-		});
-	}
+    UsersAxiosFetch({
+      axiosInstance: axiosPrivate,
+      method: 'GET',
+      url: 'api/users',
+    });
+  };
 
   // Set users after mount
-	useEffect (() => {
-		if (UsersResponse?.length !== 0) {
-			setRows(UsersResponse);
-		}
-	},[UsersResponse]);
+  useEffect(() => {
+    if (UsersResponse?.length !== 0) {
+      setRows(UsersResponse);
+    }
+  }, [UsersResponse]);
 
-	// Get users on mount
-	useEffect (() => {
-		if (effectRan.current === false) {
-			getUsers();
-		}
-		return () => {
-			effectRan.current = true;
-		}
-		// eslint-disable-next-line
+  // Get users on mount
+  useEffect(() => {
+    if (effectRan.current === false) {
+      getUsers();
+    }
+    return () => {
+      effectRan.current = true;
+    };
+    // eslint-disable-next-line
 	},[]);
 
   // Table Behavior
@@ -116,14 +118,14 @@ export default function UsersDataGrid() {
   };
 
   const handleDeleteClick = (id) => () => {
-    const row = rows.find((row) => row.id === id)
+    const row = rows.find((row) => row.id === id);
     setRows(rows.filter((row) => row.id !== id));
     userDelRan.current = true;
     UserDelAxiosFetch({
-			axiosInstance: axiosPrivate,
-			method: 'DELETE',
-			url: `api/users/${row.username}`,
-		});
+      axiosInstance: axiosPrivate,
+      method: 'DELETE',
+      url: `api/users/${row.username}`,
+    });
   };
 
   const handleCancelClick = (id) => () => {
@@ -147,18 +149,17 @@ export default function UsersDataGrid() {
         url: `api/users/${updatedRow.id}`,
         requestConfig: updatedRow,
       });
-    }
-    else {
+    } else {
       UserCreateAxiosFetch({
         axiosInstance: axiosPrivate,
         method: 'POST',
-        url: `api/users/register`,
+        url: 'api/users/register',
         requestConfig: updatedRow,
       });
     }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
-  }
+  };
 
   // CRUD Error messages
   const handleProcessRowUpdateError = (error) => {
@@ -166,27 +167,26 @@ export default function UsersDataGrid() {
   };
 
   useEffect(() => {
-    if(UserCreateError) {
+    if (UserCreateError) {
       if (UserCreateError.includes(401)) {
-        handleProcessRowUpdateError("User already exists with this username");
-      }
-      else handleProcessRowUpdateError(UserCreateError);
+        handleProcessRowUpdateError('User already exists with this username');
+      } else handleProcessRowUpdateError(UserCreateError);
       getUsers();
     }
     // eslint-disable-next-line
   },[UserCreateError]);
   useEffect(() => {
-    if(UserUpdateError) {
+    if (UserUpdateError) {
       handleProcessRowUpdateError(UserUpdateError);
       getUsers();
     }
     // eslint-disable-next-line
   },[UserUpdateError]);
   useEffect(() => {
-    if(UserDelError) {
+    if (UserDelError) {
       handleProcessRowUpdateError(UserDelError);
     }
-  },[UserDelError]);
+  }, [UserDelError]);
 
   // CRUD Response messages
   const handleProcessRowUpdateResponse = (response) => {
@@ -194,49 +194,79 @@ export default function UsersDataGrid() {
   };
 
   useEffect(() => {
-    if(UserCreateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User created");
+    if (UserCreateResponse?.length !== 0) {
+      handleProcessRowUpdateResponse('User created');
       getUsers();
     }
     // eslint-disable-next-line
   },[UserCreateResponse]);
   useEffect(() => {
-    if(UserUpdateResponse?.length !== 0) {
-      handleProcessRowUpdateResponse("User updated");
+    if (UserUpdateResponse?.length !== 0) {
+      handleProcessRowUpdateResponse('User updated');
       getUsers();
     }
     // eslint-disable-next-line
   },[UserUpdateResponse]);
   useEffect(() => {
     if (UserDelResponse && userDelRan.current === true) {
-      handleProcessRowUpdateResponse("User deleted");
+      handleProcessRowUpdateResponse('User deleted');
     }
-  },[UserDelResponse]);
-
+  }, [UserDelResponse]);
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 30, align: 'left',
-      headerAlign: 'left'},
-    { field: 'username', headerName: 'Username', width: 180, align: 'left',
-      headerAlign: 'left', editable: true
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 30,
+      align: 'left',
+      headerAlign: 'left',
     },
-    { field: 'displayName', headerName: 'DisplayName', width: 180,
-      align: 'left', headerAlign: 'left', editable: true },
-    { field: 'password', headerName: 'Password', width: 30, align: 'left',
-      headerAlign: 'left', editable: true},
-    { field: 'role', headerName: 'Role', width: 120, align: 'left',
-      headerAlign: 'left', editable: true, type:'singleSelect',
-      valueOptions:['BASIC','ADMIN']
+    {
+      field: 'username',
+      headerName: 'Username',
+      width: 180,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
     },
-    { field: 'sessions', headerName: 'Session Count', width: 120,
-      align: 'left', headerAlign: 'left', 
-      valueGetter: (params) => {
-        return params.row.sessions.length;
-      },},
+    {
+      field: 'displayName',
+      headerName: 'DisplayName',
+      width: 180,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
+    {
+      field: 'password',
+      headerName: 'Password',
+      width: 30,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
+    {
+      field: 'role',
+      headerName: 'Role',
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: ['BASIC', 'ADMIN'],
+    },
+    {
+      field: 'sessions',
+      headerName: 'Session Count',
+      width: 120,
+      align: 'left',
+      headerAlign: 'left',
+      valueGetter: (params) => params.row.sessions.length,
+    },
     {
       field: 'actions',
       type: 'actions',
@@ -249,6 +279,7 @@ export default function UsersDataGrid() {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key="save"
               icon={<SaveIcon />}
               label="Save"
               sx={{
@@ -257,6 +288,7 @@ export default function UsersDataGrid() {
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key="cancel"
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
@@ -268,6 +300,7 @@ export default function UsersDataGrid() {
 
         return [
           <GridActionsCellItem
+            key="edit"
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
@@ -275,6 +308,7 @@ export default function UsersDataGrid() {
             color="inherit"
           />,
           <GridActionsCellItem
+            key="delete"
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
@@ -286,7 +320,7 @@ export default function UsersDataGrid() {
   ];
 
   return (
-    
+
     <Box
       sx={{
         height: 500,
@@ -306,7 +340,7 @@ export default function UsersDataGrid() {
       <DataGrid
         rows={rows}
         columns={columns}
-        density='compact'
+        density="compact"
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
@@ -314,7 +348,7 @@ export default function UsersDataGrid() {
         processRowUpdate={processRowUpdate}
         // onProcessRowUpdateError={handleProcessRowUpdateError}
         slots={{
-          toolbar: EditToolbar
+          toolbar: EditToolbar,
         }}
         slotProps={{
           toolbar: { setRows, setRowModesModel, getUsers },

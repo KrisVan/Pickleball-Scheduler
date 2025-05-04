@@ -18,10 +18,9 @@ export default function UserDashboard() {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[910],
+            backgroundColor: (theme) => (theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[910]),
             flexGrow: 1,
             overflow: 'auto',
           }}
@@ -33,8 +32,8 @@ export default function UserDashboard() {
                 <NextSession />
               </Grid>
               {/* My Sessions List */}
-              <Grid item >
-                <BasicSessionDataGrid username={user.username}/>
+              <Grid item>
+                <BasicSessionDataGrid username={user.username} />
               </Grid>
             </Grid>
           </Container>

@@ -4,8 +4,19 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['airbnb', 'plugin:react/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+  ],
   overrides: [
+    {
+      // For test files, disable `no-undef` for vitest vars
+      files: ['**/*.test.jsx'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
     {
       env: {
         node: true,
@@ -19,11 +30,11 @@ module.exports = {
         ecmaFeatures: {
           jsx: true,
         },
-        sourceType: 'script',
+        sourceType: 'module',
       },
     },
   ],
-  plugins: ['react'],
+  plugins: ['react', 'react-hooks'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -34,5 +45,12 @@ module.exports = {
     'no-restricted-exports': 'off',
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
 };

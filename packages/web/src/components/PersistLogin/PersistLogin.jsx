@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import useRefreshToken from '../../hooks/useRefreshToken';
 import useUser from '../../hooks/useUser';
 import SimpleBackdrop from '../SimpleBackDrop/SimpleBackdrop';
@@ -16,14 +16,12 @@ export default function PersistLogin() {
     const verifyRefreshToken = async () => {
       try {
         await refresh();
-      }
-      catch (error) {
+      } catch (error) {
         console.error(error);
-      }
-      finally {
+      } finally {
         isMounted && setIsLoading(false);
       }
-    }
+    };
     // Only run verifyRefreshToken if no access token or persist true
     !user?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
     return () => isMounted = false;
@@ -35,9 +33,8 @@ export default function PersistLogin() {
       {!persist
         ? <Outlet />
         : isLoading
-            ? <SimpleBackdrop />
-            : <Outlet />
-      }
+          ? <SimpleBackdrop />
+          : <Outlet />}
     </>
   );
 }

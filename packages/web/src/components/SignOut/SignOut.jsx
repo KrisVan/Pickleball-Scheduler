@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -14,7 +14,7 @@ export default function SignOut() {
 
   const logoutFunction = async () => {
     await logout();
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -27,37 +27,42 @@ export default function SignOut() {
         }}
       >
         {user?.username
-          ? 
-          <>
-            <Typography variant="body">Signed in as {user?.username}</Typography>
+          ? (
+            <>
+              <Typography variant="body">
+                Signed in as
+                {user?.username}
+              </Typography>
               <Button
                 type="click"
                 variant="contained"
-                sx={{ mt: 3, mb: 2, width: 120}}
+                sx={{ mt: 3, mb: 2, width: 120 }}
                 onClick={logoutFunction}
-                
+
               >
                 Sign Out
               </Button>
-          </>
-          : <Alert
+            </>
+          )
+          : (
+            <Alert
               severity="info"
-              sx={{ mt: 2, mb: 4}}
-              action={
+              sx={{ mt: 2, mb: 4 }}
+              action={(
                 <Button
                   color="inherit"
-                    size="small"
-                    component={RouterLink}
-                    to="/login"
-                  >
+                  size="small"
+                  component={RouterLink}
+                  to="/login"
+                >
                   Login
                 </Button>
-              }
+              )}
             >
               No user logged in
             </Alert>
-        }
+          )}
       </Box>
     </Container>
-  )
+  );
 }

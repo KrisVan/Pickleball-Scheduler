@@ -26,21 +26,21 @@ const useAxiosFunction = () => {
         signal: ctrl.signal,
       });
       setResponse(res.data);
-    }
-    catch (err) {
+    } catch (err) {
       setError(err.message);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
-  }
+  };
   // Runs when component mounts
-  useEffect(() => {
+  useEffect(
+    () =>
     // useEffect cleanup
-    return () => controller && controller.abort();
-  }, [controller])
+      () => controller && controller.abort(),
+    [controller],
+  );
 
   return [response, error, loading, axiosFetch];
-}
+};
 
-export default useAxiosFunction
+export default useAxiosFunction;

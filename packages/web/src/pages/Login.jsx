@@ -7,5 +7,5 @@ export default function Login() {
     <Box>
       <SignIn />
     </Box>
-  )
+  );
 }

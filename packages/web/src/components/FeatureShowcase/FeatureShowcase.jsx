@@ -32,7 +32,8 @@ const items = [
     icon: <DashboardIcon />,
     title: 'Track Your Sessions',
     description:
-      'Stay updated on the dashboard to see who has joined your sessions, when\'s the next session, and view your analytics.',
+      'Stay updated on the dashboard to see who has joined your sessions, ' +
+      'when\'s the next session, and view your analytics.',
     imageLight: 'url("images/dashboardDark.png")',
     imageDark: 'url("images/dashboardDark.png")',
   },
@@ -103,10 +104,9 @@ export default function FeatureShowcase() {
           >
             <Box
               sx={{
-                backgroundImage: (theme) =>
-                  theme.palette.mode === 'light'
-                    ? items[selectedItemIndex].imageLight
-                    : items[selectedItemIndex].imageDark,
+                backgroundImage: (theme) => (theme.palette.mode === 'light'
+                  ? items[selectedItemIndex].imageLight
+                  : items[selectedItemIndex].imageDark),
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 minHeight: 280,
@@ -219,14 +219,13 @@ export default function FeatureShowcase() {
                 m: 'auto',
                 width: 500,
                 height: 500,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                backgroundSize: "cover",
-                backgroundImage: (theme) =>
-                  theme.palette.mode === 'light'
-                    ? items[selectedItemIndex].imageLight
-                    : items[selectedItemIndex].imageDark,
-                    
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center center',
+                backgroundSize: 'cover',
+                backgroundImage: (theme) => (theme.palette.mode === 'light'
+                  ? items[selectedItemIndex].imageLight
+                  : items[selectedItemIndex].imageDark),
+
               }}
             />
           </Card>
