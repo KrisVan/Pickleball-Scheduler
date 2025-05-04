@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: './setupTests.js',
   },
   server: {
-    port: 3000,
+    port: 5173,
     proxy: {
       '/api': {
         target: process.env.VITE_API_HOST_URL,
