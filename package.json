@@ -10,11 +10,8 @@
   "scripts": {
     "lint": "npm run lint --prefix packages/web",
     "lint:fix": "npm run lint:fix --prefix packages/web",
-    "start": "concurrently \"npm run server\" \"npm run client\" --kill-others",
     "start:dev": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:dev --prefix packages\\server\" --kill-others",
     "start:prod": "concurrently \"npm run start --prefix packages\\web\" \"npm run start:production --prefix packages\\server\" --kill-others",
-    "server": "node ./packages/server/src/index.js",
-    "client": "npm start --prefix packages/web",
     "test": "npm run test --prefix packages/web"
   },
   "browserslist": {
