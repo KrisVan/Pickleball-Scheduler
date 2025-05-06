@@ -1,0 +1,17 @@
+# docker build -f DockerFile.prod -t "frontend-prod"  .
+# docker run --name frontend-prod -p 5173:5173 frontend-prod
+
+# Stage 1: Build the app: 
+  FROM node:20-alpine AS builder
+  WORKDIR /app
+  COPY package*.json ./
+  RUN npm install
+  COPY . .
+  RUN npm run build
+  EXPOSE 5173
+  CMD [ "npm", "run", "preview" ]
+
+# Stage 2: Serve with a lightweight HTTP server
+# FROM nginx:alpine
+# COPY --from=builder /app/dist /usr/share/nginx/html
+# CMD ["nginx", "-g", "daemon off;"]
