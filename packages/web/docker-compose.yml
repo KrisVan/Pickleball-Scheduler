@@ -1,6 +1,7 @@
 services:
-  frontend-dev:
-    image: frontend-prod
+  frontend-prod:
+    image: ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508v2
+    container_name: frontend-prod
     build:
       context: .
       dockerfile: DockerFile.prod

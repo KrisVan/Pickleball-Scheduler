@@ -1,5 +1,5 @@
-# docker build -f DockerFile.prod -t "frontend-prod"  .
-# docker run -d --name frontend-prod -p 5173:5173 frontend-prod
+# docker build -f DockerFile.prod -t ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508 .
+# docker run -d --name frontend-prod -p 5173:5173 ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508
 
 # Stage 1: Build the app: 
   FROM node:20-alpine AS builder
@@ -8,7 +8,6 @@
   RUN npm install
   COPY . .
   RUN npm run build
-  RUN npm prune --omit=dev
   EXPOSE 5173
   CMD [ "npm", "run", "preview" ]
 
