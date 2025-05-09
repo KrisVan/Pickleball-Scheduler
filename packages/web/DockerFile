@@ -1,5 +1,5 @@
-# docker build -f DockerFile.prod -t ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508 .
-# docker run -d --name frontend-prod -p 5173:5173 ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508
+# docker build -f DockerFile -t ghcr.io/krisvan/pickleball-scheduler/frontend:20250508 .
+# docker run -d --name frontend -p 5173:5173 ghcr.io/krisvan/pickleball-scheduler/frontend:20250508
 
 # Stage 1: Build the app: 
   FROM node:20-alpine AS builder

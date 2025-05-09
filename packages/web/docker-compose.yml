@@ -1,10 +1,10 @@
 services:
   frontend-prod:
-    image: ghcr.io/krisvan/pickleball-scheduler/frontend-prod:20250508v2
-    container_name: frontend-prod
+    image: ghcr.io/krisvan/pickleball-scheduler/frontend:20250508v3
+    container_name: frontend
     build:
       context: .
-      dockerfile: DockerFile.prod
+      dockerfile: DockerFile
     ports:
       - "5173:5173"
     environment:
