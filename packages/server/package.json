@@ -23,9 +23,7 @@
   "scripts": {
     "seed": "npx prisma db seed",
     "studio": "npx prisma studio",
-    "start": "node ./src/index.js",
-    "start:dev": "set NODE_ENV=development&& dotenv -e .env.development -- npm start",
-    "start:prod": "set NODE_ENV=production&& dotenv -e .env.production -- npm start",
+    "start": "dotenv -e .env -- node ./src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
