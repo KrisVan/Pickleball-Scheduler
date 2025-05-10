@@ -9,6 +9,10 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
   ],
+  ignores: [
+    "dist/*",
+    "node_modules/*"
+  ],
   overrides: [
     {
       // For test files, disable `no-undef` for vitest vars
@@ -21,6 +25,10 @@ module.exports = {
       env: {
         node: true,
       },
+      ignores: [
+        "dist/*",
+        "node_modules/*"
+      ],
       files: [
         '*.jsx',
         '.eslintrc.{cjs,js,jsx}',

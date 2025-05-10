@@ -41,6 +41,11 @@ module.exports = defineConfig([{
         "plugin:react-hooks/recommended",
     )),
 
+    ignores: [
+        "**dist/*",
+        "**node_modules/*"
+    ],
+
     plugins: {
         react: fixupPluginRules(react),
         "react-hooks": fixupPluginRules(reactHooks),

@@ -8,8 +8,24 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './setupTests.js',
   },
-  server: {
+  preview: {
+    host: true,
     port: 5173,
+    strictPort: true,
+    origin: process.env.VITE_ORIGIN_URL,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_HOST_URL,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+  server: {
+    host: true,
+    port: 5173,
+    strictPort: true,
+    origin: process.env.VITE_ORIGIN_URL,
     proxy: {
       '/api': {
         target: process.env.VITE_API_HOST_URL,

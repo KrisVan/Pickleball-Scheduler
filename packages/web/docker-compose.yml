@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: ghcr.io/krisvan/pickleball-scheduler/frontend:20250508v5
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "5173:5173"
+    env_file:
+     - .env
+    command: ["npm", "run", "preview"]
