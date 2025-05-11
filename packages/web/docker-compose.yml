@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: ghcr.io/krisvan/pickleball-scheduler/frontend:20250508v5
+    image: ghcr.io/krisvan/pickleball-scheduler/frontend:latest
     container_name: frontend
     build:
       context: .
