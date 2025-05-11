@@ -1,6 +1,17 @@
-version: '3.8'
-
 services:
+  backend:
+    image: ghcr.io/krisvan/pickleball-scheduler/backend:latest
+    container_name: backend
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    command: ["npm", "run", "start"]
   postgres:
     image: postgres:15
     container_name: postgres-db
